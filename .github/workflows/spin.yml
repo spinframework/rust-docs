@@ -32,7 +32,7 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           toolchain: nightly
-          target: wasm32-wasi
+          target: wasm32-wasip1
           default: true
 
       - uses: Swatinem/rust-cache@v2
@@ -57,7 +57,7 @@ jobs:
           mkdir -p docs/spin
           mv -T ../spin/target/doc $OUT
           git add $OUT
-          git config user.name Fermybot
-          git config user.email fermybot@fermyon.com
+          git config user.name spinframeworkbot
+          git config user.email 202838904+spinframeworkbot@users.noreply.github.com
           git commit -m "Update $OUT"
           git push
