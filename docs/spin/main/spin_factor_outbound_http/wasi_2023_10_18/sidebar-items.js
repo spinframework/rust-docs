@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["exports"]};
+window.SIDEBAR_ITEMS = {"mod":["exports"],"struct":["Proxy","ProxyIndices"]};

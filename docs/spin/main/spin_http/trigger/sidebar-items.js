@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["SPIN_HTTP_EXPORT","WASI_HTTP_EXPORT_0_2_0","WASI_HTTP_EXPORT_0_2_1","WASI_HTTP_EXPORT_2023_10_18","WASI_HTTP_EXPORT_2023_11_10"],"enum":["HandlerType"],"fn":["default_base"],"struct":["Metadata"]};
+window.SIDEBAR_ITEMS = {"enum":["HandlerType"],"fn":["default_base"],"struct":["Metadata"]};

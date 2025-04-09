@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["AzureCosmosKeyValueRuntimeConfig","AzureKeyValueStore"]};
+window.SIDEBAR_ITEMS = {"enum":["KeyValueAzureCosmosAuthOptions"],"struct":["AzureCosmosKeyValueRuntimeConfig","AzureKeyValueStore","KeyValueAzureCosmos","KeyValueAzureCosmosRuntimeConfigOptions"]};

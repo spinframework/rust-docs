@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ComposeError"],"fn":["compose"],"trait":["ComponentSourceLoader"]};
+window.SIDEBAR_ITEMS = {"enum":["ComposeError"],"fn":["compose"],"struct":["ComponentSourceLoaderFs"],"trait":["ComponentSourceLoader"]};

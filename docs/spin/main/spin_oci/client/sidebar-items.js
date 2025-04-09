@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["ARCHIVE_MEDIATYPE","DATA_MEDIATYPE","SPIN_APPLICATION_MEDIA_TYPE"],"enum":["InferPredefinedAnnotations"],"fn":["unpack_archive_layer"],"struct":["Client","ClientOpts"]};
+window.SIDEBAR_ITEMS = {"constant":["ARCHIVE_MEDIATYPE","DATA_MEDIATYPE","SPIN_APPLICATION_MEDIA_TYPE"],"enum":["ComposeMode","InferPredefinedAnnotations"],"fn":["unpack_archive_layer"],"struct":["Client","ClientOpts"]};
