@@ -14,7 +14,7 @@ Usually this will be the path to the <code>.spin</code> state directory. If
 local SQLite databases are resolved.  (this should most likely be the
 path to the runtime-config file or the current working dir).</li>
 </ul>
-</div></details><details class="toggle method-toggle" open><summary><section id="method.resolve" class="method"><a class="src rightside" href="../src/spin_sqlite/lib.rs.html#55-68">Source</a><h4 class="code-header">pub fn <a href="#method.resolve" class="fn">resolve</a>(&amp;self, table: &amp;impl GetTomlValue) -&gt; <a class="type" href="https://docs.rs/anyhow/1.0.93/anyhow/type.Result.html" title="type anyhow::Result">Result</a>&lt;RuntimeConfig&gt;</h4></section></summary><div class="docblock"><p>Get the runtime configuration for SQLite databases from a TOML table.</p>
+</div></details><details class="toggle method-toggle" open><summary><section id="method.resolve" class="method"><a class="src rightside" href="../src/spin_sqlite/lib.rs.html#55-68">Source</a><h4 class="code-header">pub fn <a href="#method.resolve" class="fn">resolve</a>(&amp;self, table: &amp;impl <a class="trait" href="../spin_factors/runtime_config/toml/trait.GetTomlValue.html" title="trait spin_factors::runtime_config::toml::GetTomlValue">GetTomlValue</a>) -&gt; <a class="type" href="https://docs.rs/anyhow/1.0.93/anyhow/type.Result.html" title="type anyhow::Result">Result</a>&lt;RuntimeConfig&gt;</h4></section></summary><div class="docblock"><p>Get the runtime configuration for SQLite databases from a TOML table.</p>
 <p>Expects table to be in the format:</p>
 <div class="example-wrap"><pre class="language-toml"><code>[sqlite_database.$database-label]
 type = &quot;$database-type&quot;
