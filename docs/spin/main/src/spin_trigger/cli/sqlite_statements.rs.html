@@ -109,7 +109,7 @@
 <a href=#109 id=109 data-nosnippet>109</a>
 <a href=#110 id=110 data-nosnippet>110</a>    <span class="kw">use </span>spin_core::async_trait;
 <a href=#111 id=111 data-nosnippet>111</a>    <span class="kw">use </span>spin_factor_sqlite::{Connection, ConnectionCreator};
-<a href=#112 id=112 data-nosnippet>112</a>    <span class="kw">use </span>spin_world::v2::sqlite <span class="kw">as </span>v2;
+<a href=#112 id=112 data-nosnippet>112</a>    <span class="kw">use </span>spin_world::spin::sqlite::sqlite <span class="kw">as </span>v3;
 <a href=#113 id=113 data-nosnippet>113</a>    <span class="kw">use </span>tempfile::NamedTempFile;
 <a href=#114 id=114 data-nosnippet>114</a>
 <a href=#115 id=115 data-nosnippet>115</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
@@ -183,7 +183,7 @@
 <a href=#183 id=183 data-nosnippet>183</a>        <span class="kw">async fn </span>create_connection(
 <a href=#184 id=184 data-nosnippet>184</a>            <span class="kw-2">&amp;</span><span class="self">self</span>,
 <a href=#185 id=185 data-nosnippet>185</a>            label: <span class="kw-2">&amp;</span>str,
-<a href=#186 id=186 data-nosnippet>186</a>        ) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;<span class="kw">dyn </span>Connection + <span class="lifetime">'static</span>&gt;, v2::Error&gt; {
+<a href=#186 id=186 data-nosnippet>186</a>        ) -&gt; <span class="prelude-ty">Result</span>&lt;Box&lt;<span class="kw">dyn </span>Connection + <span class="lifetime">'static</span>&gt;, v3::Error&gt; {
 <a href=#187 id=187 data-nosnippet>187</a>            <span class="self">self</span>.push(label);
 <a href=#188 id=188 data-nosnippet>188</a>            <span class="prelude-val">Ok</span>(Box::new(MockConnection {
 <a href=#189 id=189 data-nosnippet>189</a>                tx: <span class="self">self</span>.tx.clone(),
@@ -200,11 +200,11 @@
 <a href=#200 id=200 data-nosnippet>200</a>        <span class="kw">async fn </span>query(
 <a href=#201 id=201 data-nosnippet>201</a>            <span class="kw-2">&amp;</span><span class="self">self</span>,
 <a href=#202 id=202 data-nosnippet>202</a>            query: <span class="kw-2">&amp;</span>str,
-<a href=#203 id=203 data-nosnippet>203</a>            parameters: Vec&lt;v2::Value&gt;,
-<a href=#204 id=204 data-nosnippet>204</a>        ) -&gt; <span class="prelude-ty">Result</span>&lt;v2::QueryResult, v2::Error&gt; {
+<a href=#203 id=203 data-nosnippet>203</a>            parameters: Vec&lt;v3::Value&gt;,
+<a href=#204 id=204 data-nosnippet>204</a>        ) -&gt; <span class="prelude-ty">Result</span>&lt;v3::QueryResult, v3::Error&gt; {
 <a href=#205 id=205 data-nosnippet>205</a>            <span class="self">self</span>.tx.send(Action::Query(query.to_string())).unwrap();
 <a href=#206 id=206 data-nosnippet>206</a>            <span class="kw">let _ </span>= parameters;
-<a href=#207 id=207 data-nosnippet>207</a>            <span class="prelude-val">Ok</span>(v2::QueryResult {
+<a href=#207 id=207 data-nosnippet>207</a>            <span class="prelude-val">Ok</span>(v3::QueryResult {
 <a href=#208 id=208 data-nosnippet>208</a>                columns: Vec::new(),
 <a href=#209 id=209 data-nosnippet>209</a>                rows: Vec::new(),
 <a href=#210 id=210 data-nosnippet>210</a>            })
@@ -216,12 +216,24 @@
 <a href=#216 id=216 data-nosnippet>216</a>                .unwrap();
 <a href=#217 id=217 data-nosnippet>217</a>            <span class="prelude-val">Ok</span>(())
 <a href=#218 id=218 data-nosnippet>218</a>        }
-<a href=#219 id=219 data-nosnippet>219</a>    }
-<a href=#220 id=220 data-nosnippet>220</a>
-<a href=#221 id=221 data-nosnippet>221</a>    <span class="attr">#[derive(Debug, PartialEq)]
-<a href=#222 id=222 data-nosnippet>222</a>    </span><span class="kw">enum </span>Action {
-<a href=#223 id=223 data-nosnippet>223</a>        CreateConnection(String),
-<a href=#224 id=224 data-nosnippet>224</a>        Query(String),
-<a href=#225 id=225 data-nosnippet>225</a>        Execute(String),
-<a href=#226 id=226 data-nosnippet>226</a>    }
-<a href=#227 id=227 data-nosnippet>227</a>}</code></pre></div></section></main></body></html>
+<a href=#219 id=219 data-nosnippet>219</a>
+<a href=#220 id=220 data-nosnippet>220</a>        <span class="kw">async fn </span>changes(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;u64, v3::Error&gt; {
+<a href=#221 id=221 data-nosnippet>221</a>            <span class="self">self</span>.tx.send(Action::Changes).unwrap();
+<a href=#222 id=222 data-nosnippet>222</a>            <span class="prelude-val">Ok</span>(<span class="number">123</span>)
+<a href=#223 id=223 data-nosnippet>223</a>        }
+<a href=#224 id=224 data-nosnippet>224</a>
+<a href=#225 id=225 data-nosnippet>225</a>        <span class="kw">async fn </span>last_insert_rowid(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Result</span>&lt;i64, v3::Error&gt; {
+<a href=#226 id=226 data-nosnippet>226</a>            <span class="self">self</span>.tx.send(Action::LastInsertRowid).unwrap();
+<a href=#227 id=227 data-nosnippet>227</a>            <span class="prelude-val">Ok</span>(<span class="number">456</span>)
+<a href=#228 id=228 data-nosnippet>228</a>        }
+<a href=#229 id=229 data-nosnippet>229</a>    }
+<a href=#230 id=230 data-nosnippet>230</a>
+<a href=#231 id=231 data-nosnippet>231</a>    <span class="attr">#[derive(Debug, PartialEq)]
+<a href=#232 id=232 data-nosnippet>232</a>    </span><span class="kw">enum </span>Action {
+<a href=#233 id=233 data-nosnippet>233</a>        CreateConnection(String),
+<a href=#234 id=234 data-nosnippet>234</a>        Query(String),
+<a href=#235 id=235 data-nosnippet>235</a>        Execute(String),
+<a href=#236 id=236 data-nosnippet>236</a>        Changes,
+<a href=#237 id=237 data-nosnippet>237</a>        LastInsertRowid,
+<a href=#238 id=238 data-nosnippet>238</a>    }
+<a href=#239 id=239 data-nosnippet>239</a>}</code></pre></div></section></main></body></html>

@@ -3,7 +3,7 @@
     config: &amp;FactorsConfig,
     args: &amp;Self::CliArgs,
 ) -&gt; <a class="type" href="https://docs.rs/anyhow/1.0.93/anyhow/type.Result.html" title="type anyhow::Result">Result</a>&lt;(Self::Factors, Self::RuntimeConfig)&gt;</h4></section></summary><div class='docblock'>Build the factors and runtime config from the given options.</div></details><details class="toggle method-toggle" open><summary><section id="method.configure_app" class="method trait-impl"><a class="src rightside" href="../src/spin_runtime_factors/build.rs.html#43-60">Source</a><a href="#method.configure_app" class="anchor">§</a><h4 class="code-header">fn <a class="fn">configure_app</a>&lt;U: <a class="trait" href="https://doc.rust-lang.org/nightly/core/marker/trait.Send.html" title="trait core::marker::Send">Send</a> + 'static&gt;(
-    executor: &amp;mut FactorsExecutor&lt;Self::Factors, U&gt;,
+    executor: &amp;mut <a class="struct" href="../spin_factors_executor/struct.FactorsExecutor.html" title="struct spin_factors_executor::FactorsExecutor">FactorsExecutor</a>&lt;Self::Factors, U&gt;,
     runtime_config: &amp;Self::RuntimeConfig,
     config: &amp;FactorsConfig,
     args: &amp;Self::CliArgs,
