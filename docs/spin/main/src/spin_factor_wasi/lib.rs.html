@@ -15,10 +15,10 @@
 <a href=#15 id=15 data-nosnippet>15</a>    anyhow, AppComponent, Factor, FactorInstanceBuilder, InitContext, PrepareContext,
 <a href=#16 id=16 data-nosnippet>16</a>    RuntimeFactors, RuntimeFactorsInstanceState,
 <a href=#17 id=17 data-nosnippet>17</a>};
-<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>wasmtime_wasi::{
-<a href=#19 id=19 data-nosnippet>19</a>    DirPerms, FilePerms, IoImpl, IoView, ResourceTable, StdinStream, StdoutStream, WasiCtx,
-<a href=#20 id=20 data-nosnippet>20</a>    WasiCtxBuilder, WasiImpl, WasiView,
-<a href=#21 id=21 data-nosnippet>21</a>};
+<a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>wasmtime_wasi::p2::{
+<a href=#19 id=19 data-nosnippet>19</a>    IoImpl, IoView, StdinStream, StdoutStream, WasiCtx, WasiCtxBuilder, WasiImpl, WasiView,
+<a href=#20 id=20 data-nosnippet>20</a>};
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>wasmtime_wasi::{DirPerms, FilePerms, ResourceTable};
 <a href=#22 id=22 data-nosnippet>22</a>
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">pub use </span>wasmtime_wasi::SocketAddrUse;
 <a href=#24 id=24 data-nosnippet>24</a>
@@ -104,7 +104,7 @@
 <a href=#104 id=104 data-nosnippet>104</a>    <span class="kw">type </span>InstanceBuilder = InstanceBuilder;
 <a href=#105 id=105 data-nosnippet>105</a>
 <a href=#106 id=106 data-nosnippet>106</a>    <span class="kw">fn </span>init(<span class="kw-2">&amp;mut </span><span class="self">self</span>, ctx: <span class="kw-2">&amp;mut </span><span class="kw">impl </span>InitContext&lt;<span class="self">Self</span>&gt;) -&gt; anyhow::Result&lt;()&gt; {
-<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">use </span>wasmtime_wasi::bindings;
+<a href=#107 id=107 data-nosnippet>107</a>        <span class="kw">use </span>wasmtime_wasi::p2::bindings;
 <a href=#108 id=108 data-nosnippet>108</a>
 <a href=#109 id=109 data-nosnippet>109</a>        ctx.link_wasi_bindings(bindings::clocks::wall_clock::add_to_linker_get_host)<span class="question-mark">?</span>;
 <a href=#110 id=110 data-nosnippet>110</a>        ctx.link_wasi_bindings(bindings::clocks::monotonic_clock::add_to_linker_get_host)<span class="question-mark">?</span>;

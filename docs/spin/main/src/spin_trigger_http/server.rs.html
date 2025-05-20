@@ -28,7 +28,7 @@
 <a href=#28 id=28 data-nosnippet>28</a>    task,
 <a href=#29 id=29 data-nosnippet>29</a>};
 <a href=#30 id=30 data-nosnippet>30</a><span class="kw">use </span>tracing::Instrument;
-<a href=#31 id=31 data-nosnippet>31</a><span class="kw">use </span>wasmtime_wasi::bindings::CommandIndices;
+<a href=#31 id=31 data-nosnippet>31</a><span class="kw">use </span>wasmtime_wasi::p2::bindings::CommandIndices;
 <a href=#32 id=32 data-nosnippet>32</a><span class="kw">use </span>wasmtime_wasi_http::body::HyperOutgoingBody;
 <a href=#33 id=33 data-nosnippet>33</a>
 <a href=#34 id=34 data-nosnippet>34</a><span class="kw">use crate</span>::{
@@ -109,17 +109,17 @@
 <a href=#109 id=109 data-nosnippet>109</a>        <span class="kw">let </span>component_handler_types = component_trigger_configs
 <a href=#110 id=110 data-nosnippet>110</a>            .iter()
 <a href=#111 id=111 data-nosnippet>111</a>            .map(|(component_id, trigger_config)| {
-<a href=#112 id=112 data-nosnippet>112</a>                        <span class="kw">let </span>component = trigger_app.get_component(component_id)<span class="question-mark">?</span>;
+<a href=#112 id=112 data-nosnippet>112</a>                <span class="kw">let </span>pre = trigger_app.get_instance_pre(component_id)<span class="question-mark">?</span>;
 <a href=#113 id=113 data-nosnippet>113</a>                <span class="kw">let </span>handler_type = <span class="kw">match </span><span class="kw-2">&amp;</span>trigger_config.executor {
 <a href=#114 id=114 data-nosnippet>114</a>                    <span class="prelude-val">None </span>| <span class="prelude-val">Some</span>(HttpExecutorType::Http) =&gt; {
-<a href=#115 id=115 data-nosnippet>115</a>                        HandlerType::from_component(component)<span class="question-mark">?
+<a href=#115 id=115 data-nosnippet>115</a>                        HandlerType::from_instance_pre(pre)<span class="question-mark">?
 <a href=#116 id=116 data-nosnippet>116</a>                    </span>}
 <a href=#117 id=117 data-nosnippet>117</a>                    <span class="prelude-val">Some</span>(HttpExecutorType::Wagi(wagi_config)) =&gt; {
 <a href=#118 id=118 data-nosnippet>118</a>                        <span class="macro">anyhow::ensure!</span>(
 <a href=#119 id=119 data-nosnippet>119</a>                            wagi_config.entrypoint == <span class="string">"_start"</span>,
 <a href=#120 id=120 data-nosnippet>120</a>                            <span class="string">"Wagi component '{component_id}' cannot use deprecated 'entrypoint' field"
 <a href=#121 id=121 data-nosnippet>121</a>                        </span>);
-<a href=#122 id=122 data-nosnippet>122</a>                        HandlerType::Wagi(CommandIndices::new(component)
+<a href=#122 id=122 data-nosnippet>122</a>                        HandlerType::Wagi(CommandIndices::new(pre)
 <a href=#123 id=123 data-nosnippet>123</a>                            .context(<span class="string">"failed to find wasi command interface for wagi executor"</span>)<span class="question-mark">?</span>)
 <a href=#124 id=124 data-nosnippet>124</a>                    }
 <a href=#125 id=125 data-nosnippet>125</a>                };

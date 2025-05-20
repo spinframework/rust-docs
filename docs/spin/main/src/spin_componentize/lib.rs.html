@@ -254,7 +254,7 @@
 <a href=#254 id=254 data-nosnippet>254</a>    <span class="kw">use </span>std::{path::PathBuf, process};
 <a href=#255 id=255 data-nosnippet>255</a>
 <a href=#256 id=256 data-nosnippet>256</a>    <span class="kw">use </span>anyhow::Context;
-<a href=#257 id=257 data-nosnippet>257</a>    <span class="kw">use </span>wasmtime_wasi::pipe::MemoryOutputPipe;
+<a href=#257 id=257 data-nosnippet>257</a>    <span class="kw">use </span>wasmtime_wasi::p2::pipe::MemoryOutputPipe;
 <a href=#258 id=258 data-nosnippet>258</a>
 <a href=#259 id=259 data-nosnippet>259</a>    <span class="kw">use </span>{
 <a href=#260 id=260 data-nosnippet>260</a>        <span class="kw">super</span>::abi_conformance::{
@@ -267,10 +267,10 @@
 <a href=#267 id=267 data-nosnippet>267</a>            component::{Component, Linker},
 <a href=#268 id=268 data-nosnippet>268</a>            Config, Engine, Store,
 <a href=#269 id=269 data-nosnippet>269</a>        },
-<a href=#270 id=270 data-nosnippet>270</a>        wasmtime_wasi::{
-<a href=#271 id=271 data-nosnippet>271</a>            bindings::Command, pipe::MemoryInputPipe, IoView, ResourceTable, WasiView,
+<a href=#270 id=270 data-nosnippet>270</a>        wasmtime_wasi::p2::{
+<a href=#271 id=271 data-nosnippet>271</a>            bindings::Command, pipe::MemoryInputPipe, IoView, WasiCtx, WasiCtxBuilder, WasiView,
 <a href=#272 id=272 data-nosnippet>272</a>        },
-<a href=#273 id=273 data-nosnippet>273</a>        wasmtime_wasi::{WasiCtx, WasiCtxBuilder},
+<a href=#273 id=273 data-nosnippet>273</a>        wasmtime_wasi::ResourceTable,
 <a href=#274 id=274 data-nosnippet>274</a>    };
 <a href=#275 id=275 data-nosnippet>275</a>
 <a href=#276 id=276 data-nosnippet>276</a>    <span class="kw">async fn </span>run_spin(module: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
@@ -371,7 +371,7 @@
 <a href=#371 id=371 data-nosnippet>371</a>        }
 <a href=#372 id=372 data-nosnippet>372</a>
 <a href=#373 id=373 data-nosnippet>373</a>        <span class="kw">let </span><span class="kw-2">mut </span>linker = Linker::&lt;Wasi&gt;::new(<span class="kw-2">&amp;</span>engine);
-<a href=#374 id=374 data-nosnippet>374</a>        wasmtime_wasi::add_to_linker_async(<span class="kw-2">&amp;mut </span>linker)<span class="question-mark">?</span>;
+<a href=#374 id=374 data-nosnippet>374</a>        wasmtime_wasi::p2::add_to_linker_async(<span class="kw-2">&amp;mut </span>linker)<span class="question-mark">?</span>;
 <a href=#375 id=375 data-nosnippet>375</a>        <span class="kw">let </span><span class="kw-2">mut </span>ctx = WasiCtxBuilder::new();
 <a href=#376 id=376 data-nosnippet>376</a>        <span class="kw">let </span>stdout = MemoryOutputPipe::new(<span class="number">1024</span>);
 <a href=#377 id=377 data-nosnippet>377</a>        ctx.stdin(MemoryInputPipe::new(<span class="string">"So rested he by the Tumtum tree"</span>))

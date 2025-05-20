@@ -38,10 +38,10 @@
 <a href=#38 id=38 data-nosnippet>38</a>        <span class="comment">// Expects here are safe since we have already checked that this
 <a href=#39 id=39 data-nosnippet>39</a>        // instance exists
 <a href=#40 id=40 data-nosnippet>40</a>        </span><span class="kw">let </span>inbound_http = instance
-<a href=#41 id=41 data-nosnippet>41</a>            .get_export(<span class="kw-2">&amp;mut </span>store, <span class="prelude-val">None</span>, <span class="string">"fermyon:spin/inbound-http"</span>)
+<a href=#41 id=41 data-nosnippet>41</a>            .get_export_index(<span class="kw-2">&amp;mut </span>store, <span class="prelude-val">None</span>, <span class="string">"fermyon:spin/inbound-http"</span>)
 <a href=#42 id=42 data-nosnippet>42</a>            .expect(<span class="string">"no fermyon:spin/inbound-http found"</span>);
 <a href=#43 id=43 data-nosnippet>43</a>        <span class="kw">let </span>handle_request = instance
-<a href=#44 id=44 data-nosnippet>44</a>            .get_export(<span class="kw-2">&amp;mut </span>store, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>inbound_http), <span class="string">"handle-request"</span>)
+<a href=#44 id=44 data-nosnippet>44</a>            .get_export_index(<span class="kw-2">&amp;mut </span>store, <span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>inbound_http), <span class="string">"handle-request"</span>)
 <a href=#45 id=45 data-nosnippet>45</a>            .expect(<span class="string">"no handle-request found"</span>);
 <a href=#46 id=46 data-nosnippet>46</a>        <span class="kw">let </span>func = instance.get_typed_func::&lt;(http_types::Request,), (http_types::Response,)&gt;(
 <a href=#47 id=47 data-nosnippet>47</a>            <span class="kw-2">&amp;mut </span>store,

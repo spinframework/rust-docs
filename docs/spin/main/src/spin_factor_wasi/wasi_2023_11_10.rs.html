@@ -1,10 +1,10 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-wasi/src/wasi_2023_11_10.rs`."><title>wasi_2023_11_10.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-0ce1a80b.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_wasi" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0-nightly (60dabef95 2025-05-19)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-7ef8a74a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_factor_wasi/</div>wasi_2023_11_10.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span><span class="kw">super</span>::wasi_2023_10_18::{convert, convert_result};
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>spin_factors::anyhow::{<span class="self">self</span>, <span class="prelude-ty">Result</span>};
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>wasmtime::component::{Linker, Resource};
-<a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>wasmtime_wasi::{WasiImpl, WasiView};
+<a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>wasmtime_wasi::p2::{WasiImpl, WasiView};
 <a href=#5 id=5 data-nosnippet>5</a>
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">mod </span>latest {
-<a href=#7 id=7 data-nosnippet>7</a>    <span class="kw">pub use </span>wasmtime_wasi::bindings::<span class="kw-2">*</span>;
+<a href=#7 id=7 data-nosnippet>7</a>    <span class="kw">pub use </span>wasmtime_wasi::p2::bindings::<span class="kw-2">*</span>;
 <a href=#8 id=8 data-nosnippet>8</a>}
 <a href=#9 id=9 data-nosnippet>9</a>
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">mod </span>bindings {
@@ -593,19 +593,19 @@
 <a href=#593 id=593 data-nosnippet>593</a>
 <a href=#594 id=594 data-nosnippet>594</a><span class="kw">fn </span>convert_stream_result&lt;T, T2&gt;(
 <a href=#595 id=595 data-nosnippet>595</a>    <span class="kw-2">mut </span>view: <span class="kw">impl </span>WasiView,
-<a href=#596 id=596 data-nosnippet>596</a>    result: <span class="prelude-ty">Result</span>&lt;T, wasmtime_wasi::StreamError&gt;,
+<a href=#596 id=596 data-nosnippet>596</a>    result: <span class="prelude-ty">Result</span>&lt;T, wasmtime_wasi::p2::StreamError&gt;,
 <a href=#597 id=597 data-nosnippet>597</a>) -&gt; wasmtime::Result&lt;<span class="prelude-ty">Result</span>&lt;T2, StreamError&gt;&gt;
 <a href=#598 id=598 data-nosnippet>598</a><span class="kw">where
 <a href=#599 id=599 data-nosnippet>599</a>    </span>T2: From&lt;T&gt;,
 <a href=#600 id=600 data-nosnippet>600</a>{
 <a href=#601 id=601 data-nosnippet>601</a>    <span class="kw">match </span>result {
 <a href=#602 id=602 data-nosnippet>602</a>        <span class="prelude-val">Ok</span>(e) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Ok</span>(e.into())),
-<a href=#603 id=603 data-nosnippet>603</a>        <span class="prelude-val">Err</span>(wasmtime_wasi::StreamError::Closed) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(StreamError::Closed)),
-<a href=#604 id=604 data-nosnippet>604</a>        <span class="prelude-val">Err</span>(wasmtime_wasi::StreamError::LastOperationFailed(e)) =&gt; {
+<a href=#603 id=603 data-nosnippet>603</a>        <span class="prelude-val">Err</span>(wasmtime_wasi::p2::StreamError::Closed) =&gt; <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(StreamError::Closed)),
+<a href=#604 id=604 data-nosnippet>604</a>        <span class="prelude-val">Err</span>(wasmtime_wasi::p2::StreamError::LastOperationFailed(e)) =&gt; {
 <a href=#605 id=605 data-nosnippet>605</a>            <span class="kw">let </span>e = view.table().push(e)<span class="question-mark">?</span>;
 <a href=#606 id=606 data-nosnippet>606</a>            <span class="prelude-val">Ok</span>(<span class="prelude-val">Err</span>(StreamError::LastOperationFailed(e)))
 <a href=#607 id=607 data-nosnippet>607</a>        }
-<a href=#608 id=608 data-nosnippet>608</a>        <span class="prelude-val">Err</span>(wasmtime_wasi::StreamError::Trap(e)) =&gt; <span class="prelude-val">Err</span>(e),
+<a href=#608 id=608 data-nosnippet>608</a>        <span class="prelude-val">Err</span>(wasmtime_wasi::p2::StreamError::Trap(e)) =&gt; <span class="prelude-val">Err</span>(e),
 <a href=#609 id=609 data-nosnippet>609</a>    }
 <a href=#610 id=610 data-nosnippet>610</a>}
 <a href=#611 id=611 data-nosnippet>611</a>
