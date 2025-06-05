@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["spin"],"struct":["ClientCertConfig","ComponentTlsConfigs","RuntimeConfig","TlsConfig"]};
+window.SIDEBAR_ITEMS = {"enum":["PrivateKeyDer"],"mod":["spin"],"struct":["CertificateDer","ClientCertRuntimeConfig","ClientTlsRuntimeConfig","RuntimeConfig"]};
