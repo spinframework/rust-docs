@@ -4,7 +4,7 @@
 relative paths.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.config_from_table" class="method"><a class="src rightside" href="../../../src/spin_factor_outbound_networking/runtime_config/spin.rs.html#44-70">Source</a><h4 class="code-header">pub fn <a href="#method.config_from_table" class="fn">config_from_table</a>(
     &amp;self,
-    table: &amp;impl GetTomlValue,
+    table: &amp;impl <a class="trait" href="../../../spin_factors/runtime_config/toml/trait.GetTomlValue.html" title="trait spin_factors::runtime_config::toml::GetTomlValue">GetTomlValue</a>,
 ) -&gt; <a class="type" href="https://docs.rs/anyhow/1.0.93/anyhow/type.Result.html" title="type anyhow::Result">Result</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;<a class="struct" href="../struct.RuntimeConfig.html" title="struct spin_factor_outbound_networking::runtime_config::RuntimeConfig">RuntimeConfig</a>&gt;&gt;</h4></section></summary><div class="docblock"><p>Get the runtime configuration for client TLS from a TOML table.</p>
 <p>Expects table to be in the format:</p>
 <div class="example-wrap"><pre class="language-toml"><code>[outbound_networking]
