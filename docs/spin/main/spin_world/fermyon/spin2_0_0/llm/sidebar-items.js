@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["add_to_linker","add_to_linker_get_host"],"struct":["EmbeddingsResult","EmbeddingsUsage","InferencingParams","InferencingResult","InferencingUsage"],"trait":["GetHost","Host"],"type":["EmbeddingModel","InferencingModel"]};
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["add_to_linker"],"struct":["EmbeddingsResult","EmbeddingsUsage","InferencingParams","InferencingResult","InferencingUsage"],"trait":["Host"],"type":["EmbeddingModel","InferencingModel"]};

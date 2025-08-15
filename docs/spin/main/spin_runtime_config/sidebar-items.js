@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["DEFAULT_STATE_DIR"],"fn":["key_value_config_resolver"],"struct":["ResolvedRuntimeConfig","TomlResolver","TomlRuntimeConfigSource"]};
+window.SIDEBAR_ITEMS = {"constant":["DEFAULT_STATE_DIR"],"fn":["key_value_config_resolver"],"mod":["variables"],"struct":["ResolvedRuntimeConfig","TomlResolver","TomlRuntimeConfigSource"]};

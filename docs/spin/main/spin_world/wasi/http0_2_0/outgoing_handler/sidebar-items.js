@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker","add_to_linker_get_host"],"trait":["GetHost","Host"],"type":["ErrorCode","FutureIncomingResponse","OutgoingRequest","RequestOptions"]};
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"trait":["Host"],"type":["ErrorCode","FutureIncomingResponse","OutgoingRequest","RequestOptions"]};

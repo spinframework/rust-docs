@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ShutdownType","TcpSocket"],"fn":["add_to_linker","add_to_linker_get_host"],"trait":["GetHost","Host","HostTcpSocket"],"type":["Duration","ErrorCode","InputStream","IpAddressFamily","IpSocketAddress","Network","OutputStream","Pollable"]};
+window.SIDEBAR_ITEMS = {"enum":["ShutdownType","TcpSocket"],"fn":["add_to_linker"],"trait":["Host","HostTcpSocket"],"type":["Duration","ErrorCode","InputStream","IpAddressFamily","IpSocketAddress","Network","OutputStream","Pollable"]};

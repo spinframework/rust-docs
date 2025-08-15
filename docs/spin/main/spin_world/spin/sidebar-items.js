@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["postgres","sqlite"]};
+window.SIDEBAR_ITEMS = {"mod":["postgres3_0_0","postgres4_0_0","sqlite"]};

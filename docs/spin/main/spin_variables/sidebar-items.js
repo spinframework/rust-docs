@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["AzureAuthorityHost","AzureKeyVaultAuthOptions","VariableProviderConfiguration"],"fn":["runtime_config_from_toml"],"struct":["AzureKeyVaultProvider","AzureKeyVaultVariablesConfig","EnvVariablesConfig","EnvVariablesProvider","StaticVariablesProvider","VaultVariablesProvider"]};

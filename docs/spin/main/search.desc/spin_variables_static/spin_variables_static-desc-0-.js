@@ -1,0 +1,1 @@
+searchState.loadedDescShard("spin_variables_static", 0, "A <code>Provider</code> that reads variables from an static map.\nReturns the argument unchanged.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.\nCalls <code>U::from(self)</code>.\nCreates a new <code>StaticVariablesProvider</code> with the given …")

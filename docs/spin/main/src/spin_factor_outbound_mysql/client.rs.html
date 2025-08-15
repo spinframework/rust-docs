@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-outbound-mysql/src/client.rs`."><title>client.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_outbound_mysql" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0-nightly (4b27a04cc 2025-06-04)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_factor_outbound_mysql/</div>client.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::sync::Arc;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-outbound-mysql/src/client.rs`."><title>client.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-069232aa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_outbound_mysql" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0-nightly (898aff704 2025-08-14)" data-channel="nightly" data-search-js="search-281b7574.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_factor_outbound_mysql/</div>client.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::sync::Arc;
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>anyhow::{anyhow, <span class="prelude-ty">Result</span>};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>mysql_async::consts::ColumnType;
@@ -55,7 +55,7 @@
 <a href=#55 id=55 data-nosnippet>55</a>
 <a href=#56 id=56 data-nosnippet>56</a>        <span class="self">self</span>.exec_batch(<span class="kw-2">&amp;</span>statement, <span class="kw-2">&amp;</span>[parameters])
 <a href=#57 id=57 data-nosnippet>57</a>            .<span class="kw">await
-<a href=#58 id=58 data-nosnippet>58</a>            </span>.map_err(|e| v2::Error::QueryFailed(<span class="macro">format!</span>(<span class="string">"{:?}"</span>, e)))
+<a href=#58 id=58 data-nosnippet>58</a>            </span>.map_err(|e| v2::Error::QueryFailed(<span class="macro">format!</span>(<span class="string">"{e:?}"</span>)))
 <a href=#59 id=59 data-nosnippet>59</a>    }
 <a href=#60 id=60 data-nosnippet>60</a>
 <a href=#61 id=61 data-nosnippet>61</a>    <span class="kw">async fn </span>query(
@@ -69,7 +69,7 @@
 <a href=#69 id=69 data-nosnippet>69</a>        <span class="kw">let </span><span class="kw-2">mut </span>query_result = <span class="self">self
 <a href=#70 id=70 data-nosnippet>70</a>            </span>.exec_iter(<span class="kw-2">&amp;</span>statement, parameters)
 <a href=#71 id=71 data-nosnippet>71</a>            .<span class="kw">await
-<a href=#72 id=72 data-nosnippet>72</a>            </span>.map_err(|e| v2::Error::QueryFailed(<span class="macro">format!</span>(<span class="string">"{:?}"</span>, e)))<span class="question-mark">?</span>;
+<a href=#72 id=72 data-nosnippet>72</a>            </span>.map_err(|e| v2::Error::QueryFailed(<span class="macro">format!</span>(<span class="string">"{e:?}"</span>)))<span class="question-mark">?</span>;
 <a href=#73 id=73 data-nosnippet>73</a>
 <a href=#74 id=74 data-nosnippet>74</a>        <span class="comment">// We have to get these before collect() destroys them
 <a href=#75 id=75 data-nosnippet>75</a>        </span><span class="kw">let </span>columns = convert_columns(query_result.columns());
@@ -193,116 +193,115 @@
 <a href=#193 id=193 data-nosnippet>193</a>    <span class="kw">match </span>(row.take(index), columns.get(index)) {
 <a href=#194 id=194 data-nosnippet>194</a>        (<span class="prelude-val">None</span>, <span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(DbValue::DbNull), <span class="comment">// TODO: is this right or is this an "index out of range" thing
 <a href=#195 id=195 data-nosnippet>195</a>        </span>(<span class="kw">_</span>, <span class="prelude-val">None</span>) =&gt; <span class="prelude-val">Err</span>(v2::Error::Other(<span class="macro">format!</span>(
-<a href=#196 id=196 data-nosnippet>196</a>            <span class="string">"Can't get column at index {}"</span>,
-<a href=#197 id=197 data-nosnippet>197</a>            index
-<a href=#198 id=198 data-nosnippet>198</a>        ))),
-<a href=#199 id=199 data-nosnippet>199</a>        (<span class="prelude-val">Some</span>(mysql_async::Value::NULL), <span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(DbValue::DbNull),
-<a href=#200 id=200 data-nosnippet>200</a>        (<span class="prelude-val">Some</span>(value), <span class="prelude-val">Some</span>(column)) =&gt; convert_value(value, column),
-<a href=#201 id=201 data-nosnippet>201</a>    }
-<a href=#202 id=202 data-nosnippet>202</a>}
-<a href=#203 id=203 data-nosnippet>203</a>
-<a href=#204 id=204 data-nosnippet>204</a><span class="kw">fn </span>convert_value(value: mysql_async::Value, column: <span class="kw-2">&amp;</span>Column) -&gt; <span class="prelude-ty">Result</span>&lt;DbValue, v2::Error&gt; {
-<a href=#205 id=205 data-nosnippet>205</a>    <span class="kw">match </span>column.data_type {
-<a href=#206 id=206 data-nosnippet>206</a>        DbDataType::Binary =&gt; convert_value_to::&lt;Vec&lt;u8&gt;&gt;(value).map(DbValue::Binary),
-<a href=#207 id=207 data-nosnippet>207</a>        DbDataType::Boolean =&gt; convert_value_to::&lt;bool&gt;(value).map(DbValue::Boolean),
-<a href=#208 id=208 data-nosnippet>208</a>        DbDataType::Floating32 =&gt; convert_value_to::&lt;f32&gt;(value).map(DbValue::Floating32),
-<a href=#209 id=209 data-nosnippet>209</a>        DbDataType::Floating64 =&gt; convert_value_to::&lt;f64&gt;(value).map(DbValue::Floating64),
-<a href=#210 id=210 data-nosnippet>210</a>        DbDataType::Int8 =&gt; convert_value_to::&lt;i8&gt;(value).map(DbValue::Int8),
-<a href=#211 id=211 data-nosnippet>211</a>        DbDataType::Int16 =&gt; convert_value_to::&lt;i16&gt;(value).map(DbValue::Int16),
-<a href=#212 id=212 data-nosnippet>212</a>        DbDataType::Int32 =&gt; convert_value_to::&lt;i32&gt;(value).map(DbValue::Int32),
-<a href=#213 id=213 data-nosnippet>213</a>        DbDataType::Int64 =&gt; convert_value_to::&lt;i64&gt;(value).map(DbValue::Int64),
-<a href=#214 id=214 data-nosnippet>214</a>        DbDataType::Str =&gt; convert_value_to::&lt;String&gt;(value).map(DbValue::Str),
-<a href=#215 id=215 data-nosnippet>215</a>        DbDataType::Uint8 =&gt; convert_value_to::&lt;u8&gt;(value).map(DbValue::Uint8),
-<a href=#216 id=216 data-nosnippet>216</a>        DbDataType::Uint16 =&gt; convert_value_to::&lt;u16&gt;(value).map(DbValue::Uint16),
-<a href=#217 id=217 data-nosnippet>217</a>        DbDataType::Uint32 =&gt; convert_value_to::&lt;u32&gt;(value).map(DbValue::Uint32),
-<a href=#218 id=218 data-nosnippet>218</a>        DbDataType::Uint64 =&gt; convert_value_to::&lt;u64&gt;(value).map(DbValue::Uint64),
-<a href=#219 id=219 data-nosnippet>219</a>        DbDataType::Other =&gt; <span class="prelude-val">Err</span>(v2::Error::ValueConversionFailed(<span class="macro">format!</span>(
-<a href=#220 id=220 data-nosnippet>220</a>            <span class="string">"Cannot convert value {:?} in column {} data type {:?}"</span>,
-<a href=#221 id=221 data-nosnippet>221</a>            value, column.name, column.data_type
-<a href=#222 id=222 data-nosnippet>222</a>        ))),
-<a href=#223 id=223 data-nosnippet>223</a>    }
-<a href=#224 id=224 data-nosnippet>224</a>}
-<a href=#225 id=225 data-nosnippet>225</a>
-<a href=#226 id=226 data-nosnippet>226</a><span class="kw">fn </span>is_ssl_param(s: <span class="kw-2">&amp;</span>str) -&gt; bool {
-<a href=#227 id=227 data-nosnippet>227</a>    [<span class="string">"ssl-mode"</span>, <span class="string">"sslmode"</span>].contains(<span class="kw-2">&amp;</span>s.to_lowercase().as_str())
-<a href=#228 id=228 data-nosnippet>228</a>}
-<a href=#229 id=229 data-nosnippet>229</a>
-<a href=#230 id=230 data-nosnippet>230</a><span class="doccomment">/// The mysql_async crate blows up if you pass it an SSL parameter and doesn't support SSL opts properly. This function
-<a href=#231 id=231 data-nosnippet>231</a>/// is a workaround to manually set SSL opts if the user requests them.
-<a href=#232 id=232 data-nosnippet>232</a>///
-<a href=#233 id=233 data-nosnippet>233</a>/// We only support ssl-mode in the query as per
-<a href=#234 id=234 data-nosnippet>234</a>/// https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-connp-props-security.html#cj-conn-prop_sslMode.
-<a href=#235 id=235 data-nosnippet>235</a>///
-<a href=#236 id=236 data-nosnippet>236</a>/// An issue has been filed in the upstream repository https://github.com/blackbeam/mysql_async/issues/225.
-<a href=#237 id=237 data-nosnippet>237</a></span><span class="kw">fn </span>build_opts(address: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Opts, mysql_async::Error&gt; {
-<a href=#238 id=238 data-nosnippet>238</a>    <span class="kw">let </span>url = Url::parse(address)<span class="question-mark">?</span>;
-<a href=#239 id=239 data-nosnippet>239</a>
-<a href=#240 id=240 data-nosnippet>240</a>    <span class="kw">let </span>use_ssl = url
-<a href=#241 id=241 data-nosnippet>241</a>        .query_pairs()
-<a href=#242 id=242 data-nosnippet>242</a>        .any(|(k, v)| is_ssl_param(<span class="kw-2">&amp;</span>k) &amp;&amp; v.to_lowercase() != <span class="string">"disabled"</span>);
-<a href=#243 id=243 data-nosnippet>243</a>
-<a href=#244 id=244 data-nosnippet>244</a>    <span class="kw">let </span>query_without_ssl: Vec&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; = url
-<a href=#245 id=245 data-nosnippet>245</a>        .query_pairs()
-<a href=#246 id=246 data-nosnippet>246</a>        .filter(|(k, _v)| !is_ssl_param(k))
-<a href=#247 id=247 data-nosnippet>247</a>        .collect();
-<a href=#248 id=248 data-nosnippet>248</a>    <span class="kw">let </span><span class="kw-2">mut </span>cleaned_url = url.clone();
-<a href=#249 id=249 data-nosnippet>249</a>    cleaned_url.set_query(<span class="prelude-val">None</span>);
-<a href=#250 id=250 data-nosnippet>250</a>    cleaned_url
-<a href=#251 id=251 data-nosnippet>251</a>        .query_pairs_mut()
-<a href=#252 id=252 data-nosnippet>252</a>        .extend_pairs(query_without_ssl);
-<a href=#253 id=253 data-nosnippet>253</a>
-<a href=#254 id=254 data-nosnippet>254</a>    <span class="prelude-val">Ok</span>(OptsBuilder::from_opts(cleaned_url.as_str())
-<a href=#255 id=255 data-nosnippet>255</a>        .ssl_opts(<span class="kw">if </span>use_ssl {
-<a href=#256 id=256 data-nosnippet>256</a>            <span class="prelude-val">Some</span>(SslOpts::default())
-<a href=#257 id=257 data-nosnippet>257</a>        } <span class="kw">else </span>{
-<a href=#258 id=258 data-nosnippet>258</a>            <span class="prelude-val">None
-<a href=#259 id=259 data-nosnippet>259</a>        </span>})
-<a href=#260 id=260 data-nosnippet>260</a>        .into())
-<a href=#261 id=261 data-nosnippet>261</a>}
-<a href=#262 id=262 data-nosnippet>262</a>
-<a href=#263 id=263 data-nosnippet>263</a><span class="kw">fn </span>convert_value_to&lt;T: FromValue&gt;(value: mysql_async::Value) -&gt; <span class="prelude-ty">Result</span>&lt;T, v2::Error&gt; {
-<a href=#264 id=264 data-nosnippet>264</a>    from_value_opt::&lt;T&gt;(value).map_err(|e| v2::Error::ValueConversionFailed(<span class="macro">format!</span>(<span class="string">"{}"</span>, e)))
-<a href=#265 id=265 data-nosnippet>265</a>}
-<a href=#266 id=266 data-nosnippet>266</a>
-<a href=#267 id=267 data-nosnippet>267</a><span class="attr">#[cfg(test)]
-<a href=#268 id=268 data-nosnippet>268</a></span><span class="kw">mod </span>test {
-<a href=#269 id=269 data-nosnippet>269</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#270 id=270 data-nosnippet>270</a>
-<a href=#271 id=271 data-nosnippet>271</a>    <span class="attr">#[test]
-<a href=#272 id=272 data-nosnippet>272</a>    </span><span class="kw">fn </span>test_mysql_address_without_ssl_mode() {
-<a href=#273 id=273 data-nosnippet>273</a>        <span class="macro">assert!</span>(build_opts(<span class="string">"mysql://myuser:password@127.0.0.1/db"</span>)
-<a href=#274 id=274 data-nosnippet>274</a>            .unwrap()
-<a href=#275 id=275 data-nosnippet>275</a>            .ssl_opts()
-<a href=#276 id=276 data-nosnippet>276</a>            .is_none())
-<a href=#277 id=277 data-nosnippet>277</a>    }
-<a href=#278 id=278 data-nosnippet>278</a>
-<a href=#279 id=279 data-nosnippet>279</a>    <span class="attr">#[test]
-<a href=#280 id=280 data-nosnippet>280</a>    </span><span class="kw">fn </span>test_mysql_address_with_ssl_mode_disabled() {
-<a href=#281 id=281 data-nosnippet>281</a>        <span class="macro">assert!</span>(
-<a href=#282 id=282 data-nosnippet>282</a>            build_opts(<span class="string">"mysql://myuser:password@127.0.0.1/db?ssl-mode=DISABLED"</span>)
-<a href=#283 id=283 data-nosnippet>283</a>                .unwrap()
-<a href=#284 id=284 data-nosnippet>284</a>                .ssl_opts()
-<a href=#285 id=285 data-nosnippet>285</a>                .is_none()
-<a href=#286 id=286 data-nosnippet>286</a>        )
-<a href=#287 id=287 data-nosnippet>287</a>    }
-<a href=#288 id=288 data-nosnippet>288</a>
-<a href=#289 id=289 data-nosnippet>289</a>    <span class="attr">#[test]
-<a href=#290 id=290 data-nosnippet>290</a>    </span><span class="kw">fn </span>test_mysql_address_with_ssl_mode_verify_ca() {
-<a href=#291 id=291 data-nosnippet>291</a>        <span class="macro">assert!</span>(
-<a href=#292 id=292 data-nosnippet>292</a>            build_opts(<span class="string">"mysql://myuser:password@127.0.0.1/db?sslMode=VERIFY_CA"</span>)
-<a href=#293 id=293 data-nosnippet>293</a>                .unwrap()
-<a href=#294 id=294 data-nosnippet>294</a>                .ssl_opts()
-<a href=#295 id=295 data-nosnippet>295</a>                .is_some()
-<a href=#296 id=296 data-nosnippet>296</a>        )
-<a href=#297 id=297 data-nosnippet>297</a>    }
-<a href=#298 id=298 data-nosnippet>298</a>
-<a href=#299 id=299 data-nosnippet>299</a>    <span class="attr">#[test]
-<a href=#300 id=300 data-nosnippet>300</a>    </span><span class="kw">fn </span>test_mysql_address_with_more_to_query() {
-<a href=#301 id=301 data-nosnippet>301</a>        <span class="kw">let </span>address = <span class="string">"mysql://myuser:password@127.0.0.1/db?SsLmOdE=VERIFY_CA&amp;pool_max=10"</span>;
-<a href=#302 id=302 data-nosnippet>302</a>        <span class="macro">assert!</span>(build_opts(address).unwrap().ssl_opts().is_some());
-<a href=#303 id=303 data-nosnippet>303</a>        <span class="macro">assert_eq!</span>(
-<a href=#304 id=304 data-nosnippet>304</a>            build_opts(address).unwrap().pool_opts().constraints().max(),
-<a href=#305 id=305 data-nosnippet>305</a>            <span class="number">10
-<a href=#306 id=306 data-nosnippet>306</a>        </span>)
-<a href=#307 id=307 data-nosnippet>307</a>    }
-<a href=#308 id=308 data-nosnippet>308</a>}</code></pre></div></section></main></body></html>
+<a href=#196 id=196 data-nosnippet>196</a>            <span class="string">"Can't get column at index {index}"
+<a href=#197 id=197 data-nosnippet>197</a>        </span>))),
+<a href=#198 id=198 data-nosnippet>198</a>        (<span class="prelude-val">Some</span>(mysql_async::Value::NULL), <span class="kw">_</span>) =&gt; <span class="prelude-val">Ok</span>(DbValue::DbNull),
+<a href=#199 id=199 data-nosnippet>199</a>        (<span class="prelude-val">Some</span>(value), <span class="prelude-val">Some</span>(column)) =&gt; convert_value(value, column),
+<a href=#200 id=200 data-nosnippet>200</a>    }
+<a href=#201 id=201 data-nosnippet>201</a>}
+<a href=#202 id=202 data-nosnippet>202</a>
+<a href=#203 id=203 data-nosnippet>203</a><span class="kw">fn </span>convert_value(value: mysql_async::Value, column: <span class="kw-2">&amp;</span>Column) -&gt; <span class="prelude-ty">Result</span>&lt;DbValue, v2::Error&gt; {
+<a href=#204 id=204 data-nosnippet>204</a>    <span class="kw">match </span>column.data_type {
+<a href=#205 id=205 data-nosnippet>205</a>        DbDataType::Binary =&gt; convert_value_to::&lt;Vec&lt;u8&gt;&gt;(value).map(DbValue::Binary),
+<a href=#206 id=206 data-nosnippet>206</a>        DbDataType::Boolean =&gt; convert_value_to::&lt;bool&gt;(value).map(DbValue::Boolean),
+<a href=#207 id=207 data-nosnippet>207</a>        DbDataType::Floating32 =&gt; convert_value_to::&lt;f32&gt;(value).map(DbValue::Floating32),
+<a href=#208 id=208 data-nosnippet>208</a>        DbDataType::Floating64 =&gt; convert_value_to::&lt;f64&gt;(value).map(DbValue::Floating64),
+<a href=#209 id=209 data-nosnippet>209</a>        DbDataType::Int8 =&gt; convert_value_to::&lt;i8&gt;(value).map(DbValue::Int8),
+<a href=#210 id=210 data-nosnippet>210</a>        DbDataType::Int16 =&gt; convert_value_to::&lt;i16&gt;(value).map(DbValue::Int16),
+<a href=#211 id=211 data-nosnippet>211</a>        DbDataType::Int32 =&gt; convert_value_to::&lt;i32&gt;(value).map(DbValue::Int32),
+<a href=#212 id=212 data-nosnippet>212</a>        DbDataType::Int64 =&gt; convert_value_to::&lt;i64&gt;(value).map(DbValue::Int64),
+<a href=#213 id=213 data-nosnippet>213</a>        DbDataType::Str =&gt; convert_value_to::&lt;String&gt;(value).map(DbValue::Str),
+<a href=#214 id=214 data-nosnippet>214</a>        DbDataType::Uint8 =&gt; convert_value_to::&lt;u8&gt;(value).map(DbValue::Uint8),
+<a href=#215 id=215 data-nosnippet>215</a>        DbDataType::Uint16 =&gt; convert_value_to::&lt;u16&gt;(value).map(DbValue::Uint16),
+<a href=#216 id=216 data-nosnippet>216</a>        DbDataType::Uint32 =&gt; convert_value_to::&lt;u32&gt;(value).map(DbValue::Uint32),
+<a href=#217 id=217 data-nosnippet>217</a>        DbDataType::Uint64 =&gt; convert_value_to::&lt;u64&gt;(value).map(DbValue::Uint64),
+<a href=#218 id=218 data-nosnippet>218</a>        DbDataType::Other =&gt; <span class="prelude-val">Err</span>(v2::Error::ValueConversionFailed(<span class="macro">format!</span>(
+<a href=#219 id=219 data-nosnippet>219</a>            <span class="string">"Cannot convert value {:?} in column {} data type {:?}"</span>,
+<a href=#220 id=220 data-nosnippet>220</a>            value, column.name, column.data_type
+<a href=#221 id=221 data-nosnippet>221</a>        ))),
+<a href=#222 id=222 data-nosnippet>222</a>    }
+<a href=#223 id=223 data-nosnippet>223</a>}
+<a href=#224 id=224 data-nosnippet>224</a>
+<a href=#225 id=225 data-nosnippet>225</a><span class="kw">fn </span>is_ssl_param(s: <span class="kw-2">&amp;</span>str) -&gt; bool {
+<a href=#226 id=226 data-nosnippet>226</a>    [<span class="string">"ssl-mode"</span>, <span class="string">"sslmode"</span>].contains(<span class="kw-2">&amp;</span>s.to_lowercase().as_str())
+<a href=#227 id=227 data-nosnippet>227</a>}
+<a href=#228 id=228 data-nosnippet>228</a>
+<a href=#229 id=229 data-nosnippet>229</a><span class="doccomment">/// The mysql_async crate blows up if you pass it an SSL parameter and doesn't support SSL opts properly. This function
+<a href=#230 id=230 data-nosnippet>230</a>/// is a workaround to manually set SSL opts if the user requests them.
+<a href=#231 id=231 data-nosnippet>231</a>///
+<a href=#232 id=232 data-nosnippet>232</a>/// We only support ssl-mode in the query as per
+<a href=#233 id=233 data-nosnippet>233</a>/// https://dev.mysql.com/doc/connector-j/8.0/en/connector-j-connp-props-security.html#cj-conn-prop_sslMode.
+<a href=#234 id=234 data-nosnippet>234</a>///
+<a href=#235 id=235 data-nosnippet>235</a>/// An issue has been filed in the upstream repository https://github.com/blackbeam/mysql_async/issues/225.
+<a href=#236 id=236 data-nosnippet>236</a></span><span class="kw">fn </span>build_opts(address: <span class="kw-2">&amp;</span>str) -&gt; <span class="prelude-ty">Result</span>&lt;Opts, mysql_async::Error&gt; {
+<a href=#237 id=237 data-nosnippet>237</a>    <span class="kw">let </span>url = Url::parse(address)<span class="question-mark">?</span>;
+<a href=#238 id=238 data-nosnippet>238</a>
+<a href=#239 id=239 data-nosnippet>239</a>    <span class="kw">let </span>use_ssl = url
+<a href=#240 id=240 data-nosnippet>240</a>        .query_pairs()
+<a href=#241 id=241 data-nosnippet>241</a>        .any(|(k, v)| is_ssl_param(<span class="kw-2">&amp;</span>k) &amp;&amp; v.to_lowercase() != <span class="string">"disabled"</span>);
+<a href=#242 id=242 data-nosnippet>242</a>
+<a href=#243 id=243 data-nosnippet>243</a>    <span class="kw">let </span>query_without_ssl: Vec&lt;(<span class="kw">_</span>, <span class="kw">_</span>)&gt; = url
+<a href=#244 id=244 data-nosnippet>244</a>        .query_pairs()
+<a href=#245 id=245 data-nosnippet>245</a>        .filter(|(k, _v)| !is_ssl_param(k))
+<a href=#246 id=246 data-nosnippet>246</a>        .collect();
+<a href=#247 id=247 data-nosnippet>247</a>    <span class="kw">let </span><span class="kw-2">mut </span>cleaned_url = url.clone();
+<a href=#248 id=248 data-nosnippet>248</a>    cleaned_url.set_query(<span class="prelude-val">None</span>);
+<a href=#249 id=249 data-nosnippet>249</a>    cleaned_url
+<a href=#250 id=250 data-nosnippet>250</a>        .query_pairs_mut()
+<a href=#251 id=251 data-nosnippet>251</a>        .extend_pairs(query_without_ssl);
+<a href=#252 id=252 data-nosnippet>252</a>
+<a href=#253 id=253 data-nosnippet>253</a>    <span class="prelude-val">Ok</span>(OptsBuilder::from_opts(cleaned_url.as_str())
+<a href=#254 id=254 data-nosnippet>254</a>        .ssl_opts(<span class="kw">if </span>use_ssl {
+<a href=#255 id=255 data-nosnippet>255</a>            <span class="prelude-val">Some</span>(SslOpts::default())
+<a href=#256 id=256 data-nosnippet>256</a>        } <span class="kw">else </span>{
+<a href=#257 id=257 data-nosnippet>257</a>            <span class="prelude-val">None
+<a href=#258 id=258 data-nosnippet>258</a>        </span>})
+<a href=#259 id=259 data-nosnippet>259</a>        .into())
+<a href=#260 id=260 data-nosnippet>260</a>}
+<a href=#261 id=261 data-nosnippet>261</a>
+<a href=#262 id=262 data-nosnippet>262</a><span class="kw">fn </span>convert_value_to&lt;T: FromValue&gt;(value: mysql_async::Value) -&gt; <span class="prelude-ty">Result</span>&lt;T, v2::Error&gt; {
+<a href=#263 id=263 data-nosnippet>263</a>    from_value_opt::&lt;T&gt;(value).map_err(|e| v2::Error::ValueConversionFailed(<span class="macro">format!</span>(<span class="string">"{e}"</span>)))
+<a href=#264 id=264 data-nosnippet>264</a>}
+<a href=#265 id=265 data-nosnippet>265</a>
+<a href=#266 id=266 data-nosnippet>266</a><span class="attr">#[cfg(test)]
+<a href=#267 id=267 data-nosnippet>267</a></span><span class="kw">mod </span>test {
+<a href=#268 id=268 data-nosnippet>268</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#269 id=269 data-nosnippet>269</a>
+<a href=#270 id=270 data-nosnippet>270</a>    <span class="attr">#[test]
+<a href=#271 id=271 data-nosnippet>271</a>    </span><span class="kw">fn </span>test_mysql_address_without_ssl_mode() {
+<a href=#272 id=272 data-nosnippet>272</a>        <span class="macro">assert!</span>(build_opts(<span class="string">"mysql://myuser:password@127.0.0.1/db"</span>)
+<a href=#273 id=273 data-nosnippet>273</a>            .unwrap()
+<a href=#274 id=274 data-nosnippet>274</a>            .ssl_opts()
+<a href=#275 id=275 data-nosnippet>275</a>            .is_none())
+<a href=#276 id=276 data-nosnippet>276</a>    }
+<a href=#277 id=277 data-nosnippet>277</a>
+<a href=#278 id=278 data-nosnippet>278</a>    <span class="attr">#[test]
+<a href=#279 id=279 data-nosnippet>279</a>    </span><span class="kw">fn </span>test_mysql_address_with_ssl_mode_disabled() {
+<a href=#280 id=280 data-nosnippet>280</a>        <span class="macro">assert!</span>(
+<a href=#281 id=281 data-nosnippet>281</a>            build_opts(<span class="string">"mysql://myuser:password@127.0.0.1/db?ssl-mode=DISABLED"</span>)
+<a href=#282 id=282 data-nosnippet>282</a>                .unwrap()
+<a href=#283 id=283 data-nosnippet>283</a>                .ssl_opts()
+<a href=#284 id=284 data-nosnippet>284</a>                .is_none()
+<a href=#285 id=285 data-nosnippet>285</a>        )
+<a href=#286 id=286 data-nosnippet>286</a>    }
+<a href=#287 id=287 data-nosnippet>287</a>
+<a href=#288 id=288 data-nosnippet>288</a>    <span class="attr">#[test]
+<a href=#289 id=289 data-nosnippet>289</a>    </span><span class="kw">fn </span>test_mysql_address_with_ssl_mode_verify_ca() {
+<a href=#290 id=290 data-nosnippet>290</a>        <span class="macro">assert!</span>(
+<a href=#291 id=291 data-nosnippet>291</a>            build_opts(<span class="string">"mysql://myuser:password@127.0.0.1/db?sslMode=VERIFY_CA"</span>)
+<a href=#292 id=292 data-nosnippet>292</a>                .unwrap()
+<a href=#293 id=293 data-nosnippet>293</a>                .ssl_opts()
+<a href=#294 id=294 data-nosnippet>294</a>                .is_some()
+<a href=#295 id=295 data-nosnippet>295</a>        )
+<a href=#296 id=296 data-nosnippet>296</a>    }
+<a href=#297 id=297 data-nosnippet>297</a>
+<a href=#298 id=298 data-nosnippet>298</a>    <span class="attr">#[test]
+<a href=#299 id=299 data-nosnippet>299</a>    </span><span class="kw">fn </span>test_mysql_address_with_more_to_query() {
+<a href=#300 id=300 data-nosnippet>300</a>        <span class="kw">let </span>address = <span class="string">"mysql://myuser:password@127.0.0.1/db?SsLmOdE=VERIFY_CA&amp;pool_max=10"</span>;
+<a href=#301 id=301 data-nosnippet>301</a>        <span class="macro">assert!</span>(build_opts(address).unwrap().ssl_opts().is_some());
+<a href=#302 id=302 data-nosnippet>302</a>        <span class="macro">assert_eq!</span>(
+<a href=#303 id=303 data-nosnippet>303</a>            build_opts(address).unwrap().pool_opts().constraints().max(),
+<a href=#304 id=304 data-nosnippet>304</a>            <span class="number">10
+<a href=#305 id=305 data-nosnippet>305</a>        </span>)
+<a href=#306 id=306 data-nosnippet>306</a>    }
+<a href=#307 id=307 data-nosnippet>307</a>}</code></pre></div></section></main></body></html>

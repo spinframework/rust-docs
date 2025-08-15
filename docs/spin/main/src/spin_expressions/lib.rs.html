@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/expressions/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2" crossorigin href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-84e720fa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_expressions" data-themes="" data-resource-suffix="" data-rustdoc-version="1.89.0-nightly (4b27a04cc 2025-06-04)" data-channel="nightly" data-search-js="search-f7877310.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-4e99c027.js"></script><script defer src="../../static.files/src-script-63605ae7.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fd3af306.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_expressions/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">pub mod </span>provider;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/expressions/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-069232aa.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_expressions" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0-nightly (898aff704 2025-08-14)" data-channel="nightly" data-search-js="search-281b7574.js" data-settings-js="settings-5514c975.js" ><script src="../../static.files/storage-68b7e25d.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-eebb9057.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-32bb7600.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-6580c154.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><rustdoc-search></rustdoc-search><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_expressions/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">pub mod </span>provider;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">mod </span>template;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::{borrow::Cow, collections::HashMap, fmt::Debug};
@@ -150,7 +150,7 @@
 <a href=#150 id=150 data-nosnippet>150</a>    }
 <a href=#151 id=151 data-nosnippet>151</a>
 <a href=#152 id=152 data-nosnippet>152</a>    <span class="doccomment">/// Resolves the given template.
-<a href=#153 id=153 data-nosnippet>153</a>    </span><span class="kw">fn </span>resolve_template(<span class="kw-2">&amp;</span><span class="self">self</span>, template: <span class="kw-2">&amp;</span>Template) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
+<a href=#153 id=153 data-nosnippet>153</a>    </span><span class="kw">pub fn </span>resolve_template(<span class="kw-2">&amp;</span><span class="self">self</span>, template: <span class="kw-2">&amp;</span>Template) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
 <a href=#154 id=154 data-nosnippet>154</a>        <span class="kw">let </span><span class="kw-2">mut </span>resolved_parts: Vec&lt;Cow&lt;str&gt;&gt; = Vec::with_capacity(template.parts().len());
 <a href=#155 id=155 data-nosnippet>155</a>        <span class="kw">for </span>part <span class="kw">in </span>template.parts() {
 <a href=#156 id=156 data-nosnippet>156</a>            resolved_parts.push(<span class="kw">match </span>part {
@@ -254,7 +254,7 @@
 <a href=#254 id=254 data-nosnippet>254</a>                .chars()
 <a href=#255 id=255 data-nosnippet>255</a>                .find(|c| !(c.is_ascii_lowercase() || c.is_ascii_digit() || c == <span class="kw-2">&amp;</span><span class="string">'_'</span>))
 <a href=#256 id=256 data-nosnippet>256</a>            {
-<a href=#257 id=257 data-nosnippet>257</a>                <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"invalid character {:?}. Variable names may contain only lower-case letters, numbers, and underscores."</span>, invalid))
+<a href=#257 id=257 data-nosnippet>257</a>                <span class="prelude-val">Err</span>(<span class="macro">format!</span>(<span class="string">"invalid character {invalid:?}. Variable names may contain only lower-case letters, numbers, and underscores."</span>))
 <a href=#258 id=258 data-nosnippet>258</a>            } <span class="kw">else if </span>!key.bytes().next().unwrap().is_ascii_lowercase() {
 <a href=#259 id=259 data-nosnippet>259</a>                <span class="prelude-val">Err</span>(<span class="string">"must start with a lowercase ASCII letter"</span>.to_string())
 <a href=#260 id=260 data-nosnippet>260</a>            } <span class="kw">else if </span>!key.bytes().last().unwrap().is_ascii_alphanumeric() {
@@ -330,64 +330,66 @@
 <a href=#330 id=330 data-nosnippet>330</a>            (
 <a href=#331 id=331 data-nosnippet>331</a>                <span class="string">"required"</span>.into(),
 <a href=#332 id=332 data-nosnippet>332</a>                Variable {
-<a href=#333 id=333 data-nosnippet>333</a>                    default: <span class="prelude-val">None</span>,
-<a href=#334 id=334 data-nosnippet>334</a>                    secret: <span class="bool-val">false</span>,
-<a href=#335 id=335 data-nosnippet>335</a>                },
-<a href=#336 id=336 data-nosnippet>336</a>            ),
-<a href=#337 id=337 data-nosnippet>337</a>            (
-<a href=#338 id=338 data-nosnippet>338</a>                <span class="string">"default"</span>.into(),
-<a href=#339 id=339 data-nosnippet>339</a>                Variable {
-<a href=#340 id=340 data-nosnippet>340</a>                    default: <span class="prelude-val">Some</span>(<span class="string">"default-value"</span>.into()),
-<a href=#341 id=341 data-nosnippet>341</a>                    secret: <span class="bool-val">false</span>,
-<a href=#342 id=342 data-nosnippet>342</a>                },
-<a href=#343 id=343 data-nosnippet>343</a>            ),
-<a href=#344 id=344 data-nosnippet>344</a>        ])
-<a href=#345 id=345 data-nosnippet>345</a>        .unwrap();
-<a href=#346 id=346 data-nosnippet>346</a>        resolver
-<a href=#347 id=347 data-nosnippet>347</a>            .add_component_variables(<span class="string">"test-component"</span>, [(<span class="string">"test_key"</span>.into(), template.into())])
-<a href=#348 id=348 data-nosnippet>348</a>            .unwrap();
-<a href=#349 id=349 data-nosnippet>349</a>        resolver.add_provider(Box::new(TestProvider));
-<a href=#350 id=350 data-nosnippet>350</a>        resolver.resolve(<span class="string">"test-component"</span>, Key(<span class="string">"test_key"</span>)).<span class="kw">await
-<a href=#351 id=351 data-nosnippet>351</a>    </span>}
-<a href=#352 id=352 data-nosnippet>352</a>
-<a href=#353 id=353 data-nosnippet>353</a>    <span class="attr">#[tokio::test]
-<a href=#354 id=354 data-nosnippet>354</a>    </span><span class="kw">async fn </span>resolve_static() {
-<a href=#355 id=355 data-nosnippet>355</a>        <span class="macro">assert_eq!</span>(test_resolve(<span class="string">"static-value"</span>).<span class="kw">await</span>.unwrap(), <span class="string">"static-value"</span>);
-<a href=#356 id=356 data-nosnippet>356</a>    }
-<a href=#357 id=357 data-nosnippet>357</a>
-<a href=#358 id=358 data-nosnippet>358</a>    <span class="attr">#[tokio::test]
-<a href=#359 id=359 data-nosnippet>359</a>    </span><span class="kw">async fn </span>resolve_variable_default() {
-<a href=#360 id=360 data-nosnippet>360</a>        <span class="macro">assert_eq!</span>(
-<a href=#361 id=361 data-nosnippet>361</a>            test_resolve(<span class="string">"prefix-{{ default }}-suffix"</span>).<span class="kw">await</span>.unwrap(),
-<a href=#362 id=362 data-nosnippet>362</a>            <span class="string">"prefix-default-value-suffix"
-<a href=#363 id=363 data-nosnippet>363</a>        </span>);
-<a href=#364 id=364 data-nosnippet>364</a>    }
-<a href=#365 id=365 data-nosnippet>365</a>
-<a href=#366 id=366 data-nosnippet>366</a>    <span class="attr">#[tokio::test]
-<a href=#367 id=367 data-nosnippet>367</a>    </span><span class="kw">async fn </span>resolve_variable_provider() {
-<a href=#368 id=368 data-nosnippet>368</a>        <span class="macro">assert_eq!</span>(
-<a href=#369 id=369 data-nosnippet>369</a>            test_resolve(<span class="string">"prefix-{{ required }}-suffix"</span>).<span class="kw">await</span>.unwrap(),
-<a href=#370 id=370 data-nosnippet>370</a>            <span class="string">"prefix-provider-value-suffix"
-<a href=#371 id=371 data-nosnippet>371</a>        </span>);
-<a href=#372 id=372 data-nosnippet>372</a>    }
-<a href=#373 id=373 data-nosnippet>373</a>
-<a href=#374 id=374 data-nosnippet>374</a>    <span class="attr">#[test]
-<a href=#375 id=375 data-nosnippet>375</a>    </span><span class="kw">fn </span>keys_good() {
-<a href=#376 id=376 data-nosnippet>376</a>        <span class="kw">for </span>key <span class="kw">in </span>[<span class="string">"a"</span>, <span class="string">"abc"</span>, <span class="string">"a1b2c3"</span>, <span class="string">"a_1"</span>, <span class="string">"a_1_b_3"</span>] {
-<a href=#377 id=377 data-nosnippet>377</a>            Key::new(key).expect(key);
-<a href=#378 id=378 data-nosnippet>378</a>        }
-<a href=#379 id=379 data-nosnippet>379</a>    }
-<a href=#380 id=380 data-nosnippet>380</a>
-<a href=#381 id=381 data-nosnippet>381</a>    <span class="attr">#[test]
-<a href=#382 id=382 data-nosnippet>382</a>    </span><span class="kw">fn </span>keys_bad() {
-<a href=#383 id=383 data-nosnippet>383</a>        <span class="kw">for </span>key <span class="kw">in </span>[<span class="string">""</span>, <span class="string">"aX"</span>, <span class="string">"1bc"</span>, <span class="string">"_x"</span>, <span class="string">"x.y"</span>, <span class="string">"x_"</span>, <span class="string">"a__b"</span>, <span class="string">"x-y"</span>] {
-<a href=#384 id=384 data-nosnippet>384</a>            Key::new(key).expect_err(key);
-<a href=#385 id=385 data-nosnippet>385</a>        }
-<a href=#386 id=386 data-nosnippet>386</a>    }
-<a href=#387 id=387 data-nosnippet>387</a>
-<a href=#388 id=388 data-nosnippet>388</a>    <span class="attr">#[test]
-<a href=#389 id=389 data-nosnippet>389</a>    </span><span class="kw">fn </span>template_literal() {
-<a href=#390 id=390 data-nosnippet>390</a>        <span class="macro">assert!</span>(Template::new(<span class="string">"hello"</span>).unwrap().is_literal());
-<a href=#391 id=391 data-nosnippet>391</a>        <span class="macro">assert!</span>(!Template::new(<span class="string">"hello {{ world }}"</span>).unwrap().is_literal());
-<a href=#392 id=392 data-nosnippet>392</a>    }
-<a href=#393 id=393 data-nosnippet>393</a>}</code></pre></div></section></main></body></html>
+<a href=#333 id=333 data-nosnippet>333</a>                    description: <span class="prelude-val">None</span>,
+<a href=#334 id=334 data-nosnippet>334</a>                    default: <span class="prelude-val">None</span>,
+<a href=#335 id=335 data-nosnippet>335</a>                    secret: <span class="bool-val">false</span>,
+<a href=#336 id=336 data-nosnippet>336</a>                },
+<a href=#337 id=337 data-nosnippet>337</a>            ),
+<a href=#338 id=338 data-nosnippet>338</a>            (
+<a href=#339 id=339 data-nosnippet>339</a>                <span class="string">"default"</span>.into(),
+<a href=#340 id=340 data-nosnippet>340</a>                Variable {
+<a href=#341 id=341 data-nosnippet>341</a>                    description: <span class="prelude-val">None</span>,
+<a href=#342 id=342 data-nosnippet>342</a>                    default: <span class="prelude-val">Some</span>(<span class="string">"default-value"</span>.into()),
+<a href=#343 id=343 data-nosnippet>343</a>                    secret: <span class="bool-val">false</span>,
+<a href=#344 id=344 data-nosnippet>344</a>                },
+<a href=#345 id=345 data-nosnippet>345</a>            ),
+<a href=#346 id=346 data-nosnippet>346</a>        ])
+<a href=#347 id=347 data-nosnippet>347</a>        .unwrap();
+<a href=#348 id=348 data-nosnippet>348</a>        resolver
+<a href=#349 id=349 data-nosnippet>349</a>            .add_component_variables(<span class="string">"test-component"</span>, [(<span class="string">"test_key"</span>.into(), template.into())])
+<a href=#350 id=350 data-nosnippet>350</a>            .unwrap();
+<a href=#351 id=351 data-nosnippet>351</a>        resolver.add_provider(Box::new(TestProvider));
+<a href=#352 id=352 data-nosnippet>352</a>        resolver.resolve(<span class="string">"test-component"</span>, Key(<span class="string">"test_key"</span>)).<span class="kw">await
+<a href=#353 id=353 data-nosnippet>353</a>    </span>}
+<a href=#354 id=354 data-nosnippet>354</a>
+<a href=#355 id=355 data-nosnippet>355</a>    <span class="attr">#[tokio::test]
+<a href=#356 id=356 data-nosnippet>356</a>    </span><span class="kw">async fn </span>resolve_static() {
+<a href=#357 id=357 data-nosnippet>357</a>        <span class="macro">assert_eq!</span>(test_resolve(<span class="string">"static-value"</span>).<span class="kw">await</span>.unwrap(), <span class="string">"static-value"</span>);
+<a href=#358 id=358 data-nosnippet>358</a>    }
+<a href=#359 id=359 data-nosnippet>359</a>
+<a href=#360 id=360 data-nosnippet>360</a>    <span class="attr">#[tokio::test]
+<a href=#361 id=361 data-nosnippet>361</a>    </span><span class="kw">async fn </span>resolve_variable_default() {
+<a href=#362 id=362 data-nosnippet>362</a>        <span class="macro">assert_eq!</span>(
+<a href=#363 id=363 data-nosnippet>363</a>            test_resolve(<span class="string">"prefix-{{ default }}-suffix"</span>).<span class="kw">await</span>.unwrap(),
+<a href=#364 id=364 data-nosnippet>364</a>            <span class="string">"prefix-default-value-suffix"
+<a href=#365 id=365 data-nosnippet>365</a>        </span>);
+<a href=#366 id=366 data-nosnippet>366</a>    }
+<a href=#367 id=367 data-nosnippet>367</a>
+<a href=#368 id=368 data-nosnippet>368</a>    <span class="attr">#[tokio::test]
+<a href=#369 id=369 data-nosnippet>369</a>    </span><span class="kw">async fn </span>resolve_variable_provider() {
+<a href=#370 id=370 data-nosnippet>370</a>        <span class="macro">assert_eq!</span>(
+<a href=#371 id=371 data-nosnippet>371</a>            test_resolve(<span class="string">"prefix-{{ required }}-suffix"</span>).<span class="kw">await</span>.unwrap(),
+<a href=#372 id=372 data-nosnippet>372</a>            <span class="string">"prefix-provider-value-suffix"
+<a href=#373 id=373 data-nosnippet>373</a>        </span>);
+<a href=#374 id=374 data-nosnippet>374</a>    }
+<a href=#375 id=375 data-nosnippet>375</a>
+<a href=#376 id=376 data-nosnippet>376</a>    <span class="attr">#[test]
+<a href=#377 id=377 data-nosnippet>377</a>    </span><span class="kw">fn </span>keys_good() {
+<a href=#378 id=378 data-nosnippet>378</a>        <span class="kw">for </span>key <span class="kw">in </span>[<span class="string">"a"</span>, <span class="string">"abc"</span>, <span class="string">"a1b2c3"</span>, <span class="string">"a_1"</span>, <span class="string">"a_1_b_3"</span>] {
+<a href=#379 id=379 data-nosnippet>379</a>            Key::new(key).expect(key);
+<a href=#380 id=380 data-nosnippet>380</a>        }
+<a href=#381 id=381 data-nosnippet>381</a>    }
+<a href=#382 id=382 data-nosnippet>382</a>
+<a href=#383 id=383 data-nosnippet>383</a>    <span class="attr">#[test]
+<a href=#384 id=384 data-nosnippet>384</a>    </span><span class="kw">fn </span>keys_bad() {
+<a href=#385 id=385 data-nosnippet>385</a>        <span class="kw">for </span>key <span class="kw">in </span>[<span class="string">""</span>, <span class="string">"aX"</span>, <span class="string">"1bc"</span>, <span class="string">"_x"</span>, <span class="string">"x.y"</span>, <span class="string">"x_"</span>, <span class="string">"a__b"</span>, <span class="string">"x-y"</span>] {
+<a href=#386 id=386 data-nosnippet>386</a>            Key::new(key).expect_err(key);
+<a href=#387 id=387 data-nosnippet>387</a>        }
+<a href=#388 id=388 data-nosnippet>388</a>    }
+<a href=#389 id=389 data-nosnippet>389</a>
+<a href=#390 id=390 data-nosnippet>390</a>    <span class="attr">#[test]
+<a href=#391 id=391 data-nosnippet>391</a>    </span><span class="kw">fn </span>template_literal() {
+<a href=#392 id=392 data-nosnippet>392</a>        <span class="macro">assert!</span>(Template::new(<span class="string">"hello"</span>).unwrap().is_literal());
+<a href=#393 id=393 data-nosnippet>393</a>        <span class="macro">assert!</span>(!Template::new(<span class="string">"hello {{ world }}"</span>).unwrap().is_literal());
+<a href=#394 id=394 data-nosnippet>394</a>    }
+<a href=#395 id=395 data-nosnippet>395</a>}</code></pre></div></section></main></body></html>

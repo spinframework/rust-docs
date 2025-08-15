@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Connection","Error","Value"],"fn":["add_to_linker","add_to_linker_get_host"],"struct":["QueryResult","RowResult"],"trait":["GetHost","Host","HostConnection"]};
+window.SIDEBAR_ITEMS = {"enum":["Connection","Error","Value"],"fn":["add_to_linker"],"struct":["QueryResult","RowResult"],"trait":["Host","HostConnection"]};

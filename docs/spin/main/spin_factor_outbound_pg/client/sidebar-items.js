@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"trait":["Client"]};
+window.SIDEBAR_ITEMS = {"struct":["PooledTokioClientFactory"],"trait":["Client","ClientFactory"]};
