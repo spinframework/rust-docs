@@ -1,1 +1,0 @@
-searchState.loadedDescShard("spin_key_value_redis", 0, "Runtime configuration for the Redis key-value store.\nA key-value store that uses Redis as the backend.\nReturns the argument unchanged.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.\nCalls <code>U::from(self)</code>.\nCreates a new <code>RedisKeyValueStore</code>.")

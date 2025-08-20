@@ -1,1 +1,0 @@
-searchState.loadedDescShard("terminal", 0, "A helper library for terminal output.\nA wrapper around a standard stream lock that resets the …\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.\nCreate a <code>ColorText</code> tied to stderr\nCreate a <code>ColorText</code> tied to stdout")

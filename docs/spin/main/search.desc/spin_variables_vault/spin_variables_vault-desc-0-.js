@@ -1,1 +1,0 @@
-searchState.loadedDescShard("spin_variables_vault", 0, "A config Provider that uses HashiCorp Vault.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.")

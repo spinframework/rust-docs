@@ -1,1 +1,0 @@
-searchState.loadedDescShard("spin_factor_outbound_redis", 0, "The <code>Factor</code> for <code>fermyon:spin/outbound-redis</code>.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.")

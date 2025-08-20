@@ -1,1 +1,0 @@
-searchState.loadedDescShard("spin_key_value_aws", 0, "Runtime configuration for the AWS Dynamo key-value store.\nA key-value store that uses AWS Dynamo as the backend.\nReturns the argument unchanged.\nReturns the argument unchanged.\nCalls <code>U::from(self)</code>.\nCalls <code>U::from(self)</code>.\nCreates a new <code>AwsKeyValueStore</code>.")
