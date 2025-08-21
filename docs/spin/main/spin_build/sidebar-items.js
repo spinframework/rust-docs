@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["build"]};
+window.SIDEBAR_ITEMS = {"enum":["TargetChecking"],"fn":["build","build_default"]};
