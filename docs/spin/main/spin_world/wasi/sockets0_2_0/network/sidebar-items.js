@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ErrorCode","IpAddress","IpAddressFamily","IpSocketAddress","Network"],"fn":["add_to_linker"],"struct":["Ipv4SocketAddress","Ipv6SocketAddress"],"trait":["Host","HostNetwork"],"type":["Ipv4Address","Ipv6Address"]};
+window.SIDEBAR_ITEMS = {"enum":["ErrorCode","IpAddress","IpAddressFamily","IpSocketAddress","Network"],"fn":["add_to_linker"],"struct":["Ipv4SocketAddress","Ipv6SocketAddress"],"trait":["Host","HostNetwork","HostNetworkWithStore","HostWithStore"],"type":["Ipv4Address","Ipv6Address"]};

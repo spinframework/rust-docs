@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"trait":["Host"]};
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"trait":["Host","HostWithStore"]};

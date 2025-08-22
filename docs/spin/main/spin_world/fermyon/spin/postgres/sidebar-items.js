@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["PgError"],"fn":["add_to_linker"],"trait":["Host"],"type":["ParameterValue","RowSet"]};
+window.SIDEBAR_ITEMS = {"enum":["PgError"],"fn":["add_to_linker"],"trait":["Host","HostWithStore"],"type":["ParameterValue","RowSet"]};

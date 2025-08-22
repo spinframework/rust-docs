@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["TerminalInput"],"fn":["add_to_linker"],"trait":["Host","HostTerminalInput"]};
+window.SIDEBAR_ITEMS = {"enum":["TerminalInput"],"fn":["add_to_linker"],"trait":["Host","HostTerminalInput","HostTerminalInputWithStore","HostWithStore"]};

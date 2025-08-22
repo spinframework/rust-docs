@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"trait":["Host"],"type":["ErrorCode","IpAddressFamily","Network","UdpSocket"]};
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"trait":["Host","HostWithStore"],"type":["ErrorCode","IpAddressFamily","Network","UdpSocket"]};
