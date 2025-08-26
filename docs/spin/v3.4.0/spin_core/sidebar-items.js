@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"attr":["async_trait"],"constant":["DEFAULT_EPOCH_TICK_INTERVAL"],"enum":["Trap"],"struct":["Component","Config","Engine","EngineBuilder","Instance","InstancePre","Linker","Module","ModuleInstance","State","Store","StoreBuilder","WasmtimeEngine"],"trait":["AsState"]};
