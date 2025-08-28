@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["HttpExecutorType"],"struct":["HttpTriggerConfig","WagiTriggerConfig"]};
