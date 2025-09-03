@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["arg_parser","data_dir","paths","sha256","sloth","ui","url"]};
+window.SIDEBAR_ITEMS = {"macro":["assert_matches","assert_not_matches"],"mod":["arg_parser","assert","data_dir","paths","sha256","sloth","ui","url"]};
