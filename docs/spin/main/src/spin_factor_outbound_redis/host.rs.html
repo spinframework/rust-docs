@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-outbound-redis/src/host.rs`."><title>host.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_outbound_redis" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0-nightly (7aef4bec4 2025-09-01)" data-channel="nightly" data-search-js="search-449aa9bf.js" data-stringdex-js="stringdex-0e748618.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_factor_outbound_redis/</div>host.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>anyhow::Result;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-outbound-redis/src/host.rs`."><title>host.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-e56847b5.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_outbound_redis" data-themes="" data-resource-suffix="" data-rustdoc-version="1.91.0-nightly (51ff89506 2025-09-02)" data-channel="nightly" data-search-js="search-272972ce.js" data-stringdex-js="stringdex-0e748618.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-6dc2a7f3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_factor_outbound_redis/</div>host.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>anyhow::Result;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>redis::{aio::MultiplexedConnection, AsyncCommands, FromRedisValue, Value};
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>spin_core::wasmtime::component::Resource;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>spin_factor_outbound_networking::config::allowed_hosts::OutboundAllowedHosts;
@@ -191,7 +191,7 @@
 <a href=#191 id=191 data-nosnippet>191</a>            }
 <a href=#192 id=192 data-nosnippet>192</a>        });
 <a href=#193 id=193 data-nosnippet>193</a>
-<a href=#194 id=194 data-nosnippet>194</a>        cmd.query_async::&lt;<span class="kw">_</span>, RedisResults&gt;(conn)
+<a href=#194 id=194 data-nosnippet>194</a>        cmd.query_async::&lt;RedisResults&gt;(conn)
 <a href=#195 id=195 data-nosnippet>195</a>            .<span class="kw">await
 <a href=#196 id=196 data-nosnippet>196</a>            </span>.map(|values| values.<span class="number">0</span>)
 <a href=#197 id=197 data-nosnippet>197</a>            .map_err(other_error)
@@ -296,18 +296,72 @@
 <a href=#296 id=296 data-nosnippet>296</a>
 <a href=#297 id=297 data-nosnippet>297</a><span class="kw">impl </span>FromRedisValue <span class="kw">for </span>RedisResults {
 <a href=#298 id=298 data-nosnippet>298</a>    <span class="kw">fn </span>from_redis_value(value: <span class="kw-2">&amp;</span>Value) -&gt; redis::RedisResult&lt;<span class="self">Self</span>&gt; {
-<a href=#299 id=299 data-nosnippet>299</a>        <span class="kw">fn </span>append(values: <span class="kw-2">&amp;mut </span>Vec&lt;RedisResult&gt;, value: <span class="kw-2">&amp;</span>Value) {
+<a href=#299 id=299 data-nosnippet>299</a>        <span class="kw">fn </span>append(values: <span class="kw-2">&amp;mut </span>Vec&lt;RedisResult&gt;, value: <span class="kw-2">&amp;</span>Value) -&gt; redis::RedisResult&lt;()&gt; {
 <a href=#300 id=300 data-nosnippet>300</a>            <span class="kw">match </span>value {
-<a href=#301 id=301 data-nosnippet>301</a>                Value::Nil | Value::Okay =&gt; (),
-<a href=#302 id=302 data-nosnippet>302</a>                Value::Int(v) =&gt; values.push(RedisResult::Int64(<span class="kw-2">*</span>v)),
-<a href=#303 id=303 data-nosnippet>303</a>                Value::Data(bytes) =&gt; values.push(RedisResult::Binary(bytes.to_owned())),
-<a href=#304 id=304 data-nosnippet>304</a>                Value::Bulk(bulk) =&gt; bulk.iter().for_each(|value| append(values, value)),
-<a href=#305 id=305 data-nosnippet>305</a>                Value::Status(message) =&gt; values.push(RedisResult::Status(message.to_owned())),
-<a href=#306 id=306 data-nosnippet>306</a>            }
-<a href=#307 id=307 data-nosnippet>307</a>        }
-<a href=#308 id=308 data-nosnippet>308</a>
-<a href=#309 id=309 data-nosnippet>309</a>        <span class="kw">let </span><span class="kw-2">mut </span>values = Vec::new();
-<a href=#310 id=310 data-nosnippet>310</a>        append(<span class="kw-2">&amp;mut </span>values, value);
-<a href=#311 id=311 data-nosnippet>311</a>        <span class="prelude-val">Ok</span>(RedisResults(values))
-<a href=#312 id=312 data-nosnippet>312</a>    }
-<a href=#313 id=313 data-nosnippet>313</a>}</code></pre></div></section></main></body></html>
+<a href=#301 id=301 data-nosnippet>301</a>                Value::Nil =&gt; {
+<a href=#302 id=302 data-nosnippet>302</a>                    values.push(RedisResult::Nil);
+<a href=#303 id=303 data-nosnippet>303</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#304 id=304 data-nosnippet>304</a>                }
+<a href=#305 id=305 data-nosnippet>305</a>                Value::Int(v) =&gt; {
+<a href=#306 id=306 data-nosnippet>306</a>                    values.push(RedisResult::Int64(<span class="kw-2">*</span>v));
+<a href=#307 id=307 data-nosnippet>307</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#308 id=308 data-nosnippet>308</a>                }
+<a href=#309 id=309 data-nosnippet>309</a>                Value::BulkString(bytes) =&gt; {
+<a href=#310 id=310 data-nosnippet>310</a>                    values.push(RedisResult::Binary(bytes.to_owned()));
+<a href=#311 id=311 data-nosnippet>311</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#312 id=312 data-nosnippet>312</a>                }
+<a href=#313 id=313 data-nosnippet>313</a>                Value::SimpleString(s) =&gt; {
+<a href=#314 id=314 data-nosnippet>314</a>                    values.push(RedisResult::Status(s.to_owned()));
+<a href=#315 id=315 data-nosnippet>315</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#316 id=316 data-nosnippet>316</a>                }
+<a href=#317 id=317 data-nosnippet>317</a>                Value::Okay =&gt; {
+<a href=#318 id=318 data-nosnippet>318</a>                    values.push(RedisResult::Status(<span class="string">"OK"</span>.to_string()));
+<a href=#319 id=319 data-nosnippet>319</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#320 id=320 data-nosnippet>320</a>                }
+<a href=#321 id=321 data-nosnippet>321</a>                Value::Map(<span class="kw">_</span>) =&gt; <span class="prelude-val">Err</span>(redis::RedisError::from((
+<a href=#322 id=322 data-nosnippet>322</a>                    redis::ErrorKind::TypeError,
+<a href=#323 id=323 data-nosnippet>323</a>                    <span class="string">"Could not convert Redis response"</span>,
+<a href=#324 id=324 data-nosnippet>324</a>                    <span class="string">"Redis Map type is not supported"</span>.to_string(),
+<a href=#325 id=325 data-nosnippet>325</a>                ))),
+<a href=#326 id=326 data-nosnippet>326</a>                Value::Attribute { .. } =&gt; <span class="prelude-val">Err</span>(redis::RedisError::from((
+<a href=#327 id=327 data-nosnippet>327</a>                    redis::ErrorKind::TypeError,
+<a href=#328 id=328 data-nosnippet>328</a>                    <span class="string">"Could not convert Redis response"</span>,
+<a href=#329 id=329 data-nosnippet>329</a>                    <span class="string">"Redis Attribute type is not supported"</span>.to_string(),
+<a href=#330 id=330 data-nosnippet>330</a>                ))),
+<a href=#331 id=331 data-nosnippet>331</a>                Value::Array(arr) | Value::Set(arr) =&gt; {
+<a href=#332 id=332 data-nosnippet>332</a>                    arr.iter().try_for_each(|value| append(values, value))
+<a href=#333 id=333 data-nosnippet>333</a>                }
+<a href=#334 id=334 data-nosnippet>334</a>                Value::Double(v) =&gt; {
+<a href=#335 id=335 data-nosnippet>335</a>                    values.push(RedisResult::Binary(v.to_string().into_bytes()));
+<a href=#336 id=336 data-nosnippet>336</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#337 id=337 data-nosnippet>337</a>                }
+<a href=#338 id=338 data-nosnippet>338</a>                Value::VerbatimString { .. } =&gt; <span class="prelude-val">Err</span>(redis::RedisError::from((
+<a href=#339 id=339 data-nosnippet>339</a>                    redis::ErrorKind::TypeError,
+<a href=#340 id=340 data-nosnippet>340</a>                    <span class="string">"Could not convert Redis response"</span>,
+<a href=#341 id=341 data-nosnippet>341</a>                    <span class="string">"Redis string with format attribute is not supported"</span>.to_string(),
+<a href=#342 id=342 data-nosnippet>342</a>                ))),
+<a href=#343 id=343 data-nosnippet>343</a>                Value::Boolean(v) =&gt; {
+<a href=#344 id=344 data-nosnippet>344</a>                    values.push(RedisResult::Int64(<span class="kw">if </span><span class="kw-2">*</span>v { <span class="number">1 </span>} <span class="kw">else </span>{ <span class="number">0 </span>}));
+<a href=#345 id=345 data-nosnippet>345</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#346 id=346 data-nosnippet>346</a>                }
+<a href=#347 id=347 data-nosnippet>347</a>                Value::BigNumber(v) =&gt; {
+<a href=#348 id=348 data-nosnippet>348</a>                    values.push(RedisResult::Binary(v.to_string().as_bytes().to_owned()));
+<a href=#349 id=349 data-nosnippet>349</a>                    <span class="prelude-val">Ok</span>(())
+<a href=#350 id=350 data-nosnippet>350</a>                }
+<a href=#351 id=351 data-nosnippet>351</a>                Value::Push { .. } =&gt; <span class="prelude-val">Err</span>(redis::RedisError::from((
+<a href=#352 id=352 data-nosnippet>352</a>                    redis::ErrorKind::TypeError,
+<a href=#353 id=353 data-nosnippet>353</a>                    <span class="string">"Could not convert Redis response"</span>,
+<a href=#354 id=354 data-nosnippet>354</a>                    <span class="string">"Redis Pub/Sub types are not supported"</span>.to_string(),
+<a href=#355 id=355 data-nosnippet>355</a>                ))),
+<a href=#356 id=356 data-nosnippet>356</a>                Value::ServerError(err) =&gt; <span class="prelude-val">Err</span>(redis::RedisError::from((
+<a href=#357 id=357 data-nosnippet>357</a>                    redis::ErrorKind::ResponseError,
+<a href=#358 id=358 data-nosnippet>358</a>                    <span class="string">"Server error"</span>,
+<a href=#359 id=359 data-nosnippet>359</a>                    <span class="macro">format!</span>(<span class="string">"{err:?}"</span>),
+<a href=#360 id=360 data-nosnippet>360</a>                ))),
+<a href=#361 id=361 data-nosnippet>361</a>            }
+<a href=#362 id=362 data-nosnippet>362</a>        }
+<a href=#363 id=363 data-nosnippet>363</a>        <span class="kw">let </span><span class="kw-2">mut </span>values = Vec::new();
+<a href=#364 id=364 data-nosnippet>364</a>        append(<span class="kw-2">&amp;mut </span>values, value)<span class="question-mark">?</span>;
+<a href=#365 id=365 data-nosnippet>365</a>        <span class="prelude-val">Ok</span>(RedisResults(values))
+<a href=#366 id=366 data-nosnippet>366</a>    }
+<a href=#367 id=367 data-nosnippet>367</a>}</code></pre></div></section></main></body></html>
