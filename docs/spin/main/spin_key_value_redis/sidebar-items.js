@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["RedisKeyValueRuntimeConfig","RedisKeyValueStore"]};
+window.SIDEBAR_ITEMS = {"struct":["KeyValueRedis","RedisKeyValueRuntimeConfig","RedisKeyValueStore"]};
