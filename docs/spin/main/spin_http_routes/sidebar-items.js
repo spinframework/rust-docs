@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"constant":["WELL_KNOWN_PREFIX"],"enum":["HttpTriggerRouteConfig"],"struct":["DuplicateRoute","HttpPrivateEndpoint","RouteMatch","Router"]};
+window.SIDEBAR_ITEMS = {"constant":["WELL_KNOWN_PREFIX"],"enum":["HttpTriggerRouteConfig","TriggerLookupKey"],"struct":["DuplicateRoute","HttpPrivateEndpoint","RouteMatch","Router"]};
