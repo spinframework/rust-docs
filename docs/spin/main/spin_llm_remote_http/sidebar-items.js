@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["RemoteHttpLlmEngine"]};
+window.SIDEBAR_ITEMS = {"enum":["ApiType"],"struct":["RemoteHttpLlmEngine"],"trait":["LlmWorker"]};
