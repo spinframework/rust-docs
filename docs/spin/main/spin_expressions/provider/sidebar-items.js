@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["ProviderVariableKind"],"trait":["Provider"]};
+window.SIDEBAR_ITEMS = {"trait":["Provider"]};

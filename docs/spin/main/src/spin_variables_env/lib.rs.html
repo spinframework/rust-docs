@@ -6,7 +6,7 @@
 <a href=#6 id=6 data-nosnippet>6</a>};
 <a href=#7 id=7 data-nosnippet>7</a>
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>serde::Deserialize;
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>spin_expressions::{provider::ProviderVariableKind, Key, Provider};
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>spin_expressions::{Key, Provider};
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>spin_factors::anyhow::{<span class="self">self</span>, Context <span class="kw">as _</span>};
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>spin_world::async_trait;
 <a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>tracing::{instrument, Level};
@@ -133,8 +133,8 @@
 <a href=#133 id=133 data-nosnippet>133</a>        tokio::task::block_in_place(|| <span class="self">self</span>.get_sync(key))
 <a href=#134 id=134 data-nosnippet>134</a>    }
 <a href=#135 id=135 data-nosnippet>135</a>
-<a href=#136 id=136 data-nosnippet>136</a>    <span class="kw">fn </span>kind(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; ProviderVariableKind {
-<a href=#137 id=137 data-nosnippet>137</a>        ProviderVariableKind::Static
+<a href=#136 id=136 data-nosnippet>136</a>    <span class="kw">fn </span>may_resolve(<span class="kw-2">&amp;</span><span class="self">self</span>, key: <span class="kw-2">&amp;</span>Key) -&gt; bool {
+<a href=#137 id=137 data-nosnippet>137</a>        <span class="macro">matches!</span>(<span class="self">self</span>.get_sync(key), <span class="prelude-val">Ok</span>(<span class="prelude-val">Some</span>(<span class="kw">_</span>)))
 <a href=#138 id=138 data-nosnippet>138</a>    }
 <a href=#139 id=139 data-nosnippet>139</a>}
 <a href=#140 id=140 data-nosnippet>140</a>
