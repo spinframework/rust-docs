@@ -4,75 +4,83 @@
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>wasmtime::component::InstancePre;
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>wasmtime_wasi::p2::bindings::CommandIndices;
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>wasmtime_wasi_http::bindings::ProxyIndices;
-<a href=#7 id=7 data-nosnippet>7</a>
-<a href=#8 id=8 data-nosnippet>8</a><span class="attr">#[derive(Clone, Debug, Default, Deserialize, Serialize)]
-<a href=#9 id=9 data-nosnippet>9</a>#[serde(deny_unknown_fields)]
-<a href=#10 id=10 data-nosnippet>10</a></span><span class="kw">pub struct </span>Metadata {
-<a href=#11 id=11 data-nosnippet>11</a>    <span class="comment">// The based url
-<a href=#12 id=12 data-nosnippet>12</a>    </span><span class="attr">#[serde(default = <span class="string">"default_base"</span>)]
-<a href=#13 id=13 data-nosnippet>13</a>    </span><span class="kw">pub </span>base: String,
-<a href=#14 id=14 data-nosnippet>14</a>}
-<a href=#15 id=15 data-nosnippet>15</a>
-<a href=#16 id=16 data-nosnippet>16</a><span class="kw">pub fn </span>default_base() -&gt; String {
-<a href=#17 id=17 data-nosnippet>17</a>    <span class="string">"/"</span>.into()
-<a href=#18 id=18 data-nosnippet>18</a>}
-<a href=#19 id=19 data-nosnippet>19</a>
-<a href=#20 id=20 data-nosnippet>20</a><span class="doccomment">/// The type of http handler export used by a component.
-<a href=#21 id=21 data-nosnippet>21</a></span><span class="kw">pub enum </span>HandlerType {
-<a href=#22 id=22 data-nosnippet>22</a>    Spin,
-<a href=#23 id=23 data-nosnippet>23</a>    Wagi(CommandIndices),
-<a href=#24 id=24 data-nosnippet>24</a>    Wasi0_2(ProxyIndices),
-<a href=#25 id=25 data-nosnippet>25</a>    Wasi2023_11_10(ProxyIndices2023_11_10),
-<a href=#26 id=26 data-nosnippet>26</a>    Wasi2023_10_18(ProxyIndices2023_10_18),
-<a href=#27 id=27 data-nosnippet>27</a>}
-<a href=#28 id=28 data-nosnippet>28</a>
-<a href=#29 id=29 data-nosnippet>29</a><span class="doccomment">/// The `incoming-handler` export for `wasi:http` version rc-2023-10-18
-<a href=#30 id=30 data-nosnippet>30</a></span><span class="kw">const </span>WASI_HTTP_EXPORT_2023_10_18: <span class="kw-2">&amp;</span>str = <span class="string">"wasi:http/incoming-handler@0.2.0-rc-2023-10-18"</span>;
-<a href=#31 id=31 data-nosnippet>31</a><span class="doccomment">/// The `incoming-handler` export for `wasi:http` version rc-2023-11-10
-<a href=#32 id=32 data-nosnippet>32</a></span><span class="kw">const </span>WASI_HTTP_EXPORT_2023_11_10: <span class="kw-2">&amp;</span>str = <span class="string">"wasi:http/incoming-handler@0.2.0-rc-2023-11-10"</span>;
-<a href=#33 id=33 data-nosnippet>33</a><span class="doccomment">/// The `incoming-handler` export prefix for all `wasi:http` 0.2 versions
-<a href=#34 id=34 data-nosnippet>34</a></span><span class="kw">const </span>WASI_HTTP_EXPORT_0_2_PREFIX: <span class="kw-2">&amp;</span>str = <span class="string">"wasi:http/incoming-handler@0.2"</span>;
-<a href=#35 id=35 data-nosnippet>35</a><span class="doccomment">/// The `inbound-http` export for `fermyon:spin`
-<a href=#36 id=36 data-nosnippet>36</a></span><span class="kw">const </span>SPIN_HTTP_EXPORT: <span class="kw-2">&amp;</span>str = <span class="string">"fermyon:spin/inbound-http"</span>;
-<a href=#37 id=37 data-nosnippet>37</a>
-<a href=#38 id=38 data-nosnippet>38</a><span class="kw">impl </span>HandlerType {
-<a href=#39 id=39 data-nosnippet>39</a>    <span class="doccomment">/// Determine the handler type from the exports of a component.
-<a href=#40 id=40 data-nosnippet>40</a>    </span><span class="kw">pub fn </span>from_instance_pre&lt;T&gt;(pre: <span class="kw-2">&amp;</span>InstancePre&lt;T&gt;) -&gt; anyhow::Result&lt;HandlerType&gt; {
-<a href=#41 id=41 data-nosnippet>41</a>        <span class="kw">let </span><span class="kw-2">mut </span>candidates = Vec::new();
-<a href=#42 id=42 data-nosnippet>42</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(indices) = ProxyIndices::new(pre) {
-<a href=#43 id=43 data-nosnippet>43</a>            candidates.push(HandlerType::Wasi0_2(indices));
-<a href=#44 id=44 data-nosnippet>44</a>        }
-<a href=#45 id=45 data-nosnippet>45</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(indices) = ProxyIndices2023_10_18::new(pre) {
-<a href=#46 id=46 data-nosnippet>46</a>            candidates.push(HandlerType::Wasi2023_10_18(indices));
-<a href=#47 id=47 data-nosnippet>47</a>        }
-<a href=#48 id=48 data-nosnippet>48</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(indices) = ProxyIndices2023_11_10::new(pre) {
-<a href=#49 id=49 data-nosnippet>49</a>            candidates.push(HandlerType::Wasi2023_11_10(indices));
-<a href=#50 id=50 data-nosnippet>50</a>        }
-<a href=#51 id=51 data-nosnippet>51</a>        <span class="kw">if </span>pre
-<a href=#52 id=52 data-nosnippet>52</a>            .component()
-<a href=#53 id=53 data-nosnippet>53</a>            .get_export_index(<span class="prelude-val">None</span>, SPIN_HTTP_EXPORT)
-<a href=#54 id=54 data-nosnippet>54</a>            .is_some()
-<a href=#55 id=55 data-nosnippet>55</a>        {
-<a href=#56 id=56 data-nosnippet>56</a>            candidates.push(HandlerType::Spin);
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>wasmtime_wasi_http::p3::bindings::ProxyIndices <span class="kw">as </span>P3ProxyIndices;
+<a href=#8 id=8 data-nosnippet>8</a>
+<a href=#9 id=9 data-nosnippet>9</a><span class="attr">#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+<a href=#10 id=10 data-nosnippet>10</a>#[serde(deny_unknown_fields)]
+<a href=#11 id=11 data-nosnippet>11</a></span><span class="kw">pub struct </span>Metadata {
+<a href=#12 id=12 data-nosnippet>12</a>    <span class="comment">// The based url
+<a href=#13 id=13 data-nosnippet>13</a>    </span><span class="attr">#[serde(default = <span class="string">"default_base"</span>)]
+<a href=#14 id=14 data-nosnippet>14</a>    </span><span class="kw">pub </span>base: String,
+<a href=#15 id=15 data-nosnippet>15</a>}
+<a href=#16 id=16 data-nosnippet>16</a>
+<a href=#17 id=17 data-nosnippet>17</a><span class="kw">pub fn </span>default_base() -&gt; String {
+<a href=#18 id=18 data-nosnippet>18</a>    <span class="string">"/"</span>.into()
+<a href=#19 id=19 data-nosnippet>19</a>}
+<a href=#20 id=20 data-nosnippet>20</a>
+<a href=#21 id=21 data-nosnippet>21</a><span class="doccomment">/// The type of http handler export used by a component.
+<a href=#22 id=22 data-nosnippet>22</a></span><span class="kw">pub enum </span>HandlerType {
+<a href=#23 id=23 data-nosnippet>23</a>    Spin,
+<a href=#24 id=24 data-nosnippet>24</a>    Wagi(CommandIndices),
+<a href=#25 id=25 data-nosnippet>25</a>    Wasi0_2(ProxyIndices),
+<a href=#26 id=26 data-nosnippet>26</a>    Wasi0_3(P3ProxyIndices),
+<a href=#27 id=27 data-nosnippet>27</a>    Wasi2023_11_10(ProxyIndices2023_11_10),
+<a href=#28 id=28 data-nosnippet>28</a>    Wasi2023_10_18(ProxyIndices2023_10_18),
+<a href=#29 id=29 data-nosnippet>29</a>}
+<a href=#30 id=30 data-nosnippet>30</a>
+<a href=#31 id=31 data-nosnippet>31</a><span class="doccomment">/// The `incoming-handler` export for `wasi:http` version rc-2023-10-18
+<a href=#32 id=32 data-nosnippet>32</a></span><span class="kw">const </span>WASI_HTTP_EXPORT_2023_10_18: <span class="kw-2">&amp;</span>str = <span class="string">"wasi:http/incoming-handler@0.2.0-rc-2023-10-18"</span>;
+<a href=#33 id=33 data-nosnippet>33</a><span class="doccomment">/// The `incoming-handler` export for `wasi:http` version rc-2023-11-10
+<a href=#34 id=34 data-nosnippet>34</a></span><span class="kw">const </span>WASI_HTTP_EXPORT_2023_11_10: <span class="kw-2">&amp;</span>str = <span class="string">"wasi:http/incoming-handler@0.2.0-rc-2023-11-10"</span>;
+<a href=#35 id=35 data-nosnippet>35</a><span class="doccomment">/// The `incoming-handler` export prefix for all `wasi:http` 0.2 versions
+<a href=#36 id=36 data-nosnippet>36</a></span><span class="kw">const </span>WASI_HTTP_EXPORT_0_2_PREFIX: <span class="kw-2">&amp;</span>str = <span class="string">"wasi:http/incoming-handler@0.2"</span>;
+<a href=#37 id=37 data-nosnippet>37</a><span class="doccomment">/// The `handler` export `wasi:http` version 0.3.0-rc-2025-08-15
+<a href=#38 id=38 data-nosnippet>38</a></span><span class="kw">const </span>WASI_HTTP_EXPORT_0_3_0_RC_2025_09_16: <span class="kw-2">&amp;</span>str = <span class="string">"wasi:http/handler@0.3.0-rc-2025-09-16"</span>;
+<a href=#39 id=39 data-nosnippet>39</a><span class="doccomment">/// The `inbound-http` export for `fermyon:spin`
+<a href=#40 id=40 data-nosnippet>40</a></span><span class="kw">const </span>SPIN_HTTP_EXPORT: <span class="kw-2">&amp;</span>str = <span class="string">"fermyon:spin/inbound-http"</span>;
+<a href=#41 id=41 data-nosnippet>41</a>
+<a href=#42 id=42 data-nosnippet>42</a><span class="kw">impl </span>HandlerType {
+<a href=#43 id=43 data-nosnippet>43</a>    <span class="doccomment">/// Determine the handler type from the exports of a component.
+<a href=#44 id=44 data-nosnippet>44</a>    </span><span class="kw">pub fn </span>from_instance_pre&lt;T&gt;(pre: <span class="kw-2">&amp;</span>InstancePre&lt;T&gt;) -&gt; anyhow::Result&lt;HandlerType&gt; {
+<a href=#45 id=45 data-nosnippet>45</a>        <span class="kw">let </span><span class="kw-2">mut </span>candidates = Vec::new();
+<a href=#46 id=46 data-nosnippet>46</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(indices) = ProxyIndices::new(pre) {
+<a href=#47 id=47 data-nosnippet>47</a>            candidates.push(HandlerType::Wasi0_2(indices));
+<a href=#48 id=48 data-nosnippet>48</a>        }
+<a href=#49 id=49 data-nosnippet>49</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(indices) = P3ProxyIndices::new(pre) {
+<a href=#50 id=50 data-nosnippet>50</a>            candidates.push(HandlerType::Wasi0_3(indices));
+<a href=#51 id=51 data-nosnippet>51</a>        }
+<a href=#52 id=52 data-nosnippet>52</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(indices) = ProxyIndices2023_10_18::new(pre) {
+<a href=#53 id=53 data-nosnippet>53</a>            candidates.push(HandlerType::Wasi2023_10_18(indices));
+<a href=#54 id=54 data-nosnippet>54</a>        }
+<a href=#55 id=55 data-nosnippet>55</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(indices) = ProxyIndices2023_11_10::new(pre) {
+<a href=#56 id=56 data-nosnippet>56</a>            candidates.push(HandlerType::Wasi2023_11_10(indices));
 <a href=#57 id=57 data-nosnippet>57</a>        }
-<a href=#58 id=58 data-nosnippet>58</a>
-<a href=#59 id=59 data-nosnippet>59</a>        <span class="kw">match </span>candidates.len() {
-<a href=#60 id=60 data-nosnippet>60</a>            <span class="number">0 </span>=&gt; {
-<a href=#61 id=61 data-nosnippet>61</a>                <span class="macro">anyhow::bail!</span>(
-<a href=#62 id=62 data-nosnippet>62</a>                    <span class="string">"Expected component to export one of \
-<a href=#63 id=63 data-nosnippet>63</a>                    `{WASI_HTTP_EXPORT_2023_10_18}`, \
-<a href=#64 id=64 data-nosnippet>64</a>                    `{WASI_HTTP_EXPORT_2023_11_10}`, \
-<a href=#65 id=65 data-nosnippet>65</a>                    `{WASI_HTTP_EXPORT_0_2_PREFIX}.*`, \
-<a href=#66 id=66 data-nosnippet>66</a>                     or `{SPIN_HTTP_EXPORT}` but it exported none of those. \
-<a href=#67 id=67 data-nosnippet>67</a>                     This may mean the component handles a different trigger, or that its `wasi:http` export is newer then those supported by Spin. \
-<a href=#68 id=68 data-nosnippet>68</a>                     If you're sure this is an HTTP module, check if a Spin upgrade is available: this may handle the newer version."
-<a href=#69 id=69 data-nosnippet>69</a>                </span>)
-<a href=#70 id=70 data-nosnippet>70</a>            }
-<a href=#71 id=71 data-nosnippet>71</a>            <span class="number">1 </span>=&gt; <span class="prelude-val">Ok</span>(candidates.pop().unwrap()),
-<a href=#72 id=72 data-nosnippet>72</a>            <span class="kw">_ </span>=&gt; <span class="macro">anyhow::bail!</span>(
-<a href=#73 id=73 data-nosnippet>73</a>                <span class="string">"component exports multiple different handlers but \
-<a href=#74 id=74 data-nosnippet>74</a>                     it's expected to export only one"
-<a href=#75 id=75 data-nosnippet>75</a>            </span>),
-<a href=#76 id=76 data-nosnippet>76</a>        }
-<a href=#77 id=77 data-nosnippet>77</a>    }
-<a href=#78 id=78 data-nosnippet>78</a>}</code></pre></div></section></main></body></html>
+<a href=#58 id=58 data-nosnippet>58</a>        <span class="kw">if </span>pre
+<a href=#59 id=59 data-nosnippet>59</a>            .component()
+<a href=#60 id=60 data-nosnippet>60</a>            .get_export_index(<span class="prelude-val">None</span>, SPIN_HTTP_EXPORT)
+<a href=#61 id=61 data-nosnippet>61</a>            .is_some()
+<a href=#62 id=62 data-nosnippet>62</a>        {
+<a href=#63 id=63 data-nosnippet>63</a>            candidates.push(HandlerType::Spin);
+<a href=#64 id=64 data-nosnippet>64</a>        }
+<a href=#65 id=65 data-nosnippet>65</a>
+<a href=#66 id=66 data-nosnippet>66</a>        <span class="kw">match </span>candidates.len() {
+<a href=#67 id=67 data-nosnippet>67</a>            <span class="number">0 </span>=&gt; {
+<a href=#68 id=68 data-nosnippet>68</a>                <span class="macro">anyhow::bail!</span>(
+<a href=#69 id=69 data-nosnippet>69</a>                    <span class="string">"Expected component to export one of \
+<a href=#70 id=70 data-nosnippet>70</a>                    `{WASI_HTTP_EXPORT_2023_10_18}`, \
+<a href=#71 id=71 data-nosnippet>71</a>                    `{WASI_HTTP_EXPORT_2023_11_10}`, \
+<a href=#72 id=72 data-nosnippet>72</a>                    `{WASI_HTTP_EXPORT_0_2_PREFIX}.*`, \
+<a href=#73 id=73 data-nosnippet>73</a>                    `{WASI_HTTP_EXPORT_0_3_0_RC_2025_09_16}`, \
+<a href=#74 id=74 data-nosnippet>74</a>                     or `{SPIN_HTTP_EXPORT}` but it exported none of those. \
+<a href=#75 id=75 data-nosnippet>75</a>                     This may mean the component handles a different trigger, or that its `wasi:http` export is newer then those supported by Spin. \
+<a href=#76 id=76 data-nosnippet>76</a>                     If you're sure this is an HTTP module, check if a Spin upgrade is available: this may handle the newer version."
+<a href=#77 id=77 data-nosnippet>77</a>                </span>)
+<a href=#78 id=78 data-nosnippet>78</a>            }
+<a href=#79 id=79 data-nosnippet>79</a>            <span class="number">1 </span>=&gt; <span class="prelude-val">Ok</span>(candidates.pop().unwrap()),
+<a href=#80 id=80 data-nosnippet>80</a>            <span class="kw">_ </span>=&gt; <span class="macro">anyhow::bail!</span>(
+<a href=#81 id=81 data-nosnippet>81</a>                <span class="string">"component exports multiple different handlers but \
+<a href=#82 id=82 data-nosnippet>82</a>                     it's expected to export only one"
+<a href=#83 id=83 data-nosnippet>83</a>            </span>),
+<a href=#84 id=84 data-nosnippet>84</a>        }
+<a href=#85 id=85 data-nosnippet>85</a>    }
+<a href=#86 id=86 data-nosnippet>86</a>}</code></pre></div></section></main></body></html>

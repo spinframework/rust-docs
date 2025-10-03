@@ -30,7 +30,7 @@
 <a href=#30 id=30 data-nosnippet>30</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;Response&lt;Body&gt;&gt; {
 <a href=#31 id=31 data-nosnippet>31</a>        <span class="kw">let </span>spin_http::routes::TriggerLookupKey::Component(component_id) = route_match.lookup_key()
 <a href=#32 id=32 data-nosnippet>32</a>        <span class="kw">else </span>{
-<a href=#33 id=33 data-nosnippet>33</a>            <span class="macro">anyhow::bail!</span>(<span class="string">"INCONCEIVABLE"</span>);
+<a href=#33 id=33 data-nosnippet>33</a>            <span class="macro">unreachable!</span>()
 <a href=#34 id=34 data-nosnippet>34</a>        };
 <a href=#35 id=35 data-nosnippet>35</a>
 <a href=#36 id=36 data-nosnippet>36</a>        <span class="macro">tracing::trace!</span>(<span class="string">"Executing request using the Spin executor for component {component_id}"</span>);
