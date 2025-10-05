@@ -341,7 +341,7 @@
 <a href=#341 id=341 data-nosnippet>341</a>        <span class="kw">let </span>configured_app = {
 <a href=#342 id=342 data-nosnippet>342</a>            <span class="kw">let </span>_sloth_guard = warn_if_wasm_build_slothful();
 <a href=#343 id=343 data-nosnippet>343</a>            executor
-<a href=#344 id=344 data-nosnippet>344</a>                .load_app(app, runtime_config.into(), loader)
+<a href=#344 id=344 data-nosnippet>344</a>                .load_app(app, runtime_config.into(), loader, <span class="prelude-val">Some</span>(T::TYPE))
 <a href=#345 id=345 data-nosnippet>345</a>                .<span class="kw">await</span><span class="question-mark">?
 <a href=#346 id=346 data-nosnippet>346</a>        </span>};
 <a href=#347 id=347 data-nosnippet>347</a>
