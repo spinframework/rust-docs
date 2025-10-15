@@ -73,7 +73,7 @@
 <a href=#73 id=73 data-nosnippet>73</a>
 <a href=#74 id=74 data-nosnippet>74</a>    <span class="comment">// Load the given manifest into a LockedApp, ready for execution.
 <a href=#75 id=75 data-nosnippet>75</a>    </span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">async fn </span>load_manifest(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="kw-2">mut </span>manifest: AppManifest) -&gt; <span class="prelude-ty">Result</span>&lt;LockedApp&gt; {
-<a href=#76 id=76 data-nosnippet>76</a>        spin_manifest::normalize::normalize_manifest(<span class="kw-2">&amp;mut </span>manifest);
+<a href=#76 id=76 data-nosnippet>76</a>        spin_manifest::normalize::normalize_manifest(<span class="kw-2">&amp;mut </span>manifest)<span class="question-mark">?</span>;
 <a href=#77 id=77 data-nosnippet>77</a>
 <a href=#78 id=78 data-nosnippet>78</a>        manifest.validate_dependencies()<span class="question-mark">?</span>;
 <a href=#79 id=79 data-nosnippet>79</a>
@@ -867,75 +867,78 @@
 <a href=#867 id=867 data-nosnippet>867</a>                <span class="kw">let </span>content = <span class="self">self</span>.load_http_source(<span class="kw-2">&amp;</span>url, <span class="kw-2">&amp;</span>digest).<span class="kw">await</span><span class="question-mark">?</span>;
 <a href=#868 id=868 data-nosnippet>868</a>                <span class="prelude-val">Ok</span>((content, export))
 <a href=#869 id=869 data-nosnippet>869</a>            }
-<a href=#870 id=870 data-nosnippet>870</a>        }
-<a href=#871 id=871 data-nosnippet>871</a>    }
-<a href=#872 id=872 data-nosnippet>872</a>}
-<a href=#873 id=873 data-nosnippet>873</a>
-<a href=#874 id=874 data-nosnippet>874</a><span class="kw">fn </span>looks_like_glob_pattern(s: <span class="kw">impl </span>AsRef&lt;str&gt;) -&gt; bool {
-<a href=#875 id=875 data-nosnippet>875</a>    <span class="kw">let </span>s = s.as_ref();
-<a href=#876 id=876 data-nosnippet>876</a>    glob::Pattern::escape(s) != s
-<a href=#877 id=877 data-nosnippet>877</a>}
-<a href=#878 id=878 data-nosnippet>878</a>
-<a href=#879 id=879 data-nosnippet>879</a><span class="kw">fn </span>file_content_ref(path: <span class="kw">impl </span>AsRef&lt;Path&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;ContentRef&gt; {
-<a href=#880 id=880 data-nosnippet>880</a>    <span class="prelude-val">Ok</span>(ContentRef {
-<a href=#881 id=881 data-nosnippet>881</a>        source: <span class="prelude-val">Some</span>(file_url(path)<span class="question-mark">?</span>),
-<a href=#882 id=882 data-nosnippet>882</a>        ..Default::default()
-<a href=#883 id=883 data-nosnippet>883</a>    })
-<a href=#884 id=884 data-nosnippet>884</a>}
-<a href=#885 id=885 data-nosnippet>885</a>
-<a href=#886 id=886 data-nosnippet>886</a><span class="kw">fn </span>file_url(path: <span class="kw">impl </span>AsRef&lt;Path&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
-<a href=#887 id=887 data-nosnippet>887</a>    <span class="kw">let </span>path = path.as_ref();
-<a href=#888 id=888 data-nosnippet>888</a>    <span class="kw">let </span>abs_path = safe_canonicalize(path)
-<a href=#889 id=889 data-nosnippet>889</a>        .with_context(|| <span class="macro">format!</span>(<span class="string">"Couldn't resolve `{}`"</span>, path.display()))<span class="question-mark">?</span>;
-<a href=#890 id=890 data-nosnippet>890</a>    <span class="prelude-val">Ok</span>(Url::from_file_path(abs_path).unwrap().to_string())
-<a href=#891 id=891 data-nosnippet>891</a>}
-<a href=#892 id=892 data-nosnippet>892</a>
-<a href=#893 id=893 data-nosnippet>893</a><span class="doccomment">/// Determines if a component requires the host to support local
-<a href=#894 id=894 data-nosnippet>894</a>/// service chaining.
-<a href=#895 id=895 data-nosnippet>895</a></span><span class="kw">pub fn </span>requires_service_chaining(component: <span class="kw-2">&amp;</span>spin_manifest::schema::v2::Component) -&gt; bool {
-<a href=#896 id=896 data-nosnippet>896</a>    component
-<a href=#897 id=897 data-nosnippet>897</a>        .normalized_allowed_outbound_hosts()
-<a href=#898 id=898 data-nosnippet>898</a>        .unwrap_or_default()
-<a href=#899 id=899 data-nosnippet>899</a>        .iter()
-<a href=#900 id=900 data-nosnippet>900</a>        .any(|h| is_chaining_host(h))
-<a href=#901 id=901 data-nosnippet>901</a>}
-<a href=#902 id=902 data-nosnippet>902</a>
-<a href=#903 id=903 data-nosnippet>903</a><span class="kw">fn </span>is_chaining_host(pattern: <span class="kw-2">&amp;</span>str) -&gt; bool {
-<a href=#904 id=904 data-nosnippet>904</a>    AllowedHostConfig::parse(pattern).is_ok_and(|config| config.is_for_service_chaining())
-<a href=#905 id=905 data-nosnippet>905</a>}
-<a href=#906 id=906 data-nosnippet>906</a>
-<a href=#907 id=907 data-nosnippet>907</a><span class="kw">const </span>SLOTH_WARNING_DELAY_MILLIS: u64 = <span class="number">1250</span>;
-<a href=#908 id=908 data-nosnippet>908</a>
-<a href=#909 id=909 data-nosnippet>909</a><span class="kw">fn </span>warn_if_component_load_slothful() -&gt; sloth::SlothGuard {
-<a href=#910 id=910 data-nosnippet>910</a>    <span class="kw">let </span>message = <span class="string">"Loading Wasm components is taking a few seconds..."</span>;
-<a href=#911 id=911 data-nosnippet>911</a>    sloth::warn_if_slothful(SLOTH_WARNING_DELAY_MILLIS, <span class="macro">format!</span>(<span class="string">"{message}\n"</span>))
-<a href=#912 id=912 data-nosnippet>912</a>}
-<a href=#913 id=913 data-nosnippet>913</a>
-<a href=#914 id=914 data-nosnippet>914</a><span class="attr">#[cfg(test)]
-<a href=#915 id=915 data-nosnippet>915</a></span><span class="kw">mod </span>test {
-<a href=#916 id=916 data-nosnippet>916</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
-<a href=#917 id=917 data-nosnippet>917</a>
-<a href=#918 id=918 data-nosnippet>918</a>    <span class="attr">#[tokio::test]
-<a href=#919 id=919 data-nosnippet>919</a>    </span><span class="kw">async fn </span>bad_destination_filename_is_explained() -&gt; anyhow::Result&lt;()&gt; {
-<a href=#920 id=920 data-nosnippet>920</a>        <span class="kw">let </span>app_root = PathBuf::from(<span class="macro">env!</span>(<span class="string">"CARGO_MANIFEST_DIR"</span>))
-<a href=#921 id=921 data-nosnippet>921</a>            .join(<span class="string">"tests"</span>)
-<a href=#922 id=922 data-nosnippet>922</a>            .join(<span class="string">"file-errors"</span>);
-<a href=#923 id=923 data-nosnippet>923</a>        <span class="kw">let </span>wd = tempfile::tempdir()<span class="question-mark">?</span>;
-<a href=#924 id=924 data-nosnippet>924</a>        <span class="kw">let </span>loader = LocalLoader::new(
-<a href=#925 id=925 data-nosnippet>925</a>            <span class="kw-2">&amp;</span>app_root,
-<a href=#926 id=926 data-nosnippet>926</a>            FilesMountStrategy::Copy(wd.path().to_owned()),
-<a href=#927 id=927 data-nosnippet>927</a>            <span class="prelude-val">None</span>,
-<a href=#928 id=928 data-nosnippet>928</a>        )
-<a href=#929 id=929 data-nosnippet>929</a>        .<span class="kw">await</span><span class="question-mark">?</span>;
-<a href=#930 id=930 data-nosnippet>930</a>        <span class="kw">let </span>err = loader
-<a href=#931 id=931 data-nosnippet>931</a>            .load_file(app_root.join(<span class="string">"bad.toml"</span>))
-<a href=#932 id=932 data-nosnippet>932</a>            .<span class="kw">await
-<a href=#933 id=933 data-nosnippet>933</a>            </span>.expect_err(<span class="string">"loader should not have succeeded"</span>);
-<a href=#934 id=934 data-nosnippet>934</a>        <span class="kw">let </span>err_ctx = <span class="macro">format!</span>(<span class="string">"{err:#}"</span>);
-<a href=#935 id=935 data-nosnippet>935</a>        <span class="macro">assert!</span>(
-<a href=#936 id=936 data-nosnippet>936</a>            err_ctx.contains(<span class="string">r#""/" is not a valid destination file name"#</span>),
-<a href=#937 id=937 data-nosnippet>937</a>            <span class="string">"expected error to show destination file name but got {err_ctx}"</span>,
-<a href=#938 id=938 data-nosnippet>938</a>        );
-<a href=#939 id=939 data-nosnippet>939</a>        <span class="prelude-val">Ok</span>(())
-<a href=#940 id=940 data-nosnippet>940</a>    }
-<a href=#941 id=941 data-nosnippet>941</a>}</code></pre></div></section></main></body></html>
+<a href=#870 id=870 data-nosnippet>870</a>            v2::ComponentDependency::AppComponent { .. } =&gt; {
+<a href=#871 id=871 data-nosnippet>871</a>                <span class="macro">panic!</span>(<span class="string">"Internal error: component ID dependency was not resolved to a source"</span>);
+<a href=#872 id=872 data-nosnippet>872</a>            }
+<a href=#873 id=873 data-nosnippet>873</a>        }
+<a href=#874 id=874 data-nosnippet>874</a>    }
+<a href=#875 id=875 data-nosnippet>875</a>}
+<a href=#876 id=876 data-nosnippet>876</a>
+<a href=#877 id=877 data-nosnippet>877</a><span class="kw">fn </span>looks_like_glob_pattern(s: <span class="kw">impl </span>AsRef&lt;str&gt;) -&gt; bool {
+<a href=#878 id=878 data-nosnippet>878</a>    <span class="kw">let </span>s = s.as_ref();
+<a href=#879 id=879 data-nosnippet>879</a>    glob::Pattern::escape(s) != s
+<a href=#880 id=880 data-nosnippet>880</a>}
+<a href=#881 id=881 data-nosnippet>881</a>
+<a href=#882 id=882 data-nosnippet>882</a><span class="kw">fn </span>file_content_ref(path: <span class="kw">impl </span>AsRef&lt;Path&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;ContentRef&gt; {
+<a href=#883 id=883 data-nosnippet>883</a>    <span class="prelude-val">Ok</span>(ContentRef {
+<a href=#884 id=884 data-nosnippet>884</a>        source: <span class="prelude-val">Some</span>(file_url(path)<span class="question-mark">?</span>),
+<a href=#885 id=885 data-nosnippet>885</a>        ..Default::default()
+<a href=#886 id=886 data-nosnippet>886</a>    })
+<a href=#887 id=887 data-nosnippet>887</a>}
+<a href=#888 id=888 data-nosnippet>888</a>
+<a href=#889 id=889 data-nosnippet>889</a><span class="kw">fn </span>file_url(path: <span class="kw">impl </span>AsRef&lt;Path&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
+<a href=#890 id=890 data-nosnippet>890</a>    <span class="kw">let </span>path = path.as_ref();
+<a href=#891 id=891 data-nosnippet>891</a>    <span class="kw">let </span>abs_path = safe_canonicalize(path)
+<a href=#892 id=892 data-nosnippet>892</a>        .with_context(|| <span class="macro">format!</span>(<span class="string">"Couldn't resolve `{}`"</span>, path.display()))<span class="question-mark">?</span>;
+<a href=#893 id=893 data-nosnippet>893</a>    <span class="prelude-val">Ok</span>(Url::from_file_path(abs_path).unwrap().to_string())
+<a href=#894 id=894 data-nosnippet>894</a>}
+<a href=#895 id=895 data-nosnippet>895</a>
+<a href=#896 id=896 data-nosnippet>896</a><span class="doccomment">/// Determines if a component requires the host to support local
+<a href=#897 id=897 data-nosnippet>897</a>/// service chaining.
+<a href=#898 id=898 data-nosnippet>898</a></span><span class="kw">pub fn </span>requires_service_chaining(component: <span class="kw-2">&amp;</span>spin_manifest::schema::v2::Component) -&gt; bool {
+<a href=#899 id=899 data-nosnippet>899</a>    component
+<a href=#900 id=900 data-nosnippet>900</a>        .normalized_allowed_outbound_hosts()
+<a href=#901 id=901 data-nosnippet>901</a>        .unwrap_or_default()
+<a href=#902 id=902 data-nosnippet>902</a>        .iter()
+<a href=#903 id=903 data-nosnippet>903</a>        .any(|h| is_chaining_host(h))
+<a href=#904 id=904 data-nosnippet>904</a>}
+<a href=#905 id=905 data-nosnippet>905</a>
+<a href=#906 id=906 data-nosnippet>906</a><span class="kw">fn </span>is_chaining_host(pattern: <span class="kw-2">&amp;</span>str) -&gt; bool {
+<a href=#907 id=907 data-nosnippet>907</a>    AllowedHostConfig::parse(pattern).is_ok_and(|config| config.is_for_service_chaining())
+<a href=#908 id=908 data-nosnippet>908</a>}
+<a href=#909 id=909 data-nosnippet>909</a>
+<a href=#910 id=910 data-nosnippet>910</a><span class="kw">const </span>SLOTH_WARNING_DELAY_MILLIS: u64 = <span class="number">1250</span>;
+<a href=#911 id=911 data-nosnippet>911</a>
+<a href=#912 id=912 data-nosnippet>912</a><span class="kw">fn </span>warn_if_component_load_slothful() -&gt; sloth::SlothGuard {
+<a href=#913 id=913 data-nosnippet>913</a>    <span class="kw">let </span>message = <span class="string">"Loading Wasm components is taking a few seconds..."</span>;
+<a href=#914 id=914 data-nosnippet>914</a>    sloth::warn_if_slothful(SLOTH_WARNING_DELAY_MILLIS, <span class="macro">format!</span>(<span class="string">"{message}\n"</span>))
+<a href=#915 id=915 data-nosnippet>915</a>}
+<a href=#916 id=916 data-nosnippet>916</a>
+<a href=#917 id=917 data-nosnippet>917</a><span class="attr">#[cfg(test)]
+<a href=#918 id=918 data-nosnippet>918</a></span><span class="kw">mod </span>test {
+<a href=#919 id=919 data-nosnippet>919</a>    <span class="kw">use super</span>::<span class="kw-2">*</span>;
+<a href=#920 id=920 data-nosnippet>920</a>
+<a href=#921 id=921 data-nosnippet>921</a>    <span class="attr">#[tokio::test]
+<a href=#922 id=922 data-nosnippet>922</a>    </span><span class="kw">async fn </span>bad_destination_filename_is_explained() -&gt; anyhow::Result&lt;()&gt; {
+<a href=#923 id=923 data-nosnippet>923</a>        <span class="kw">let </span>app_root = PathBuf::from(<span class="macro">env!</span>(<span class="string">"CARGO_MANIFEST_DIR"</span>))
+<a href=#924 id=924 data-nosnippet>924</a>            .join(<span class="string">"tests"</span>)
+<a href=#925 id=925 data-nosnippet>925</a>            .join(<span class="string">"file-errors"</span>);
+<a href=#926 id=926 data-nosnippet>926</a>        <span class="kw">let </span>wd = tempfile::tempdir()<span class="question-mark">?</span>;
+<a href=#927 id=927 data-nosnippet>927</a>        <span class="kw">let </span>loader = LocalLoader::new(
+<a href=#928 id=928 data-nosnippet>928</a>            <span class="kw-2">&amp;</span>app_root,
+<a href=#929 id=929 data-nosnippet>929</a>            FilesMountStrategy::Copy(wd.path().to_owned()),
+<a href=#930 id=930 data-nosnippet>930</a>            <span class="prelude-val">None</span>,
+<a href=#931 id=931 data-nosnippet>931</a>        )
+<a href=#932 id=932 data-nosnippet>932</a>        .<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#933 id=933 data-nosnippet>933</a>        <span class="kw">let </span>err = loader
+<a href=#934 id=934 data-nosnippet>934</a>            .load_file(app_root.join(<span class="string">"bad.toml"</span>))
+<a href=#935 id=935 data-nosnippet>935</a>            .<span class="kw">await
+<a href=#936 id=936 data-nosnippet>936</a>            </span>.expect_err(<span class="string">"loader should not have succeeded"</span>);
+<a href=#937 id=937 data-nosnippet>937</a>        <span class="kw">let </span>err_ctx = <span class="macro">format!</span>(<span class="string">"{err:#}"</span>);
+<a href=#938 id=938 data-nosnippet>938</a>        <span class="macro">assert!</span>(
+<a href=#939 id=939 data-nosnippet>939</a>            err_ctx.contains(<span class="string">r#""/" is not a valid destination file name"#</span>),
+<a href=#940 id=940 data-nosnippet>940</a>            <span class="string">"expected error to show destination file name but got {err_ctx}"</span>,
+<a href=#941 id=941 data-nosnippet>941</a>        );
+<a href=#942 id=942 data-nosnippet>942</a>        <span class="prelude-val">Ok</span>(())
+<a href=#943 id=943 data-nosnippet>943</a>    }
+<a href=#944 id=944 data-nosnippet>944</a>}</code></pre></div></section></main></body></html>

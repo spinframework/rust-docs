@@ -70,7 +70,7 @@
 <a href=#70 id=70 data-nosnippet>70</a>    <span class="kw">let </span>manifest = spin_manifest::manifest_from_file(<span class="kw-2">&amp;</span>manifest_file);
 <a href=#71 id=71 data-nosnippet>71</a>    <span class="kw">match </span>manifest {
 <a href=#72 id=72 data-nosnippet>72</a>        <span class="prelude-val">Ok</span>(<span class="kw-2">mut </span>manifest) =&gt; {
-<a href=#73 id=73 data-nosnippet>73</a>            spin_manifest::normalize::normalize_manifest(<span class="kw-2">&amp;mut </span>manifest);
+<a href=#73 id=73 data-nosnippet>73</a>            spin_manifest::normalize::normalize_manifest(<span class="kw-2">&amp;mut </span>manifest)<span class="question-mark">?</span>;
 <a href=#74 id=74 data-nosnippet>74</a>            <span class="kw">let </span>components = build_configs_from_manifest(<span class="kw-2">&amp;</span>manifest);
 <a href=#75 id=75 data-nosnippet>75</a>            <span class="kw">let </span>deployment_targets = deployment_targets_from_manifest(<span class="kw-2">&amp;</span>manifest);
 <a href=#76 id=76 data-nosnippet>76</a>            <span class="prelude-val">Ok</span>(ManifestBuildInfo::Loadable {

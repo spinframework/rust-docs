@@ -272,18 +272,19 @@
 <a href=#272 id=272 data-nosnippet>272</a>            spin_manifest::schema::v2::ComponentDependency::Package { export, .. } =&gt; export,
 <a href=#273 id=273 data-nosnippet>273</a>            spin_manifest::schema::v2::ComponentDependency::Local { export, .. } =&gt; export,
 <a href=#274 id=274 data-nosnippet>274</a>            spin_manifest::schema::v2::ComponentDependency::HTTP { export, .. } =&gt; export,
-<a href=#275 id=275 data-nosnippet>275</a>        }
-<a href=#276 id=276 data-nosnippet>276</a>    }
-<a href=#277 id=277 data-nosnippet>277</a>}
-<a href=#278 id=278 data-nosnippet>278</a>
-<a href=#279 id=279 data-nosnippet>279</a><span class="kw">fn </span>source_description(source: <span class="kw-2">&amp;</span>spin_manifest::schema::v2::ComponentSource) -&gt; String {
-<a href=#280 id=280 data-nosnippet>280</a>    <span class="kw">match </span>source {
-<a href=#281 id=281 data-nosnippet>281</a>        spin_manifest::schema::v2::ComponentSource::Local(path) =&gt; {
-<a href=#282 id=282 data-nosnippet>282</a>            <span class="macro">format!</span>(<span class="string">"file {}"</span>, quoted_path(path))
-<a href=#283 id=283 data-nosnippet>283</a>        }
-<a href=#284 id=284 data-nosnippet>284</a>        spin_manifest::schema::v2::ComponentSource::Remote { url, .. } =&gt; <span class="macro">format!</span>(<span class="string">"URL {url}"</span>),
-<a href=#285 id=285 data-nosnippet>285</a>        spin_manifest::schema::v2::ComponentSource::Registry { package, .. } =&gt; {
-<a href=#286 id=286 data-nosnippet>286</a>            <span class="macro">format!</span>(<span class="string">"package {package}"</span>)
-<a href=#287 id=287 data-nosnippet>287</a>        }
-<a href=#288 id=288 data-nosnippet>288</a>    }
-<a href=#289 id=289 data-nosnippet>289</a>}</code></pre></div></section></main></body></html>
+<a href=#275 id=275 data-nosnippet>275</a>            spin_manifest::schema::v2::ComponentDependency::AppComponent { export, .. } =&gt; export,
+<a href=#276 id=276 data-nosnippet>276</a>        }
+<a href=#277 id=277 data-nosnippet>277</a>    }
+<a href=#278 id=278 data-nosnippet>278</a>}
+<a href=#279 id=279 data-nosnippet>279</a>
+<a href=#280 id=280 data-nosnippet>280</a><span class="kw">fn </span>source_description(source: <span class="kw-2">&amp;</span>spin_manifest::schema::v2::ComponentSource) -&gt; String {
+<a href=#281 id=281 data-nosnippet>281</a>    <span class="kw">match </span>source {
+<a href=#282 id=282 data-nosnippet>282</a>        spin_manifest::schema::v2::ComponentSource::Local(path) =&gt; {
+<a href=#283 id=283 data-nosnippet>283</a>            <span class="macro">format!</span>(<span class="string">"file {}"</span>, quoted_path(path))
+<a href=#284 id=284 data-nosnippet>284</a>        }
+<a href=#285 id=285 data-nosnippet>285</a>        spin_manifest::schema::v2::ComponentSource::Remote { url, .. } =&gt; <span class="macro">format!</span>(<span class="string">"URL {url}"</span>),
+<a href=#286 id=286 data-nosnippet>286</a>        spin_manifest::schema::v2::ComponentSource::Registry { package, .. } =&gt; {
+<a href=#287 id=287 data-nosnippet>287</a>            <span class="macro">format!</span>(<span class="string">"package {package}"</span>)
+<a href=#288 id=288 data-nosnippet>288</a>        }
+<a href=#289 id=289 data-nosnippet>289</a>    }
+<a href=#290 id=290 data-nosnippet>290</a>}</code></pre></div></section></main></body></html>

@@ -83,7 +83,7 @@
 <a href=#83 id=83 data-nosnippet>83</a>            .app()
 <a href=#84 id=84 data-nosnippet>84</a>            .trigger_configs::&lt;HttpTriggerConfig&gt;(<span class="string">"http"</span>)<span class="question-mark">?
 <a href=#85 id=85 data-nosnippet>85</a>            </span>.into_iter()
-<a href=#86 id=86 data-nosnippet>86</a>            .map(|(trigger_id, config)| (config.lookup_key(trigger_id).map(|k| (k, config))))
+<a href=#86 id=86 data-nosnippet>86</a>            .map(|(trigger_id, config)| config.lookup_key(trigger_id).map(|k| (k, config)))
 <a href=#87 id=87 data-nosnippet>87</a>            .collect::&lt;<span class="prelude-ty">Result</span>&lt;Vec&lt;<span class="kw">_</span>&gt;, <span class="kw">_</span>&gt;&gt;()<span class="question-mark">?</span>;
 <a href=#88 id=88 data-nosnippet>88</a>
 <a href=#89 id=89 data-nosnippet>89</a>        <span class="comment">// Build router
