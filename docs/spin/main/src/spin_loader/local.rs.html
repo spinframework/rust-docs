@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/loader/src/local.rs`."><title>local.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_loader" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0-nightly (1d23d0680 2025-10-22)" data-channel="nightly" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_loader/</div>local.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::path::{Path, PathBuf};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/loader/src/local.rs`."><title>local.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_loader" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.0-nightly (f37aa9955 2025-10-26)" data-channel="nightly" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_loader/</div>local.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::path::{Path, PathBuf};
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>anyhow::{anyhow, bail, ensure, Context, <span class="prelude-ty">Result</span>};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>futures::{future::try_join_all, StreamExt};
@@ -119,7 +119,7 @@
 <a href=#119 id=119 data-nosnippet>119</a>        <span class="kw">let </span>host_requirements = spin_locked_app::values::ValuesMap::new();
 <a href=#120 id=120 data-nosnippet>120</a>
 <a href=#121 id=121 data-nosnippet>121</a>        <span class="kw">let </span><span class="kw-2">mut </span>must_understand = <span class="macro">vec!</span>[];
-<a href=#122 id=122 data-nosnippet>122</a>        <span class="kw">if </span>!host_requirements.is_empty() {
+<a href=#122 id=122 data-nosnippet>122</a>        <span class="macro">if !</span>host_requirements.is_empty() {
 <a href=#123 id=123 data-nosnippet>123</a>            must_understand.push(spin_locked_app::locked::MustUnderstand::HostRequirements);
 <a href=#124 id=124 data-nosnippet>124</a>        }
 <a href=#125 id=125 data-nosnippet>125</a>        <span class="kw">if </span>components.iter().any(|c| !c.host_requirements.is_empty()) {
@@ -435,7 +435,7 @@
 <a href=#435 id=435 data-nosnippet>435</a>
 <a href=#436 id=436 data-nosnippet>436</a>        <span class="kw">for </span>path_res <span class="kw">in </span>paths {
 <a href=#437 id=437 data-nosnippet>437</a>            <span class="kw">let </span>src = path_res<span class="question-mark">?</span>;
-<a href=#438 id=438 data-nosnippet>438</a>            <span class="kw">if </span>!src.is_file() {
+<a href=#438 id=438 data-nosnippet>438</a>            <span class="macro">if !</span>src.is_file() {
 <a href=#439 id=439 data-nosnippet>439</a>                <span class="kw">continue</span>;
 <a href=#440 id=440 data-nosnippet>440</a>            }
 <a href=#441 id=441 data-nosnippet>441</a>
@@ -530,7 +530,7 @@
 <a href=#530 id=530 data-nosnippet>530</a>            } =&gt; (source, destination),
 <a href=#531 id=531 data-nosnippet>531</a>        };
 <a href=#532 id=532 data-nosnippet>532</a>        <span class="kw">let </span>path = <span class="self">self</span>.app_root.join(src);
-<a href=#533 id=533 data-nosnippet>533</a>        <span class="kw">if </span>!path.is_dir() {
+<a href=#533 id=533 data-nosnippet>533</a>        <span class="macro">if !</span>path.is_dir() {
 <a href=#534 id=534 data-nosnippet>534</a>            <span class="macro">bail!</span>(<span class="string">"Only directory mounts are supported with `--direct-mounts`; {src:?} is not a directory."</span>);
 <a href=#535 id=535 data-nosnippet>535</a>        }
 <a href=#536 id=536 data-nosnippet>536</a>        <span class="prelude-val">Ok</span>(ContentPath {
@@ -629,7 +629,7 @@
 <a href=#629 id=629 data-nosnippet>629</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(id) = trigger.component.map(reference_id) {
 <a href=#630 id=630 data-nosnippet>630</a>        config.insert(<span class="string">"component"</span>.into(), id);
 <a href=#631 id=631 data-nosnippet>631</a>    }
-<a href=#632 id=632 data-nosnippet>632</a>    <span class="kw">if </span>!trigger.components.is_empty() {
+<a href=#632 id=632 data-nosnippet>632</a>    <span class="macro">if !</span>trigger.components.is_empty() {
 <a href=#633 id=633 data-nosnippet>633</a>        <span class="comment">// Flatten trigger config `components` `OneOrManyComponentSpecs` into
 <a href=#634 id=634 data-nosnippet>634</a>        // lists of component references.
 <a href=#635 id=635 data-nosnippet>635</a>        </span>config.insert(
@@ -941,4 +941,5 @@
 <a href=#941 id=941 data-nosnippet>941</a>        );
 <a href=#942 id=942 data-nosnippet>942</a>        <span class="prelude-val">Ok</span>(())
 <a href=#943 id=943 data-nosnippet>943</a>    }
-<a href=#944 id=944 data-nosnippet>944</a>}</code></pre></div></section></main></body></html>
+<a href=#944 id=944 data-nosnippet>944</a>}
+</code></pre></div></section></main></body></html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/templates/src/run.rs`."><title>run.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_templates" data-themes="" data-resource-suffix="" data-rustdoc-version="1.92.0-nightly (1d23d0680 2025-10-22)" data-channel="nightly" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_templates/</div>run.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/templates/src/run.rs`."><title>run.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-ca0dd0c4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_templates" data-themes="" data-resource-suffix="" data-rustdoc-version="1.93.0-nightly (f37aa9955 2025-10-26)" data-channel="nightly" data-search-js="search-d69d8955.js" data-stringdex-js="stringdex-c3e638e9.js" data-settings-js="settings-c38705f0.js" ><script src="../../static.files/storage-e2aeef58.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-ce535bd0.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-263c88ec.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content"><div class="main-heading"><h1><div class="sub-heading">spin_templates/</div>run.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::{
 <a href=#2 id=2 data-nosnippet>2</a>    collections::HashMap,
 <a href=#3 id=3 data-nosnippet>3</a>    path::{Path, PathBuf},
 <a href=#4 id=4 data-nosnippet>4</a>};
@@ -102,7 +102,7 @@
 <a href=#102 id=102 data-nosnippet>102</a>        <span class="comment">// TODO: rationalise `path` and `dir`
 <a href=#103 id=103 data-nosnippet>103</a>        </span><span class="kw">let </span>to = <span class="self">self</span>.generation_target_dir();
 <a href=#104 id=104 data-nosnippet>104</a>
-<a href=#105 id=105 data-nosnippet>105</a>        <span class="kw">if </span>!<span class="self">self</span>.options.allow_overwrite {
+<a href=#105 id=105 data-nosnippet>105</a>        <span class="macro">if !</span><span class="self">self</span>.options.allow_overwrite {
 <a href=#106 id=106 data-nosnippet>106</a>            <span class="kw">match </span>interaction.allow_generate_into(<span class="kw-2">&amp;</span>to) {
 <a href=#107 id=107 data-nosnippet>107</a>                Cancellable::Cancelled =&gt; <span class="kw">return </span><span class="prelude-val">Ok</span>(<span class="prelude-val">None</span>),
 <a href=#108 id=108 data-nosnippet>108</a>                Cancellable::Ok(<span class="kw">_</span>) =&gt; (),
@@ -356,7 +356,7 @@
 <a href=#356 id=356 data-nosnippet>356</a>    }
 <a href=#357 id=357 data-nosnippet>357</a>
 <a href=#358 id=358 data-nosnippet>358</a>    <span class="kw">async fn </span>maybe_initialise_git(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; anyhow::Result&lt;()&gt; {
-<a href=#359 id=359 data-nosnippet>359</a>        <span class="kw">if </span>!<span class="macro">matches!</span>(<span class="self">self</span>.options.variant, TemplateVariantInfo::NewApplication) {
+<a href=#359 id=359 data-nosnippet>359</a>        <span class="macro">if !matches!</span>(<span class="self">self</span>.options.variant, TemplateVariantInfo::NewApplication) {
 <a href=#360 id=360 data-nosnippet>360</a>            <span class="kw">return </span><span class="prelude-val">Ok</span>(());
 <a href=#361 id=361 data-nosnippet>361</a>        }
 <a href=#362 id=362 data-nosnippet>362</a>
@@ -373,7 +373,7 @@
 <a href=#373 id=373 data-nosnippet>373</a>        }
 <a href=#374 id=374 data-nosnippet>374</a>
 <a href=#375 id=375 data-nosnippet>375</a>        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = git::init_git_repo(<span class="kw-2">&amp;</span>target_dir).<span class="kw">await </span>{
-<a href=#376 id=376 data-nosnippet>376</a>            <span class="kw">if </span>!<span class="macro">matches!</span>(e, git::GitError::ProgramNotFound) {
+<a href=#376 id=376 data-nosnippet>376</a>            <span class="macro">if !matches!</span>(e, git::GitError::ProgramNotFound) {
 <a href=#377 id=377 data-nosnippet>377</a>                <span class="macro">terminal::warn!</span>(<span class="string">"Spin was unable to initialise a Git repository. Run `git init` manually if you want one."</span>);
 <a href=#378 id=378 data-nosnippet>378</a>            }
 <a href=#379 id=379 data-nosnippet>379</a>        }
@@ -465,7 +465,7 @@
 <a href=#465 id=465 data-nosnippet>465</a>            <span class="kw">for </span>partial_file <span class="kw">in </span>partials_dir {
 <a href=#466 id=466 data-nosnippet>466</a>                <span class="kw">let </span>partial_file =
 <a href=#467 id=467 data-nosnippet>467</a>                    partial_file.context(<span class="string">"Error scanning template partials directory"</span>)<span class="question-mark">?</span>;
-<a href=#468 id=468 data-nosnippet>468</a>                <span class="kw">if </span>!partial_file.file_type().is_ok_and(|t| t.is_file()) {
+<a href=#468 id=468 data-nosnippet>468</a>                <span class="macro">if !</span>partial_file.file_type().is_ok_and(|t| t.is_file()) {
 <a href=#469 id=469 data-nosnippet>469</a>                    <span class="macro">anyhow::bail!</span>(<span class="string">"Non-file in partials directory: {partial_file:?}"</span>);
 <a href=#470 id=470 data-nosnippet>470</a>                }
 <a href=#471 id=471 data-nosnippet>471</a>                <span class="kw">let </span>partial_name = partial_file
@@ -511,4 +511,5 @@
 <a href=#511 id=511 data-nosnippet>511</a>        <span class="kw">let </span>dotpas = eval(<span class="string">"{{ dotted | dotted_pascal_case }}"</span>);
 <a href=#512 id=512 data-nosnippet>512</a>        <span class="macro">assert_eq!</span>(<span class="string">"Originally.SemiDotted"</span>, dotpas);
 <a href=#513 id=513 data-nosnippet>513</a>    }
-<a href=#514 id=514 data-nosnippet>514</a>}</code></pre></div></section></main></body></html>
+<a href=#514 id=514 data-nosnippet>514</a>}
+</code></pre></div></section></main></body></html>
