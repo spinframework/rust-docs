@@ -30,7 +30,7 @@
 <a href=#30 id=30 data-nosnippet>30</a>        address: String,
 <a href=#31 id=31 data-nosnippet>31</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;Resource&lt;RedisConnection&gt;, Error&gt; {
 <a href=#32 id=32 data-nosnippet>32</a>        <span class="kw">let </span>config = AsyncConnectionConfig::new()
-<a href=#33 id=33 data-nosnippet>33</a>            .set_dns_resolver(SpinResolver(<span class="self">self</span>.blocked_networks.clone()));
+<a href=#33 id=33 data-nosnippet>33</a>            .set_dns_resolver(SpinDnsResolver(<span class="self">self</span>.blocked_networks.clone()));
 <a href=#34 id=34 data-nosnippet>34</a>        <span class="kw">let </span>conn = redis::Client::open(address.as_str())
 <a href=#35 id=35 data-nosnippet>35</a>            .map_err(|<span class="kw">_</span>| Error::InvalidAddress)<span class="question-mark">?
 <a href=#36 id=36 data-nosnippet>36</a>            </span>.get_multiplexed_async_connection_with_config(<span class="kw-2">&amp;</span>config)
@@ -374,29 +374,30 @@
 <a href=#374 id=374 data-nosnippet>374</a>    }
 <a href=#375 id=375 data-nosnippet>375</a>}
 <a href=#376 id=376 data-nosnippet>376</a>
-<a href=#377 id=377 data-nosnippet>377</a><span class="kw">struct </span>SpinResolver(BlockedNetworks);
-<a href=#378 id=378 data-nosnippet>378</a>
-<a href=#379 id=379 data-nosnippet>379</a><span class="kw">impl </span>AsyncDNSResolver <span class="kw">for </span>SpinResolver {
-<a href=#380 id=380 data-nosnippet>380</a>    <span class="kw">fn </span>resolve&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>: <span class="lifetime">'a</span>&gt;(
-<a href=#381 id=381 data-nosnippet>381</a>        <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="self">self</span>,
-<a href=#382 id=382 data-nosnippet>382</a>        host: <span class="kw-2">&amp;</span><span class="lifetime">'b </span>str,
-<a href=#383 id=383 data-nosnippet>383</a>        port: u16,
-<a href=#384 id=384 data-nosnippet>384</a>    ) -&gt; redis::RedisFuture&lt;<span class="lifetime">'a</span>, Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = std::net::SocketAddr&gt; + Send + <span class="lifetime">'a</span>&gt;&gt; {
-<a href=#385 id=385 data-nosnippet>385</a>        Box::pin(<span class="kw">async move </span>{
-<a href=#386 id=386 data-nosnippet>386</a>            <span class="kw">let </span><span class="kw-2">mut </span>addrs = tokio::net::lookup_host((host, port))
-<a href=#387 id=387 data-nosnippet>387</a>                .<span class="kw">await</span><span class="question-mark">?
-<a href=#388 id=388 data-nosnippet>388</a>                </span>.collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
-<a href=#389 id=389 data-nosnippet>389</a>            <span class="comment">// Remove blocked IPs
-<a href=#390 id=390 data-nosnippet>390</a>            </span><span class="kw">let </span>blocked_addrs = <span class="self">self</span>.<span class="number">0</span>.remove_blocked(<span class="kw-2">&amp;mut </span>addrs);
-<a href=#391 id=391 data-nosnippet>391</a>            <span class="kw">if </span>addrs.is_empty() &amp;&amp; !blocked_addrs.is_empty() {
-<a href=#392 id=392 data-nosnippet>392</a>                <span class="macro">tracing::error!</span>(
-<a href=#393 id=393 data-nosnippet>393</a>                    <span class="string">"error.type" </span>= <span class="string">"destination_ip_prohibited"</span>,
-<a href=#394 id=394 data-nosnippet>394</a>                    <span class="question-mark">?</span>blocked_addrs,
-<a href=#395 id=395 data-nosnippet>395</a>                    <span class="string">"all destination IP(s) prohibited by runtime config"
-<a href=#396 id=396 data-nosnippet>396</a>                </span>);
-<a href=#397 id=397 data-nosnippet>397</a>            }
-<a href=#398 id=398 data-nosnippet>398</a>            <span class="prelude-val">Ok</span>(Box::new(addrs.into_iter()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = SocketAddr&gt; + Send&gt;)
-<a href=#399 id=399 data-nosnippet>399</a>        })
-<a href=#400 id=400 data-nosnippet>400</a>    }
-<a href=#401 id=401 data-nosnippet>401</a>}
+<a href=#377 id=377 data-nosnippet>377</a><span class="doccomment">/// Resolves DNS using Tokio's resolver, filtering out blocked IPs.
+<a href=#378 id=378 data-nosnippet>378</a></span><span class="kw">struct </span>SpinDnsResolver(BlockedNetworks);
+<a href=#379 id=379 data-nosnippet>379</a>
+<a href=#380 id=380 data-nosnippet>380</a><span class="kw">impl </span>AsyncDNSResolver <span class="kw">for </span>SpinDnsResolver {
+<a href=#381 id=381 data-nosnippet>381</a>    <span class="kw">fn </span>resolve&lt;<span class="lifetime">'a</span>, <span class="lifetime">'b</span>: <span class="lifetime">'a</span>&gt;(
+<a href=#382 id=382 data-nosnippet>382</a>        <span class="kw-2">&amp;</span><span class="lifetime">'a </span><span class="self">self</span>,
+<a href=#383 id=383 data-nosnippet>383</a>        host: <span class="kw-2">&amp;</span><span class="lifetime">'b </span>str,
+<a href=#384 id=384 data-nosnippet>384</a>        port: u16,
+<a href=#385 id=385 data-nosnippet>385</a>    ) -&gt; redis::RedisFuture&lt;<span class="lifetime">'a</span>, Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = std::net::SocketAddr&gt; + Send + <span class="lifetime">'a</span>&gt;&gt; {
+<a href=#386 id=386 data-nosnippet>386</a>        Box::pin(<span class="kw">async move </span>{
+<a href=#387 id=387 data-nosnippet>387</a>            <span class="kw">let </span><span class="kw-2">mut </span>addrs = tokio::net::lookup_host((host, port))
+<a href=#388 id=388 data-nosnippet>388</a>                .<span class="kw">await</span><span class="question-mark">?
+<a href=#389 id=389 data-nosnippet>389</a>                </span>.collect::&lt;Vec&lt;<span class="kw">_</span>&gt;&gt;();
+<a href=#390 id=390 data-nosnippet>390</a>            <span class="comment">// Remove blocked IPs
+<a href=#391 id=391 data-nosnippet>391</a>            </span><span class="kw">let </span>blocked_addrs = <span class="self">self</span>.<span class="number">0</span>.remove_blocked(<span class="kw-2">&amp;mut </span>addrs);
+<a href=#392 id=392 data-nosnippet>392</a>            <span class="kw">if </span>addrs.is_empty() &amp;&amp; !blocked_addrs.is_empty() {
+<a href=#393 id=393 data-nosnippet>393</a>                <span class="macro">tracing::error!</span>(
+<a href=#394 id=394 data-nosnippet>394</a>                    <span class="string">"error.type" </span>= <span class="string">"destination_ip_prohibited"</span>,
+<a href=#395 id=395 data-nosnippet>395</a>                    <span class="question-mark">?</span>blocked_addrs,
+<a href=#396 id=396 data-nosnippet>396</a>                    <span class="string">"all destination IP(s) prohibited by runtime config"
+<a href=#397 id=397 data-nosnippet>397</a>                </span>);
+<a href=#398 id=398 data-nosnippet>398</a>            }
+<a href=#399 id=399 data-nosnippet>399</a>            <span class="prelude-val">Ok</span>(Box::new(addrs.into_iter()) <span class="kw">as </span>Box&lt;<span class="kw">dyn </span>Iterator&lt;Item = SocketAddr&gt; + Send&gt;)
+<a href=#400 id=400 data-nosnippet>400</a>        })
+<a href=#401 id=401 data-nosnippet>401</a>    }
+<a href=#402 id=402 data-nosnippet>402</a>}
 </code></pre></div></section></main></body></html>
