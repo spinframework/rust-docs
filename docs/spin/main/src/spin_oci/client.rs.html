@@ -447,7 +447,7 @@
 <a href=#447 id=447 data-nosnippet>447</a>        <span class="comment">// Only add the archive layer to the OCI manifest
 <a href=#448 id=448 data-nosnippet>448</a>        </span><span class="macro">tracing::trace!</span>(<span class="string">"Adding archive layer for all files in source {:?}"</span>, <span class="kw-2">&amp;</span>source);
 <a href=#449 id=449 data-nosnippet>449</a>        <span class="kw">let </span>working_dir = tempfile::tempdir()<span class="question-mark">?</span>;
-<a href=#450 id=450 data-nosnippet>450</a>        <span class="kw">let </span>archive_path = <span class="kw">crate</span>::utils::archive(source, <span class="kw-2">&amp;</span>working_dir.into_path())
+<a href=#450 id=450 data-nosnippet>450</a>        <span class="kw">let </span>archive_path = <span class="kw">crate</span>::utils::archive(source, <span class="kw-2">&amp;</span>working_dir.keep())
 <a href=#451 id=451 data-nosnippet>451</a>            .<span class="kw">await
 <a href=#452 id=452 data-nosnippet>452</a>            </span>.context(<span class="macro">format!</span>(
 <a href=#453 id=453 data-nosnippet>453</a>                <span class="string">"Unable to create compressed archive for source {source:?}"

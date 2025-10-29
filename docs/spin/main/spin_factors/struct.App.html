@@ -7,7 +7,7 @@ app.</p>
     &amp;'this self,
     key: MetadataKey&lt;T&gt;,
 ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt;, Error&gt;<div class="where">where
-    T: <a class="trait" href="https://docs.rs/serde/1.0.215/serde/de/trait.Deserialize.html" title="trait serde::de::Deserialize">Deserialize</a>&lt;'this&gt;,</div></h4></section></summary><div class="docblock"><p>Deserializes typed metadata for this app.</p>
+    T: <a class="trait" href="https://docs.rs/serde_core/1.0.228/serde_core/de/trait.Deserialize.html" title="trait serde_core::de::Deserialize">Deserialize</a>&lt;'this&gt;,</div></h4></section></summary><div class="docblock"><p>Deserializes typed metadata for this app.</p>
 <p>Returns <code>Ok(None)</code> if there is no metadata for the given <code>key</code> and an
 <code>Err</code> only if there <em>is</em> a value for the <code>key</code> but the typed
 deserialization failed.</p>
@@ -15,7 +15,7 @@ deserialization failed.</p>
     &amp;'this self,
     key: MetadataKey&lt;T&gt;,
 ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;T, Error&gt;<div class="where">where
-    T: <a class="trait" href="https://docs.rs/serde/1.0.215/serde/de/trait.Deserialize.html" title="trait serde::de::Deserialize">Deserialize</a>&lt;'this&gt;,</div></h4></section></summary><div class="docblock"><p>Deserializes typed metadata for this app.</p>
+    T: <a class="trait" href="https://docs.rs/serde_core/1.0.228/serde_core/de/trait.Deserialize.html" title="trait serde_core::de::Deserialize">Deserialize</a>&lt;'this&gt;,</div></h4></section></summary><div class="docblock"><p>Deserializes typed metadata for this app.</p>
 <p>Like <a href="struct.App.html#method.get_metadata" title="method spin_factors::App::get_metadata"><code>App::get_metadata</code></a>, but returns an error if there is
 no metadata for the given <code>key</code>.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.variables" class="method"><h4 class="code-header">pub fn <a href="#method.variables" class="fn">variables</a>(&amp;self) -&gt; impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/iterator/trait.Iterator.html" title="trait core::iter::traits::iterator::Iterator">Iterator</a>&lt;Item = (&amp;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>, &amp;Variable)&gt;</h4></section></summary><div class="docblock"><p>Returns an iterator of custom config [<code>Variable</code>]s defined for this app.</p>
@@ -27,7 +27,7 @@ if it doesn’t exist.</p>
     &amp;'this self,
     trigger_type: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>,
 ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;<a class="enum" href="https://doc.rust-lang.org/nightly/core/option/enum.Option.html" title="enum core::option::Option">Option</a>&lt;T&gt;, Error&gt;<div class="where">where
-    T: <a class="trait" href="https://docs.rs/serde/1.0.215/serde/de/trait.Deserialize.html" title="trait serde::de::Deserialize">Deserialize</a>&lt;'this&gt;,</div></h4></section></summary><div class="docblock"><p>Returns the trigger metadata for a specific trigger type.</p>
+    T: <a class="trait" href="https://docs.rs/serde_core/1.0.228/serde_core/de/trait.Deserialize.html" title="trait serde_core::de::Deserialize">Deserialize</a>&lt;'this&gt;,</div></h4></section></summary><div class="docblock"><p>Returns the trigger metadata for a specific trigger type.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.triggers_with_type" class="method"><h4 class="code-header">pub fn <a href="#method.triggers_with_type" class="fn">triggers_with_type</a>&lt;'a&gt;(
     &amp;'a self,
     trigger_type: &amp;'a <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>,
@@ -37,7 +37,7 @@ the given <code>trigger_type</code>.</p>
     &amp;'a self,
     trigger_type: &amp;'a <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>,
 ) -&gt; <a class="enum" href="https://doc.rust-lang.org/nightly/core/result/enum.Result.html" title="enum core::result::Result">Result</a>&lt;impl <a class="trait" href="https://doc.rust-lang.org/nightly/core/iter/traits/collect/trait.IntoIterator.html" title="trait core::iter::traits::collect::IntoIterator">IntoIterator</a>&lt;Item = (&amp;'a <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>, T)&gt;, Error&gt;<div class="where">where
-    T: <a class="trait" href="https://docs.rs/serde/1.0.215/serde/de/trait.Deserialize.html" title="trait serde::de::Deserialize">Deserialize</a>&lt;'a&gt;,</div></h4></section></summary><div class="docblock"><p>Returns an iterator of trigger IDs and deserialized trigger configs for
+    T: <a class="trait" href="https://docs.rs/serde_core/1.0.228/serde_core/de/trait.Deserialize.html" title="trait serde_core::de::Deserialize">Deserialize</a>&lt;'a&gt;,</div></h4></section></summary><div class="docblock"><p>Returns an iterator of trigger IDs and deserialized trigger configs for
 the given <code>trigger_type</code>.</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.ensure_needs_only" class="method"><h4 class="code-header">pub fn <a href="#method.ensure_needs_only" class="fn">ensure_needs_only</a>(
     &amp;self,
