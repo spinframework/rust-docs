@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":["counter","histogram","monotonic_counter"]};
+window.SIDEBAR_ITEMS = {"macro":["counter","gauge","histogram","monotonic_counter"]};

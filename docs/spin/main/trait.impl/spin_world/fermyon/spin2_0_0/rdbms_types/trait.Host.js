@@ -1,9 +1,9 @@
 (function() {
-    var implementors = Object.fromEntries([["spin_factor_outbound_mysql",[["impl&lt;C: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Send.html\" title=\"trait core::marker::Send\">Send</a>&gt; <a class=\"trait\" href=\"spin_world/fermyon/spin2_0_0/rdbms_types/trait.Host.html\" title=\"trait spin_world::fermyon::spin2_0_0::rdbms_types::Host\">Host</a> for <a class=\"struct\" href=\"spin_factor_outbound_mysql/struct.InstanceState.html\" title=\"struct spin_factor_outbound_mysql::InstanceState\">InstanceState</a>&lt;C&gt;"]]],["spin_factor_outbound_pg",[["impl&lt;CF: <a class=\"trait\" href=\"spin_factor_outbound_pg/client/trait.ClientFactory.html\" title=\"trait spin_factor_outbound_pg::client::ClientFactory\">ClientFactory</a>&gt; <a class=\"trait\" href=\"spin_world/fermyon/spin2_0_0/rdbms_types/trait.Host.html\" title=\"trait spin_world::fermyon::spin2_0_0::rdbms_types::Host\">Host</a> for <a class=\"struct\" href=\"spin_factor_outbound_pg/struct.InstanceState.html\" title=\"struct spin_factor_outbound_pg::InstanceState\">InstanceState</a>&lt;CF&gt;"]]],["spin_world",[]]]);
+    var implementors = Object.fromEntries([["spin_factor_outbound_mysql",[["impl&lt;C: <a class=\"trait\" href=\"https://doc.rust-lang.org/nightly/core/marker/trait.Send.html\" title=\"trait core::marker::Send\">Send</a>&gt; Host for <a class=\"struct\" href=\"spin_factor_outbound_mysql/struct.InstanceState.html\" title=\"struct spin_factor_outbound_mysql::InstanceState\">InstanceState</a>&lt;C&gt;"]]],["spin_factor_outbound_pg",[["impl&lt;CF: <a class=\"trait\" href=\"spin_factor_outbound_pg/client/trait.ClientFactory.html\" title=\"trait spin_factor_outbound_pg::client::ClientFactory\">ClientFactory</a>&gt; Host for <a class=\"struct\" href=\"spin_factor_outbound_pg/struct.InstanceState.html\" title=\"struct spin_factor_outbound_pg::InstanceState\">InstanceState</a>&lt;CF&gt;"]]],["spin_world",[]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
         window.pending_implementors = implementors;
     }
 })()
-//{"start":57,"fragment_lengths":[517,542,18]}
+//{"start":57,"fragment_lengths":[362,387,18]}
