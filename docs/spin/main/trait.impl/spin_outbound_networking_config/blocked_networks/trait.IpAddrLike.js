@@ -1,9 +1,9 @@
 (function() {
-    var implementors = Object.fromEntries([["spin_outbound_networking_config",[]]]);
+    const implementors = Object.fromEntries([["spin_outbound_networking_config",[]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
         window.pending_implementors = implementors;
     }
 })()
-//{"start":57,"fragment_lengths":[38]}
+//{"start":59,"fragment_lengths":[38]}
