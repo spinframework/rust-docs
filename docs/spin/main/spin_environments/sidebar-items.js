@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["validate_application_against_environment_ids"],"struct":["ApplicationToValidate","TargetEnvironmentValidation"]};
+window.SIDEBAR_ITEMS = {"fn":["validate_application_against_environment_ids"],"struct":["ApplicationToValidate","TargetEnvironmentValidation","Targets"]};
