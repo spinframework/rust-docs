@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"attr":["async_trait"],"mod":["exports","fermyon","spin","wasi"],"struct":["Host_","Host_Indices","Host_Pre","LinkOptions"]};
+window.SIDEBAR_ITEMS = {"attr":["async_trait"],"mod":["exports","fermyon","spin","wasi","wasi_otel"],"struct":["Host_","Host_Indices","Host_Pre","LinkOptions"]};
