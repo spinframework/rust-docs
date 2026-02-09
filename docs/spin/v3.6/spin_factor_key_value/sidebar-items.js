@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["KEY_VALUE_STORES_KEY"],"enum":["Error","SwapError"],"fn":["log_cas_error","log_error"],"mod":["runtime_config"],"struct":["AppState","DelegatingStoreManager","InstanceBuilder","KeyValueDispatch","KeyValueFactor"],"trait":["Cas","Store","StoreManager"]};

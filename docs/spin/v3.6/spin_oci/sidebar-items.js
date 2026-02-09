@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ORIGIN_URL_SCHEME"],"enum":["ExecutableArtifact"],"fn":["is_probably_oci_reference"],"mod":["client","utils"],"struct":["OciLoader"]};
