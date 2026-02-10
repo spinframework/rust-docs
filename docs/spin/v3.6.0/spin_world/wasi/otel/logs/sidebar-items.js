@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"struct":["LogRecord"],"trait":["Host","HostWithStore"],"type":["Datetime","InstrumentationScope","KeyValue","Resource","SpanId","TraceFlags","TraceId","Value"]};
