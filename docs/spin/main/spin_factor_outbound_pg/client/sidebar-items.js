@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["PooledTokioClientFactory"],"trait":["Client","ClientFactory"]};
+window.SIDEBAR_ITEMS = {"struct":["HashableCertificate","PooledTokioClientFactory"],"trait":["Client","ClientFactory"]};

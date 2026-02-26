@@ -3,7 +3,7 @@
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">mod </span>rdbms_types {
 <a href=#4 id=4 data-nosnippet>4</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
 <a href=#5 id=5 data-nosnippet>5</a>    <span class="kw">use </span>spin::postgres3_0_0::postgres <span class="kw">as </span>pg3;
-<a href=#6 id=6 data-nosnippet>6</a>    <span class="kw">use </span>spin::postgres4_0_0::postgres <span class="kw">as </span>pg4;
+<a href=#6 id=6 data-nosnippet>6</a>    <span class="kw">use </span>spin::postgres4_1_0::postgres <span class="kw">as </span>pg4;
 <a href=#7 id=7 data-nosnippet>7</a>
 <a href=#8 id=8 data-nosnippet>8</a>    <span class="kw">impl </span>From&lt;v2::rdbms_types::Column&gt; <span class="kw">for </span>v1::rdbms_types::Column {
 <a href=#9 id=9 data-nosnippet>9</a>        <span class="kw">fn </span>from(value: v2::rdbms_types::Column) -&gt; <span class="self">Self </span>{
@@ -15,7 +15,7 @@
 <a href=#15 id=15 data-nosnippet>15</a>    }
 <a href=#16 id=16 data-nosnippet>16</a>
 <a href=#17 id=17 data-nosnippet>17</a>    <span class="kw">impl </span>From&lt;pg4::Column&gt; <span class="kw">for </span>v1::rdbms_types::Column {
-<a href=#18 id=18 data-nosnippet>18</a>        <span class="kw">fn </span>from(value: spin::postgres4_0_0::postgres::Column) -&gt; <span class="self">Self </span>{
+<a href=#18 id=18 data-nosnippet>18</a>        <span class="kw">fn </span>from(value: pg4::Column) -&gt; <span class="self">Self </span>{
 <a href=#19 id=19 data-nosnippet>19</a>            v1::rdbms_types::Column {
 <a href=#20 id=20 data-nosnippet>20</a>                name: value.name,
 <a href=#21 id=21 data-nosnippet>21</a>                data_type: value.data_type.into(),
@@ -422,7 +422,7 @@
 <a href=#422 id=422 data-nosnippet>422</a><span class="kw">mod </span>postgres {
 <a href=#423 id=423 data-nosnippet>423</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
 <a href=#424 id=424 data-nosnippet>424</a>    <span class="kw">use </span>spin::postgres3_0_0::postgres <span class="kw">as </span>pg3;
-<a href=#425 id=425 data-nosnippet>425</a>    <span class="kw">use </span>spin::postgres4_0_0::postgres <span class="kw">as </span>pg4;
+<a href=#425 id=425 data-nosnippet>425</a>    <span class="kw">use </span>spin::postgres4_1_0::postgres <span class="kw">as </span>pg4;
 <a href=#426 id=426 data-nosnippet>426</a>
 <a href=#427 id=427 data-nosnippet>427</a>    <span class="kw">impl </span>From&lt;pg4::RowSet&gt; <span class="kw">for </span>v1::postgres::RowSet {
 <a href=#428 id=428 data-nosnippet>428</a>        <span class="kw">fn </span>from(value: pg4::RowSet) -&gt; v1::postgres::RowSet {
