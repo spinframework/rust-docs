@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["TargetChecking"],"fn":["build","build_default"]};
+window.SIDEBAR_ITEMS = {"enum":["TargetChecking"],"fn":["build","build_default","read_last_build_profile","save_last_build_profile","warn_if_not_latest_build"]};
