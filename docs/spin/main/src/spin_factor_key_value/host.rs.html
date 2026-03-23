@@ -356,10 +356,10 @@
 <a href=#356 id=356 data-nosnippet>356</a>
 <a href=#357 id=357 data-nosnippet>357</a>        <span class="kw">let </span>producer = spin_wasi_async::stream::producer(keys_rx);
 <a href=#358 id=358 data-nosnippet>358</a>        <span class="kw">let </span>(ksr, efr) = accessor.with(|<span class="kw-2">mut </span>access| {
-<a href=#359 id=359 data-nosnippet>359</a>            <span class="kw">let </span>ksr = StreamReader::new(<span class="kw-2">&amp;mut </span>access, producer);
-<a href=#360 id=360 data-nosnippet>360</a>            <span class="kw">let </span>efr = FutureReader::new(<span class="kw-2">&amp;mut </span>access, err_rx);
-<a href=#361 id=361 data-nosnippet>361</a>            (ksr, efr)
-<a href=#362 id=362 data-nosnippet>362</a>        });
+<a href=#359 id=359 data-nosnippet>359</a>            <span class="kw">let </span>ksr = StreamReader::new(<span class="kw-2">&amp;mut </span>access, producer)<span class="question-mark">?</span>;
+<a href=#360 id=360 data-nosnippet>360</a>            <span class="kw">let </span>efr = FutureReader::new(<span class="kw-2">&amp;mut </span>access, err_rx)<span class="question-mark">?</span>;
+<a href=#361 id=361 data-nosnippet>361</a>            anyhow::Ok((ksr, efr))
+<a href=#362 id=362 data-nosnippet>362</a>        })<span class="question-mark">?</span>;
 <a href=#363 id=363 data-nosnippet>363</a>
 <a href=#364 id=364 data-nosnippet>364</a>        <span class="prelude-val">Ok</span>((ksr, efr))
 <a href=#365 id=365 data-nosnippet>365</a>    }

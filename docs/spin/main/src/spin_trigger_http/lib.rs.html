@@ -30,13 +30,13 @@
 <a href=#30 id=30 data-nosnippet>30</a><span class="kw">use </span>spin_app::App;
 <a href=#31 id=31 data-nosnippet>31</a><span class="kw">use </span>spin_factors::RuntimeFactors;
 <a href=#32 id=32 data-nosnippet>32</a><span class="kw">use </span>spin_trigger::Trigger;
-<a href=#33 id=33 data-nosnippet>33</a><span class="kw">use </span>wasmtime_wasi_http::bindings::http::types::ErrorCode;
+<a href=#33 id=33 data-nosnippet>33</a><span class="kw">use </span>wasmtime_wasi_http::p2::bindings::http::types::ErrorCode;
 <a href=#34 id=34 data-nosnippet>34</a>
 <a href=#35 id=35 data-nosnippet>35</a><span class="kw">pub use </span>server::HttpServer;
 <a href=#36 id=36 data-nosnippet>36</a>
 <a href=#37 id=37 data-nosnippet>37</a><span class="kw">pub use </span>tls::TlsConfig;
 <a href=#38 id=38 data-nosnippet>38</a>
-<a href=#39 id=39 data-nosnippet>39</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>wasmtime_wasi_http::body::HyperIncomingBody <span class="kw">as </span>Body;
+<a href=#39 id=39 data-nosnippet>39</a><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">use </span>wasmtime_wasi_http::p2::body::HyperIncomingBody <span class="kw">as </span>Body;
 <a href=#40 id=40 data-nosnippet>40</a>
 <a href=#41 id=41 data-nosnippet>41</a><span class="kw">const </span>DEFAULT_WASIP3_MAX_INSTANCE_REUSE_COUNT: usize = <span class="number">128</span>;
 <a href=#42 id=42 data-nosnippet>42</a><span class="kw">const </span>DEFAULT_WASIP3_MAX_INSTANCE_CONCURRENT_REUSE_COUNT: usize = <span class="number">16</span>;
@@ -401,21 +401,23 @@
 <a href=#401 id=401 data-nosnippet>401</a>}
 <a href=#402 id=402 data-nosnippet>402</a>
 <a href=#403 id=403 data-nosnippet>403</a><span class="kw">pub fn </span>dns_error(rcode: String, info_code: u16) -&gt; ErrorCode {
-<a href=#404 id=404 data-nosnippet>404</a>    ErrorCode::DnsError(wasmtime_wasi_http::bindings::http::types::DnsErrorPayload {
-<a href=#405 id=405 data-nosnippet>405</a>        rcode: <span class="prelude-val">Some</span>(rcode),
-<a href=#406 id=406 data-nosnippet>406</a>        info_code: <span class="prelude-val">Some</span>(info_code),
-<a href=#407 id=407 data-nosnippet>407</a>    })
-<a href=#408 id=408 data-nosnippet>408</a>}
-<a href=#409 id=409 data-nosnippet>409</a>
-<a href=#410 id=410 data-nosnippet>410</a><span class="attr">#[cfg(test)]
-<a href=#411 id=411 data-nosnippet>411</a></span><span class="kw">mod </span>tests {
-<a href=#412 id=412 data-nosnippet>412</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
-<a href=#413 id=413 data-nosnippet>413</a>
-<a href=#414 id=414 data-nosnippet>414</a>    <span class="attr">#[test]
-<a href=#415 id=415 data-nosnippet>415</a>    </span><span class="kw">fn </span>parse_listen_addr_prefers_ipv4() {
-<a href=#416 id=416 data-nosnippet>416</a>        <span class="kw">let </span>addr = parse_listen_addr(<span class="string">"localhost:12345"</span>).unwrap();
-<a href=#417 id=417 data-nosnippet>417</a>        <span class="macro">assert_eq!</span>(addr.ip(), Ipv4Addr::LOCALHOST);
-<a href=#418 id=418 data-nosnippet>418</a>        <span class="macro">assert_eq!</span>(addr.port(), <span class="number">12345</span>);
-<a href=#419 id=419 data-nosnippet>419</a>    }
-<a href=#420 id=420 data-nosnippet>420</a>}
+<a href=#404 id=404 data-nosnippet>404</a>    ErrorCode::DnsError(
+<a href=#405 id=405 data-nosnippet>405</a>        wasmtime_wasi_http::p2::bindings::http::types::DnsErrorPayload {
+<a href=#406 id=406 data-nosnippet>406</a>            rcode: <span class="prelude-val">Some</span>(rcode),
+<a href=#407 id=407 data-nosnippet>407</a>            info_code: <span class="prelude-val">Some</span>(info_code),
+<a href=#408 id=408 data-nosnippet>408</a>        },
+<a href=#409 id=409 data-nosnippet>409</a>    )
+<a href=#410 id=410 data-nosnippet>410</a>}
+<a href=#411 id=411 data-nosnippet>411</a>
+<a href=#412 id=412 data-nosnippet>412</a><span class="attr">#[cfg(test)]
+<a href=#413 id=413 data-nosnippet>413</a></span><span class="kw">mod </span>tests {
+<a href=#414 id=414 data-nosnippet>414</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
+<a href=#415 id=415 data-nosnippet>415</a>
+<a href=#416 id=416 data-nosnippet>416</a>    <span class="attr">#[test]
+<a href=#417 id=417 data-nosnippet>417</a>    </span><span class="kw">fn </span>parse_listen_addr_prefers_ipv4() {
+<a href=#418 id=418 data-nosnippet>418</a>        <span class="kw">let </span>addr = parse_listen_addr(<span class="string">"localhost:12345"</span>).unwrap();
+<a href=#419 id=419 data-nosnippet>419</a>        <span class="macro">assert_eq!</span>(addr.ip(), Ipv4Addr::LOCALHOST);
+<a href=#420 id=420 data-nosnippet>420</a>        <span class="macro">assert_eq!</span>(addr.port(), <span class="number">12345</span>);
+<a href=#421 id=421 data-nosnippet>421</a>    }
+<a href=#422 id=422 data-nosnippet>422</a>}
 </code></pre></div></section></main></body></html>
