@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["OutboundRedisFactor"]};
+window.SIDEBAR_ITEMS = {"struct":["OutboundRedisFactor","RedisFactorData"]};

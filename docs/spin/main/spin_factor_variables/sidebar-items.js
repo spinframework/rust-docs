@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["runtime_config"],"struct":["AppState","InstanceState","VariablesFactor"]};
+window.SIDEBAR_ITEMS = {"mod":["runtime_config"],"struct":["AppState","InstanceState","VariablesFactor","VariablesFactorData"]};

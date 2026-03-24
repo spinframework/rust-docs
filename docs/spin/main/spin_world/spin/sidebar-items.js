@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["key_value","postgres3_0_0","postgres4_0_0","postgres4_2_0","sqlite3_0_0","sqlite3_1_0"]};
+window.SIDEBAR_ITEMS = {"mod":["key_value","mqtt","postgres3_0_0","postgres4_0_0","postgres4_2_0","redis","sqlite3_0_0","sqlite3_1_0","variables"]};
