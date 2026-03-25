@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["fermyon"]};
+window.SIDEBAR_ITEMS = {"mod":["fermyon","spin"]};

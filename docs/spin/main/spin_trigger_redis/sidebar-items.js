@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["RedisTrigger"]};
+window.SIDEBAR_ITEMS = {"enum":["HandlerType"],"struct":["RedisTrigger"]};
