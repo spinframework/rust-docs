@@ -90,7 +90,7 @@
 <a href=#90 id=90 data-nosnippet>90</a>                Handler::Handler2023_11_10(guest)
 <a href=#91 id=91 data-nosnippet>91</a>            }
 <a href=#92 id=92 data-nosnippet>92</a>            HandlerType::Wasi0_2(indices) =&gt; Handler::Latest(indices.load(<span class="kw-2">&amp;mut </span>store, <span class="kw-2">&amp;</span>instance)<span class="question-mark">?</span>),
-<a href=#93 id=93 data-nosnippet>93</a>            HandlerType::Wasi0_3(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">"should have used Wasip3HttpExecutor"</span>),
+<a href=#93 id=93 data-nosnippet>93</a>            HandlerType::Wasi0_3(<span class="kw">_</span>, <span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">"should have used Wasip3HttpExecutor"</span>),
 <a href=#94 id=94 data-nosnippet>94</a>            HandlerType::Spin =&gt; <span class="macro">unreachable!</span>(<span class="string">"should have used SpinHttpExecutor"</span>),
 <a href=#95 id=95 data-nosnippet>95</a>            HandlerType::Wagi(<span class="kw">_</span>) =&gt; <span class="macro">unreachable!</span>(<span class="string">"should have used WagiExecutor instead"</span>),
 <a href=#96 id=96 data-nosnippet>96</a>        };
