@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":["ceprint","ceprintln","cprint","einfo","error","step","warn"],"mod":["colors"],"struct":["ColorText"]};

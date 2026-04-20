@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["HttpError","Method"],"fn":["add_to_linker"],"struct":["Request","Response"],"trait":["Host","HostWithStore"],"type":["Body","Headers","HttpStatus","Params","Uri"]};
