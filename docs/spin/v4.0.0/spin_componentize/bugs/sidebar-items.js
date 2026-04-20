@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["EARLIEST_PROBABLY_SAFE_CLANG_VERSION"],"struct":["WasiLibc377Bug"]};

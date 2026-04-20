@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["fetch_plugins_repo","plugins_repo_url","spin_plugins_repo_manifest_dir"],"struct":["PluginLookup"]};

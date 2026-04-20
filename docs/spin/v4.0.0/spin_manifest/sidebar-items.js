@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ManifestVersion"],"fn":["manifest_from_file","manifest_from_str"],"mod":["compat","error","normalize","schema"]};
