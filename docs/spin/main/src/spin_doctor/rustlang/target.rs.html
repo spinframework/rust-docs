@@ -37,8 +37,8 @@
 <a href=#37 id=37 data-nosnippet>37</a>    // - if rustup is not present, check if cargo is present
 <a href=#38 id=38 data-nosnippet>38</a>    //   - if not, return RustNotInstalled
 <a href=#39 id=39 data-nosnippet>39</a>    //   - if so, warn but return empty list (Rust is installed but not via rustup, so we can't perform a diagnosis - bit of an edge case this one, and the user probably knows what they're doing...?)
-<a href=#40 id=40 data-nosnippet>40</a>    // - if rustup is present but the list does not contain wasm32-wasip1, return WasmTargetNotInstalled
-<a href=#41 id=41 data-nosnippet>41</a>    // - if the list does contain wasm32-wasip1, return an empty list
+<a href=#40 id=40 data-nosnippet>40</a>    // - if rustup is present but the list does not contain wasm32-wasip2, return WasmTargetNotInstalled
+<a href=#41 id=41 data-nosnippet>41</a>    // - if the list does contain wasm32-wasip2, return an empty list
 <a href=#42 id=42 data-nosnippet>42</a>    // NOTE: this does not currently check against the Rust SDK MSRV - that could
 <a href=#43 id=43 data-nosnippet>43</a>    // be a future enhancement or separate diagnosis, but at least the Rust compiler
 <a href=#44 id=44 data-nosnippet>44</a>    // should give a clear error for that!
@@ -49,7 +49,7 @@
 <a href=#49 id=49 data-nosnippet>49</a>        RustupStatus::RustupNotInstalled =&gt; <span class="kw">match </span>get_cargo_status().<span class="kw">await</span><span class="question-mark">? </span>{
 <a href=#50 id=50 data-nosnippet>50</a>            CargoStatus::Installed =&gt; {
 <a href=#51 id=51 data-nosnippet>51</a>                <span class="macro">terminal::warn!</span>(
-<a href=#52 id=52 data-nosnippet>52</a>                    <span class="string">"Spin Doctor can't determine if the Rust wasm32-wasip1 target is installed."
+<a href=#52 id=52 data-nosnippet>52</a>                    <span class="string">"Spin Doctor can't determine if the Rust wasm32-wasip2 target is installed."
 <a href=#53 id=53 data-nosnippet>53</a>                </span>);
 <a href=#54 id=54 data-nosnippet>54</a>                <span class="macro">vec!</span>[]
 <a href=#55 id=55 data-nosnippet>55</a>            }
@@ -81,7 +81,7 @@
 <a href=#81 id=81 data-nosnippet>81</a>        }
 <a href=#82 id=82 data-nosnippet>82</a>        <span class="prelude-val">Ok</span>(output) =&gt; {
 <a href=#83 id=83 data-nosnippet>83</a>            <span class="kw">let </span>stdout = String::from_utf8_lossy(<span class="kw-2">&amp;</span>output.stdout);
-<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">if </span>stdout.lines().any(|line| line == <span class="string">"wasm32-wasip1"</span>) {
+<a href=#84 id=84 data-nosnippet>84</a>            <span class="kw">if </span>stdout.lines().any(|line| line == <span class="string">"wasm32-wasip2"</span>) {
 <a href=#85 id=85 data-nosnippet>85</a>                RustupStatus::AllInstalled
 <a href=#86 id=86 data-nosnippet>86</a>            } <span class="kw">else </span>{
 <a href=#87 id=87 data-nosnippet>87</a>                RustupStatus::WasiNotInstalled
@@ -119,7 +119,7 @@
 <a href=#119 id=119 data-nosnippet>119</a></span><span class="kw">pub enum </span>TargetDiagnosis {
 <a href=#120 id=120 data-nosnippet>120</a>    <span class="doccomment">/// Rust is not installed: neither cargo nor rustup is present
 <a href=#121 id=121 data-nosnippet>121</a>    </span>RustNotInstalled,
-<a href=#122 id=122 data-nosnippet>122</a>    <span class="doccomment">/// The Rust wasm32-wasip1 target is not installed: rustup is present but the target isn't
+<a href=#122 id=122 data-nosnippet>122</a>    <span class="doccomment">/// The Rust wasm32-wasip2 target is not installed: rustup is present but the target isn't
 <a href=#123 id=123 data-nosnippet>123</a>    </span>WasmTargetNotInstalled,
 <a href=#124 id=124 data-nosnippet>124</a>}
 <a href=#125 id=125 data-nosnippet>125</a>
@@ -128,7 +128,7 @@
 <a href=#128 id=128 data-nosnippet>128</a>        <span class="kw">match </span><span class="self">self </span>{
 <a href=#129 id=129 data-nosnippet>129</a>            <span class="self">Self</span>::RustNotInstalled =&gt; <span class="string">"The Rust compiler isn't installed"</span>.into(),
 <a href=#130 id=130 data-nosnippet>130</a>            <span class="self">Self</span>::WasmTargetNotInstalled =&gt; {
-<a href=#131 id=131 data-nosnippet>131</a>                <span class="string">"The required Rust target 'wasm32-wasip1' isn't installed"</span>.into()
+<a href=#131 id=131 data-nosnippet>131</a>                <span class="string">"The required Rust target 'wasm32-wasip2' isn't installed"</span>.into()
 <a href=#132 id=132 data-nosnippet>132</a>            }
 <a href=#133 id=133 data-nosnippet>133</a>        }
 <a href=#134 id=134 data-nosnippet>134</a>    }
@@ -142,16 +142,16 @@
 <a href=#142 id=142 data-nosnippet>142</a></span><span class="kw">impl </span>Treatment <span class="kw">for </span>TargetDiagnosis {
 <a href=#143 id=143 data-nosnippet>143</a>    <span class="kw">fn </span>summary(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; String {
 <a href=#144 id=144 data-nosnippet>144</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#145 id=145 data-nosnippet>145</a>            <span class="self">Self</span>::RustNotInstalled =&gt; <span class="string">"Install the Rust compiler and the wasm32-wasip1 target"</span>,
-<a href=#146 id=146 data-nosnippet>146</a>            <span class="self">Self</span>::WasmTargetNotInstalled =&gt; <span class="string">"Install the Rust wasm32-wasip1 target"</span>,
+<a href=#145 id=145 data-nosnippet>145</a>            <span class="self">Self</span>::RustNotInstalled =&gt; <span class="string">"Install the Rust compiler and the wasm32-wasip2 target"</span>,
+<a href=#146 id=146 data-nosnippet>146</a>            <span class="self">Self</span>::WasmTargetNotInstalled =&gt; <span class="string">"Install the Rust wasm32-wasip2 target"</span>,
 <a href=#147 id=147 data-nosnippet>147</a>        }
 <a href=#148 id=148 data-nosnippet>148</a>        .into()
 <a href=#149 id=149 data-nosnippet>149</a>    }
 <a href=#150 id=150 data-nosnippet>150</a>
 <a href=#151 id=151 data-nosnippet>151</a>    <span class="kw">async fn </span>dry_run(<span class="kw-2">&amp;</span><span class="self">self</span>, _patient: <span class="kw-2">&amp;</span>PatientApp) -&gt; <span class="prelude-ty">Result</span>&lt;String&gt; {
 <a href=#152 id=152 data-nosnippet>152</a>        <span class="kw">let </span>message = <span class="kw">match </span><span class="self">self </span>{
-<a href=#153 id=153 data-nosnippet>153</a>            <span class="self">Self</span>::RustNotInstalled =&gt; <span class="string">"Download and run the Rust installer from https://rustup.rs, with the `--target wasm32-wasip1` option"</span>,
-<a href=#154 id=154 data-nosnippet>154</a>            <span class="self">Self</span>::WasmTargetNotInstalled =&gt; <span class="string">"Run the following command:\n    `rustup target add wasm32-wasip1`"</span>,
+<a href=#153 id=153 data-nosnippet>153</a>            <span class="self">Self</span>::RustNotInstalled =&gt; <span class="string">"Download and run the Rust installer from https://rustup.rs, with the `--target wasm32-wasip2` option"</span>,
+<a href=#154 id=154 data-nosnippet>154</a>            <span class="self">Self</span>::WasmTargetNotInstalled =&gt; <span class="string">"Run the following command:\n    `rustup target add wasm32-wasip2`"</span>,
 <a href=#155 id=155 data-nosnippet>155</a>        };
 <a href=#156 id=156 data-nosnippet>156</a>        <span class="prelude-val">Ok</span>(message.into())
 <a href=#157 id=157 data-nosnippet>157</a>    }
@@ -184,7 +184,7 @@
 <a href=#184 id=184 data-nosnippet>184</a>    <span class="kw">let </span>script = resp.bytes().<span class="kw">await</span><span class="question-mark">?</span>;
 <a href=#185 id=185 data-nosnippet>185</a>
 <a href=#186 id=186 data-nosnippet>186</a>    <span class="kw">let </span><span class="kw-2">mut </span>cmd = std::process::Command::new(<span class="string">"sh"</span>);
-<a href=#187 id=187 data-nosnippet>187</a>    cmd.args([<span class="string">"-s"</span>, <span class="string">"--"</span>, <span class="string">"--target"</span>, <span class="string">"wasm32-wasip1"</span>]);
+<a href=#187 id=187 data-nosnippet>187</a>    cmd.args([<span class="string">"-s"</span>, <span class="string">"--"</span>, <span class="string">"--target"</span>, <span class="string">"wasm32-wasip2"</span>]);
 <a href=#188 id=188 data-nosnippet>188</a>    cmd.stdin(std::process::Stdio::piped());
 <a href=#189 id=189 data-nosnippet>189</a>    <span class="kw">let </span><span class="kw-2">mut </span>shell = cmd.spawn()<span class="question-mark">?</span>;
 <a href=#190 id=190 data-nosnippet>190</a>    <span class="kw">let </span><span class="kw-2">mut </span>stdin = shell.stdin.take().unwrap();
@@ -213,14 +213,14 @@
 <a href=#213 id=213 data-nosnippet>213</a>    std::fs::write(<span class="kw-2">&amp;</span>installer_path, <span class="kw-2">&amp;</span>installer_bin)<span class="question-mark">?</span>;
 <a href=#214 id=214 data-nosnippet>214</a>
 <a href=#215 id=215 data-nosnippet>215</a>    <span class="kw">let </span><span class="kw-2">mut </span>cmd = std::process::Command::new(installer_path);
-<a href=#216 id=216 data-nosnippet>216</a>    cmd.args([<span class="string">"--target"</span>, <span class="string">"wasm32-wasip1"</span>]);
+<a href=#216 id=216 data-nosnippet>216</a>    cmd.args([<span class="string">"--target"</span>, <span class="string">"wasm32-wasip2"</span>]);
 <a href=#217 id=217 data-nosnippet>217</a>    <span class="kw">let </span>status = cmd.status()<span class="question-mark">?</span>;
 <a href=#218 id=218 data-nosnippet>218</a>    <span class="prelude-val">Ok</span>(status)
 <a href=#219 id=219 data-nosnippet>219</a>}
 <a href=#220 id=220 data-nosnippet>220</a>
 <a href=#221 id=221 data-nosnippet>221</a><span class="kw">fn </span>install_wasi_target() -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
 <a href=#222 id=222 data-nosnippet>222</a>    <span class="kw">let </span><span class="kw-2">mut </span>cmd = std::process::Command::new(<span class="string">"rustup"</span>);
-<a href=#223 id=223 data-nosnippet>223</a>    cmd.args([<span class="string">"target"</span>, <span class="string">"add"</span>, <span class="string">"wasm32-wasip1"</span>]);
+<a href=#223 id=223 data-nosnippet>223</a>    cmd.args([<span class="string">"target"</span>, <span class="string">"add"</span>, <span class="string">"wasm32-wasip2"</span>]);
 <a href=#224 id=224 data-nosnippet>224</a>    <span class="kw">let </span>status = cmd.status()<span class="question-mark">?</span>;
 <a href=#225 id=225 data-nosnippet>225</a>    <span class="macro">anyhow::ensure!</span>(
 <a href=#226 id=226 data-nosnippet>226</a>        status.success(),
