@@ -6,10 +6,10 @@
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>serde::Deserialize;
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>spin_factor_variables::VariablesFactor;
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>spin_factors::RuntimeFactors;
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>spin_trigger::{cli::NoCliArgs, App, Trigger, TriggerApp};
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>spin_trigger::{App, Trigger, TriggerApp, cli::NoCliArgs};
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>spin_world::exports::fermyon::spin::inbound_redis <span class="kw">as </span>v1;
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>spin_world::exports::spin::redis::inbound_redis <span class="kw">as </span>v3;
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>tracing::{instrument, Level};
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>tracing::{Level, instrument};
 <a href=#13 id=13 data-nosnippet>13</a>
 <a href=#14 id=14 data-nosnippet>14</a><span class="kw">pub struct </span>RedisTrigger;
 <a href=#15 id=15 data-nosnippet>15</a>

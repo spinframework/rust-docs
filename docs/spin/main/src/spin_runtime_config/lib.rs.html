@@ -2,15 +2,15 @@
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>anyhow::Context <span class="kw">as _</span>;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>spin_common::ui::quoted_path;
-<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>spin_factor_key_value::runtime_config::spin::{<span class="self">self </span><span class="kw">as </span>key_value};
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>spin_factor_key_value::KeyValueFactor;
-<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>spin_factor_llm::{spin <span class="kw">as </span>llm, LlmFactor};
+<a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>spin_factor_key_value::KeyValueFactor;
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>spin_factor_key_value::runtime_config::spin::{<span class="self">self </span><span class="kw">as </span>key_value};
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>spin_factor_llm::{LlmFactor, spin <span class="kw">as </span>llm};
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>spin_factor_otel::OtelFactor;
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>spin_factor_outbound_http::OutboundHttpFactor;
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>spin_factor_outbound_mqtt::OutboundMqttFactor;
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>spin_factor_outbound_mysql::OutboundMysqlFactor;
-<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>spin_factor_outbound_networking::runtime_config::spin::SpinRuntimeConfig <span class="kw">as </span>OutboundNetworkingSpinRuntimeConfig;
-<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>spin_factor_outbound_networking::OutboundNetworkingFactor;
+<a href=#12 id=12 data-nosnippet>12</a><span class="kw">use </span>spin_factor_outbound_networking::OutboundNetworkingFactor;
+<a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span>spin_factor_outbound_networking::runtime_config::spin::SpinRuntimeConfig <span class="kw">as </span>OutboundNetworkingSpinRuntimeConfig;
 <a href=#14 id=14 data-nosnippet>14</a><span class="kw">use </span>spin_factor_outbound_pg::OutboundPgFactor;
 <a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>spin_factor_outbound_redis::OutboundRedisFactor;
 <a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span>spin_factor_sqlite::SqliteFactor;
@@ -18,7 +18,7 @@
 <a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>spin_factor_wasi::WasiFactor;
 <a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>spin_factors::runtime_config::toml::GetTomlValue <span class="kw">as _</span>;
 <a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>spin_factors::{
-<a href=#21 id=21 data-nosnippet>21</a>    runtime_config::toml::TomlKeyTracker, FactorRuntimeConfigSource, RuntimeConfigSourceFinalizer,
+<a href=#21 id=21 data-nosnippet>21</a>    FactorRuntimeConfigSource, RuntimeConfigSourceFinalizer, runtime_config::toml::TomlKeyTracker,
 <a href=#22 id=22 data-nosnippet>22</a>};
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>spin_key_value_spin::{SpinKeyValueRuntimeConfig, SpinKeyValueStore};
 <a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>spin_sqlite <span class="kw">as </span>sqlite;
@@ -568,93 +568,95 @@
 <a href=#568 id=568 data-nosnippet>568</a>            <span class="kw">type </span>= <span class="string">"spin"
 <a href=#569 id=569 data-nosnippet>569</a>        </span>};
 <a href=#570 id=570 data-nosnippet>570</a>        <span class="kw">let </span>runtime_config = resolve_toml(toml, <span class="string">"config.toml"</span>).unwrap().runtime_config;
-<a href=#571 id=571 data-nosnippet>571</a>        <span class="macro">assert!</span>([<span class="string">"default"</span>, <span class="string">"foo"</span>]
-<a href=#572 id=572 data-nosnippet>572</a>            .iter()
-<a href=#573 id=573 data-nosnippet>573</a>            .all(|label| runtime_config.has_store_manager(label)));
-<a href=#574 id=574 data-nosnippet>574</a>    }
-<a href=#575 id=575 data-nosnippet>575</a>
-<a href=#576 id=576 data-nosnippet>576</a>    <span class="attr">#[tokio::test(flavor = <span class="string">"multi_thread"</span>, worker_threads = <span class="number">1</span>)]
-<a href=#577 id=577 data-nosnippet>577</a>    </span><span class="kw">async fn </span>custom_spin_key_value_works_with_custom_paths() -&gt; anyhow::Result&lt;()&gt; {
-<a href=#578 id=578 data-nosnippet>578</a>        <span class="kw">use </span>spin_world::v2::key_value::HostStore;
-<a href=#579 id=579 data-nosnippet>579</a>        <span class="macro">define_test_factor!</span>(key_value: KeyValueFactor);
-<a href=#580 id=580 data-nosnippet>580</a>        <span class="kw">let </span>tmp_dir = tempfile::TempDir::with_prefix(<span class="string">"example"</span>)<span class="question-mark">?</span>;
-<a href=#581 id=581 data-nosnippet>581</a>        <span class="kw">let </span>absolute_path = tmp_dir.path().join(<span class="string">"foo/custom.db"</span>);
-<a href=#582 id=582 data-nosnippet>582</a>        <span class="kw">let </span>relative_path = tmp_dir.path().join(<span class="string">"custom.db"</span>);
-<a href=#583 id=583 data-nosnippet>583</a>        <span class="comment">// Check that the dbs do not exist yet - they will exist by the end of the test
-<a href=#584 id=584 data-nosnippet>584</a>        </span><span class="macro">assert!</span>(!absolute_path.exists());
-<a href=#585 id=585 data-nosnippet>585</a>        <span class="macro">assert!</span>(!relative_path.exists());
-<a href=#586 id=586 data-nosnippet>586</a>
-<a href=#587 id=587 data-nosnippet>587</a>        <span class="kw">let </span>path_str = absolute_path.to_str().unwrap();
-<a href=#588 id=588 data-nosnippet>588</a>        <span class="kw">let </span>runtime_config = <span class="macro">toml::toml!</span> {
-<a href=#589 id=589 data-nosnippet>589</a>            [key_value_store.absolute]
-<a href=#590 id=590 data-nosnippet>590</a>            <span class="kw">type </span>= <span class="string">"spin"
-<a href=#591 id=591 data-nosnippet>591</a>            </span>path = path_str
-<a href=#592 id=592 data-nosnippet>592</a>
-<a href=#593 id=593 data-nosnippet>593</a>            [key_value_store.relative]
-<a href=#594 id=594 data-nosnippet>594</a>            <span class="kw">type </span>= <span class="string">"spin"
-<a href=#595 id=595 data-nosnippet>595</a>            </span>path = <span class="string">"custom.db"
-<a href=#596 id=596 data-nosnippet>596</a>        </span>};
-<a href=#597 id=597 data-nosnippet>597</a>        <span class="kw">let </span>factors = TestFactors {
-<a href=#598 id=598 data-nosnippet>598</a>            key_value: KeyValueFactor::new(),
-<a href=#599 id=599 data-nosnippet>599</a>        };
-<a href=#600 id=600 data-nosnippet>600</a>        <span class="kw">let </span>env = TestEnvironment::new(factors)
-<a href=#601 id=601 data-nosnippet>601</a>            .extend_manifest(<span class="macro">toml::toml!</span> {
-<a href=#602 id=602 data-nosnippet>602</a>                [component.test-component]
-<a href=#603 id=603 data-nosnippet>603</a>                source = <span class="string">"does-not-exist.wasm"
-<a href=#604 id=604 data-nosnippet>604</a>                </span>key_value_stores = [<span class="string">"absolute"</span>, <span class="string">"relative"</span>]
-<a href=#605 id=605 data-nosnippet>605</a>            })
-<a href=#606 id=606 data-nosnippet>606</a>            .runtime_config(
-<a href=#607 id=607 data-nosnippet>607</a>                resolve_toml(runtime_config, tmp_dir.path().join(<span class="string">"runtime-config.toml"</span>))
-<a href=#608 id=608 data-nosnippet>608</a>                    .unwrap()
-<a href=#609 id=609 data-nosnippet>609</a>                    .runtime_config,
-<a href=#610 id=610 data-nosnippet>610</a>            )<span class="question-mark">?</span>;
-<a href=#611 id=611 data-nosnippet>611</a>        <span class="kw">let </span><span class="kw-2">mut </span>state = env.build_instance_state().<span class="kw">await</span><span class="question-mark">?</span>;
-<a href=#612 id=612 data-nosnippet>612</a>
-<a href=#613 id=613 data-nosnippet>613</a>        <span class="comment">// Actually get a key since store creation is lazy
-<a href=#614 id=614 data-nosnippet>614</a>        </span><span class="kw">let </span>store = state.key_value.open(<span class="string">"absolute"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
-<a href=#615 id=615 data-nosnippet>615</a>        <span class="kw">let _ </span>= state.key_value.get(store, <span class="string">"foo"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
-<a href=#616 id=616 data-nosnippet>616</a>
-<a href=#617 id=617 data-nosnippet>617</a>        <span class="kw">let </span>store = state.key_value.open(<span class="string">"relative"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
-<a href=#618 id=618 data-nosnippet>618</a>        <span class="kw">let _ </span>= state.key_value.get(store, <span class="string">"foo"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
-<a href=#619 id=619 data-nosnippet>619</a>
-<a href=#620 id=620 data-nosnippet>620</a>        <span class="comment">// Check that the dbs have been created
-<a href=#621 id=621 data-nosnippet>621</a>        </span><span class="macro">assert!</span>(absolute_path.exists());
-<a href=#622 id=622 data-nosnippet>622</a>        <span class="macro">assert!</span>(relative_path.exists());
-<a href=#623 id=623 data-nosnippet>623</a>        <span class="prelude-val">Ok</span>(())
-<a href=#624 id=624 data-nosnippet>624</a>    }
-<a href=#625 id=625 data-nosnippet>625</a>
-<a href=#626 id=626 data-nosnippet>626</a>    <span class="kw">fn </span>toml_resolver(toml: <span class="kw-2">&amp;</span>toml::Table) -&gt; TomlResolver&lt;<span class="lifetime">'_</span>&gt; {
-<a href=#627 id=627 data-nosnippet>627</a>        TomlResolver::new(
-<a href=#628 id=628 data-nosnippet>628</a>            toml,
-<a href=#629 id=629 data-nosnippet>629</a>            <span class="prelude-val">None</span>,
-<a href=#630 id=630 data-nosnippet>630</a>            UserProvidedPath::Default,
-<a href=#631 id=631 data-nosnippet>631</a>            UserProvidedPath::Default,
-<a href=#632 id=632 data-nosnippet>632</a>        )
-<a href=#633 id=633 data-nosnippet>633</a>    }
-<a href=#634 id=634 data-nosnippet>634</a>
-<a href=#635 id=635 data-nosnippet>635</a>    <span class="attr">#[test]
-<a href=#636 id=636 data-nosnippet>636</a>    </span><span class="kw">fn </span>dirs_are_resolved() {
-<a href=#637 id=637 data-nosnippet>637</a>        <span class="macro">define_test_factor!</span>(sqlite: SqliteFactor);
-<a href=#638 id=638 data-nosnippet>638</a>
-<a href=#639 id=639 data-nosnippet>639</a>        <span class="kw">let </span>toml = <span class="macro">toml::toml!</span> {
-<a href=#640 id=640 data-nosnippet>640</a>            state_dir = <span class="string">"/foo"
-<a href=#641 id=641 data-nosnippet>641</a>            </span>log_dir = <span class="string">"/bar"
-<a href=#642 id=642 data-nosnippet>642</a>        </span>};
-<a href=#643 id=643 data-nosnippet>643</a>        resolve_toml(toml, <span class="string">"config.toml"</span>).unwrap();
-<a href=#644 id=644 data-nosnippet>644</a>    }
-<a href=#645 id=645 data-nosnippet>645</a>
-<a href=#646 id=646 data-nosnippet>646</a>    <span class="attr">#[test]
-<a href=#647 id=647 data-nosnippet>647</a>    </span><span class="kw">fn </span>fails_to_resolve_with_unused_key() {
-<a href=#648 id=648 data-nosnippet>648</a>        <span class="macro">define_test_factor!</span>(sqlite: SqliteFactor);
-<a href=#649 id=649 data-nosnippet>649</a>
-<a href=#650 id=650 data-nosnippet>650</a>        <span class="kw">let </span>toml = <span class="macro">toml::toml!</span> {
-<a href=#651 id=651 data-nosnippet>651</a>            baz = <span class="string">"/baz"
-<a href=#652 id=652 data-nosnippet>652</a>        </span>};
-<a href=#653 id=653 data-nosnippet>653</a>        <span class="comment">// assert returns an error with value "unused runtime config key(s): local_app_dir"
-<a href=#654 id=654 data-nosnippet>654</a>        </span><span class="kw">let </span><span class="prelude-val">Err</span>(e) = resolve_toml(toml, <span class="string">"config.toml"</span>) <span class="kw">else </span>{
-<a href=#655 id=655 data-nosnippet>655</a>            <span class="macro">panic!</span>(<span class="string">"Should not be able to resolve unknown key"</span>);
-<a href=#656 id=656 data-nosnippet>656</a>        };
-<a href=#657 id=657 data-nosnippet>657</a>        <span class="macro">assert_eq!</span>(e.to_string(), <span class="string">"unused runtime config key(s): baz"</span>);
-<a href=#658 id=658 data-nosnippet>658</a>    }
-<a href=#659 id=659 data-nosnippet>659</a>}
+<a href=#571 id=571 data-nosnippet>571</a>        <span class="macro">assert!</span>(
+<a href=#572 id=572 data-nosnippet>572</a>            [<span class="string">"default"</span>, <span class="string">"foo"</span>]
+<a href=#573 id=573 data-nosnippet>573</a>                .iter()
+<a href=#574 id=574 data-nosnippet>574</a>                .all(|label| runtime_config.has_store_manager(label))
+<a href=#575 id=575 data-nosnippet>575</a>        );
+<a href=#576 id=576 data-nosnippet>576</a>    }
+<a href=#577 id=577 data-nosnippet>577</a>
+<a href=#578 id=578 data-nosnippet>578</a>    <span class="attr">#[tokio::test(flavor = <span class="string">"multi_thread"</span>, worker_threads = <span class="number">1</span>)]
+<a href=#579 id=579 data-nosnippet>579</a>    </span><span class="kw">async fn </span>custom_spin_key_value_works_with_custom_paths() -&gt; anyhow::Result&lt;()&gt; {
+<a href=#580 id=580 data-nosnippet>580</a>        <span class="kw">use </span>spin_world::v2::key_value::HostStore;
+<a href=#581 id=581 data-nosnippet>581</a>        <span class="macro">define_test_factor!</span>(key_value: KeyValueFactor);
+<a href=#582 id=582 data-nosnippet>582</a>        <span class="kw">let </span>tmp_dir = tempfile::TempDir::with_prefix(<span class="string">"example"</span>)<span class="question-mark">?</span>;
+<a href=#583 id=583 data-nosnippet>583</a>        <span class="kw">let </span>absolute_path = tmp_dir.path().join(<span class="string">"foo/custom.db"</span>);
+<a href=#584 id=584 data-nosnippet>584</a>        <span class="kw">let </span>relative_path = tmp_dir.path().join(<span class="string">"custom.db"</span>);
+<a href=#585 id=585 data-nosnippet>585</a>        <span class="comment">// Check that the dbs do not exist yet - they will exist by the end of the test
+<a href=#586 id=586 data-nosnippet>586</a>        </span><span class="macro">assert!</span>(!absolute_path.exists());
+<a href=#587 id=587 data-nosnippet>587</a>        <span class="macro">assert!</span>(!relative_path.exists());
+<a href=#588 id=588 data-nosnippet>588</a>
+<a href=#589 id=589 data-nosnippet>589</a>        <span class="kw">let </span>path_str = absolute_path.to_str().unwrap();
+<a href=#590 id=590 data-nosnippet>590</a>        <span class="kw">let </span>runtime_config = <span class="macro">toml::toml!</span> {
+<a href=#591 id=591 data-nosnippet>591</a>            [key_value_store.absolute]
+<a href=#592 id=592 data-nosnippet>592</a>            <span class="kw">type </span>= <span class="string">"spin"
+<a href=#593 id=593 data-nosnippet>593</a>            </span>path = path_str
+<a href=#594 id=594 data-nosnippet>594</a>
+<a href=#595 id=595 data-nosnippet>595</a>            [key_value_store.relative]
+<a href=#596 id=596 data-nosnippet>596</a>            <span class="kw">type </span>= <span class="string">"spin"
+<a href=#597 id=597 data-nosnippet>597</a>            </span>path = <span class="string">"custom.db"
+<a href=#598 id=598 data-nosnippet>598</a>        </span>};
+<a href=#599 id=599 data-nosnippet>599</a>        <span class="kw">let </span>factors = TestFactors {
+<a href=#600 id=600 data-nosnippet>600</a>            key_value: KeyValueFactor::new(),
+<a href=#601 id=601 data-nosnippet>601</a>        };
+<a href=#602 id=602 data-nosnippet>602</a>        <span class="kw">let </span>env = TestEnvironment::new(factors)
+<a href=#603 id=603 data-nosnippet>603</a>            .extend_manifest(<span class="macro">toml::toml!</span> {
+<a href=#604 id=604 data-nosnippet>604</a>                [component.test-component]
+<a href=#605 id=605 data-nosnippet>605</a>                source = <span class="string">"does-not-exist.wasm"
+<a href=#606 id=606 data-nosnippet>606</a>                </span>key_value_stores = [<span class="string">"absolute"</span>, <span class="string">"relative"</span>]
+<a href=#607 id=607 data-nosnippet>607</a>            })
+<a href=#608 id=608 data-nosnippet>608</a>            .runtime_config(
+<a href=#609 id=609 data-nosnippet>609</a>                resolve_toml(runtime_config, tmp_dir.path().join(<span class="string">"runtime-config.toml"</span>))
+<a href=#610 id=610 data-nosnippet>610</a>                    .unwrap()
+<a href=#611 id=611 data-nosnippet>611</a>                    .runtime_config,
+<a href=#612 id=612 data-nosnippet>612</a>            )<span class="question-mark">?</span>;
+<a href=#613 id=613 data-nosnippet>613</a>        <span class="kw">let </span><span class="kw-2">mut </span>state = env.build_instance_state().<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#614 id=614 data-nosnippet>614</a>
+<a href=#615 id=615 data-nosnippet>615</a>        <span class="comment">// Actually get a key since store creation is lazy
+<a href=#616 id=616 data-nosnippet>616</a>        </span><span class="kw">let </span>store = state.key_value.open(<span class="string">"absolute"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
+<a href=#617 id=617 data-nosnippet>617</a>        <span class="kw">let _ </span>= state.key_value.get(store, <span class="string">"foo"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
+<a href=#618 id=618 data-nosnippet>618</a>
+<a href=#619 id=619 data-nosnippet>619</a>        <span class="kw">let </span>store = state.key_value.open(<span class="string">"relative"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
+<a href=#620 id=620 data-nosnippet>620</a>        <span class="kw">let _ </span>= state.key_value.get(store, <span class="string">"foo"</span>.to_owned()).<span class="kw">await</span><span class="question-mark">??</span>;
+<a href=#621 id=621 data-nosnippet>621</a>
+<a href=#622 id=622 data-nosnippet>622</a>        <span class="comment">// Check that the dbs have been created
+<a href=#623 id=623 data-nosnippet>623</a>        </span><span class="macro">assert!</span>(absolute_path.exists());
+<a href=#624 id=624 data-nosnippet>624</a>        <span class="macro">assert!</span>(relative_path.exists());
+<a href=#625 id=625 data-nosnippet>625</a>        <span class="prelude-val">Ok</span>(())
+<a href=#626 id=626 data-nosnippet>626</a>    }
+<a href=#627 id=627 data-nosnippet>627</a>
+<a href=#628 id=628 data-nosnippet>628</a>    <span class="kw">fn </span>toml_resolver(toml: <span class="kw-2">&amp;</span>toml::Table) -&gt; TomlResolver&lt;<span class="lifetime">'_</span>&gt; {
+<a href=#629 id=629 data-nosnippet>629</a>        TomlResolver::new(
+<a href=#630 id=630 data-nosnippet>630</a>            toml,
+<a href=#631 id=631 data-nosnippet>631</a>            <span class="prelude-val">None</span>,
+<a href=#632 id=632 data-nosnippet>632</a>            UserProvidedPath::Default,
+<a href=#633 id=633 data-nosnippet>633</a>            UserProvidedPath::Default,
+<a href=#634 id=634 data-nosnippet>634</a>        )
+<a href=#635 id=635 data-nosnippet>635</a>    }
+<a href=#636 id=636 data-nosnippet>636</a>
+<a href=#637 id=637 data-nosnippet>637</a>    <span class="attr">#[test]
+<a href=#638 id=638 data-nosnippet>638</a>    </span><span class="kw">fn </span>dirs_are_resolved() {
+<a href=#639 id=639 data-nosnippet>639</a>        <span class="macro">define_test_factor!</span>(sqlite: SqliteFactor);
+<a href=#640 id=640 data-nosnippet>640</a>
+<a href=#641 id=641 data-nosnippet>641</a>        <span class="kw">let </span>toml = <span class="macro">toml::toml!</span> {
+<a href=#642 id=642 data-nosnippet>642</a>            state_dir = <span class="string">"/foo"
+<a href=#643 id=643 data-nosnippet>643</a>            </span>log_dir = <span class="string">"/bar"
+<a href=#644 id=644 data-nosnippet>644</a>        </span>};
+<a href=#645 id=645 data-nosnippet>645</a>        resolve_toml(toml, <span class="string">"config.toml"</span>).unwrap();
+<a href=#646 id=646 data-nosnippet>646</a>    }
+<a href=#647 id=647 data-nosnippet>647</a>
+<a href=#648 id=648 data-nosnippet>648</a>    <span class="attr">#[test]
+<a href=#649 id=649 data-nosnippet>649</a>    </span><span class="kw">fn </span>fails_to_resolve_with_unused_key() {
+<a href=#650 id=650 data-nosnippet>650</a>        <span class="macro">define_test_factor!</span>(sqlite: SqliteFactor);
+<a href=#651 id=651 data-nosnippet>651</a>
+<a href=#652 id=652 data-nosnippet>652</a>        <span class="kw">let </span>toml = <span class="macro">toml::toml!</span> {
+<a href=#653 id=653 data-nosnippet>653</a>            baz = <span class="string">"/baz"
+<a href=#654 id=654 data-nosnippet>654</a>        </span>};
+<a href=#655 id=655 data-nosnippet>655</a>        <span class="comment">// assert returns an error with value "unused runtime config key(s): local_app_dir"
+<a href=#656 id=656 data-nosnippet>656</a>        </span><span class="kw">let </span><span class="prelude-val">Err</span>(e) = resolve_toml(toml, <span class="string">"config.toml"</span>) <span class="kw">else </span>{
+<a href=#657 id=657 data-nosnippet>657</a>            <span class="macro">panic!</span>(<span class="string">"Should not be able to resolve unknown key"</span>);
+<a href=#658 id=658 data-nosnippet>658</a>        };
+<a href=#659 id=659 data-nosnippet>659</a>        <span class="macro">assert_eq!</span>(e.to_string(), <span class="string">"unused runtime config key(s): baz"</span>);
+<a href=#660 id=660 data-nosnippet>660</a>    }
+<a href=#661 id=661 data-nosnippet>661</a>}
 </code></pre></div></section></main></body></html>

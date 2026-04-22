@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/manifest/src/schema/v2.rs`."><title>v2.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_manifest" data-themes="" data-resource-suffix="" data-rustdoc-version="1.97.0-nightly (9ec5d5f32 2026-04-21)" data-channel="nightly" data-search-js="search-b5634cc7.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../static.files/storage-41dd4d93.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-aa4d37ac.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_manifest/schema/</div>v2.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>anyhow::{anyhow, Context};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/manifest/src/schema/v2.rs`."><title>v2.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../../" data-static-root-path="../../../static.files/" data-current-crate="spin_manifest" data-themes="" data-resource-suffix="" data-rustdoc-version="1.97.0-nightly (9ec5d5f32 2026-04-21)" data-channel="nightly" data-search-js="search-b5634cc7.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../../static.files/storage-41dd4d93.js"></script><script defer src="../../../static.files/src-script-813739b1.js"></script><script defer src="../../../src-files.js"></script><script defer src="../../../static.files/main-aa4d37ac.js"></script><noscript><link rel="stylesheet" href="../../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_manifest/schema/</div>v2.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-4"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>anyhow::{Context, anyhow};
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>schemars::JsonSchema;
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>serde::{Deserialize, Serialize};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>spin_serde::{DependencyName, DependencyPackageName, FixedVersion, LowerSnakeId};
@@ -645,19 +645,19 @@
 <a href=#645 id=645 data-nosnippet>645</a>    /// interfaces, e.g. `"foo:bar = { ..., export = "my-export" }"` is invalid.
 <a href=#646 id=646 data-nosnippet>646</a>    </span><span class="kw">fn </span>ensure_package_names_no_export(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; anyhow::Result&lt;()&gt; {
 <a href=#647 id=647 data-nosnippet>647</a>        <span class="kw">for </span>(dependency_name, dependency) <span class="kw">in </span><span class="self">self</span>.inner.iter() {
-<a href=#648 id=648 data-nosnippet>648</a>            <span class="kw">if let </span>DependencyName::Package(name) = dependency_name {
-<a href=#649 id=649 data-nosnippet>649</a>                <span class="kw">if </span>name.interface.is_none() {
-<a href=#650 id=650 data-nosnippet>650</a>                    <span class="kw">let </span>export = <span class="kw">match </span>dependency {
-<a href=#651 id=651 data-nosnippet>651</a>                        ComponentDependency::Package { export, .. } =&gt; export,
-<a href=#652 id=652 data-nosnippet>652</a>                        ComponentDependency::Local { export, .. } =&gt; export,
-<a href=#653 id=653 data-nosnippet>653</a>                        <span class="kw">_ </span>=&gt; <span class="kw">continue</span>,
-<a href=#654 id=654 data-nosnippet>654</a>                    };
-<a href=#655 id=655 data-nosnippet>655</a>
-<a href=#656 id=656 data-nosnippet>656</a>                    <span class="macro">anyhow::ensure!</span>(
-<a href=#657 id=657 data-nosnippet>657</a>                        export.is_none(),
-<a href=#658 id=658 data-nosnippet>658</a>                        <span class="string">"using an export to satisfy the package dependency {dependency_name:?} is not currently permitted"</span>,
-<a href=#659 id=659 data-nosnippet>659</a>                    );
-<a href=#660 id=660 data-nosnippet>660</a>                }
+<a href=#648 id=648 data-nosnippet>648</a>            <span class="kw">if let </span>DependencyName::Package(name) = dependency_name
+<a href=#649 id=649 data-nosnippet>649</a>                &amp;&amp; name.interface.is_none()
+<a href=#650 id=650 data-nosnippet>650</a>            {
+<a href=#651 id=651 data-nosnippet>651</a>                <span class="kw">let </span>export = <span class="kw">match </span>dependency {
+<a href=#652 id=652 data-nosnippet>652</a>                    ComponentDependency::Package { export, .. } =&gt; export,
+<a href=#653 id=653 data-nosnippet>653</a>                    ComponentDependency::Local { export, .. } =&gt; export,
+<a href=#654 id=654 data-nosnippet>654</a>                    <span class="kw">_ </span>=&gt; <span class="kw">continue</span>,
+<a href=#655 id=655 data-nosnippet>655</a>                };
+<a href=#656 id=656 data-nosnippet>656</a>
+<a href=#657 id=657 data-nosnippet>657</a>                <span class="macro">anyhow::ensure!</span>(
+<a href=#658 id=658 data-nosnippet>658</a>                    export.is_none(),
+<a href=#659 id=659 data-nosnippet>659</a>                    <span class="string">"using an export to satisfy the package dependency {dependency_name:?} is not currently permitted"</span>,
+<a href=#660 id=660 data-nosnippet>660</a>                );
 <a href=#661 id=661 data-nosnippet>661</a>            }
 <a href=#662 id=662 data-nosnippet>662</a>        }
 <a href=#663 id=663 data-nosnippet>663</a>        <span class="prelude-val">Ok</span>(())
@@ -689,268 +689,268 @@
 <a href=#689 id=689 data-nosnippet>689</a>    ) -&gt; anyhow::Result&lt;()&gt; {
 <a href=#690 id=690 data-nosnippet>690</a>        <span class="macro">assert_eq!</span>(this.package, other.package);
 <a href=#691 id=691 data-nosnippet>691</a>
-<a href=#692 id=692 data-nosnippet>692</a>        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(this_ver), <span class="prelude-val">Some</span>(other_ver)) = (this.version.clone(), other.version.clone()) {
-<a href=#693 id=693 data-nosnippet>693</a>            <span class="kw">if </span><span class="self">Self</span>::normalize_compatible_version(this_ver)
+<a href=#692 id=692 data-nosnippet>692</a>        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(this_ver), <span class="prelude-val">Some</span>(other_ver)) = (this.version.clone(), other.version.clone())
+<a href=#693 id=693 data-nosnippet>693</a>            &amp;&amp; <span class="self">Self</span>::normalize_compatible_version(this_ver)
 <a href=#694 id=694 data-nosnippet>694</a>                != <span class="self">Self</span>::normalize_compatible_version(other_ver)
-<a href=#695 id=695 data-nosnippet>695</a>            {
-<a href=#696 id=696 data-nosnippet>696</a>                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
-<a href=#697 id=697 data-nosnippet>697</a>            }
-<a href=#698 id=698 data-nosnippet>698</a>        }
-<a href=#699 id=699 data-nosnippet>699</a>
-<a href=#700 id=700 data-nosnippet>700</a>        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(this_itf), <span class="prelude-val">Some</span>(other_itf)) =
-<a href=#701 id=701 data-nosnippet>701</a>            (this.interface.as_ref(), other.interface.as_ref())
+<a href=#695 id=695 data-nosnippet>695</a>        {
+<a href=#696 id=696 data-nosnippet>696</a>            <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+<a href=#697 id=697 data-nosnippet>697</a>        }
+<a href=#698 id=698 data-nosnippet>698</a>
+<a href=#699 id=699 data-nosnippet>699</a>        <span class="kw">if let </span>(<span class="prelude-val">Some</span>(this_itf), <span class="prelude-val">Some</span>(other_itf)) =
+<a href=#700 id=700 data-nosnippet>700</a>            (this.interface.as_ref(), other.interface.as_ref())
+<a href=#701 id=701 data-nosnippet>701</a>            &amp;&amp; this_itf != other_itf
 <a href=#702 id=702 data-nosnippet>702</a>        {
-<a href=#703 id=703 data-nosnippet>703</a>            <span class="kw">if </span>this_itf != other_itf {
-<a href=#704 id=704 data-nosnippet>704</a>                <span class="kw">return </span><span class="prelude-val">Ok</span>(());
-<a href=#705 id=705 data-nosnippet>705</a>            }
-<a href=#706 id=706 data-nosnippet>706</a>        }
-<a href=#707 id=707 data-nosnippet>707</a>
-<a href=#708 id=708 data-nosnippet>708</a>        <span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(<span class="string">"{this:?} dependency conflicts with {other:?}"</span>))
-<a href=#709 id=709 data-nosnippet>709</a>    }
-<a href=#710 id=710 data-nosnippet>710</a>
-<a href=#711 id=711 data-nosnippet>711</a>    <span class="doccomment">/// Normalize version to perform a compatibility check against another version.
-<a href=#712 id=712 data-nosnippet>712</a>    ///
-<a href=#713 id=713 data-nosnippet>713</a>    /// See backwards comptabilitiy rules at https://semver.org/
-<a href=#714 id=714 data-nosnippet>714</a>    </span><span class="kw">fn </span>normalize_compatible_version(<span class="kw-2">mut </span>version: semver::Version) -&gt; semver::Version {
-<a href=#715 id=715 data-nosnippet>715</a>        version.build = semver::BuildMetadata::EMPTY;
-<a href=#716 id=716 data-nosnippet>716</a>
-<a href=#717 id=717 data-nosnippet>717</a>        <span class="kw">if </span>version.pre != semver::Prerelease::EMPTY {
-<a href=#718 id=718 data-nosnippet>718</a>            <span class="kw">return </span>version;
-<a href=#719 id=719 data-nosnippet>719</a>        }
-<a href=#720 id=720 data-nosnippet>720</a>        <span class="kw">if </span>version.major &gt; <span class="number">0 </span>{
-<a href=#721 id=721 data-nosnippet>721</a>            version.minor = <span class="number">0</span>;
-<a href=#722 id=722 data-nosnippet>722</a>            version.patch = <span class="number">0</span>;
-<a href=#723 id=723 data-nosnippet>723</a>            <span class="kw">return </span>version;
-<a href=#724 id=724 data-nosnippet>724</a>        }
-<a href=#725 id=725 data-nosnippet>725</a>
-<a href=#726 id=726 data-nosnippet>726</a>        <span class="kw">if </span>version.minor &gt; <span class="number">0 </span>{
-<a href=#727 id=727 data-nosnippet>727</a>            version.patch = <span class="number">0</span>;
-<a href=#728 id=728 data-nosnippet>728</a>            <span class="kw">return </span>version;
-<a href=#729 id=729 data-nosnippet>729</a>        }
-<a href=#730 id=730 data-nosnippet>730</a>
-<a href=#731 id=731 data-nosnippet>731</a>        version
-<a href=#732 id=732 data-nosnippet>732</a>    }
-<a href=#733 id=733 data-nosnippet>733</a>
-<a href=#734 id=734 data-nosnippet>734</a>    <span class="kw">fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
-<a href=#735 id=735 data-nosnippet>735</a>        <span class="self">self</span>.inner.is_empty()
-<a href=#736 id=736 data-nosnippet>736</a>    }
-<a href=#737 id=737 data-nosnippet>737</a>}
-<a href=#738 id=738 data-nosnippet>738</a>
-<a href=#739 id=739 data-nosnippet>739</a><span class="doccomment">/// Identifies a deployment target.
-<a href=#740 id=740 data-nosnippet>740</a></span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize, JsonSchema)]
-<a href=#741 id=741 data-nosnippet>741</a>#[serde(untagged, deny_unknown_fields)]
-<a href=#742 id=742 data-nosnippet>742</a></span><span class="kw">pub enum </span>TargetEnvironmentRef {
-<a href=#743 id=743 data-nosnippet>743</a>    <span class="doccomment">/// Environment definition doc reference e.g. `spin-up:3.2`, `my-host`. This is looked up
-<a href=#744 id=744 data-nosnippet>744</a>    /// in the default environment catalogue (registry).
-<a href=#745 id=745 data-nosnippet>745</a>    </span>DefaultRegistry(String),
-<a href=#746 id=746 data-nosnippet>746</a>    <span class="doccomment">/// An environment definition doc in an OCI registry other than the default
-<a href=#747 id=747 data-nosnippet>747</a>    </span>Registry {
-<a href=#748 id=748 data-nosnippet>748</a>        <span class="doccomment">/// Registry or prefix hosting the environment document e.g. `ghcr.io/my/environments`.
-<a href=#749 id=749 data-nosnippet>749</a>        </span>registry: String,
-<a href=#750 id=750 data-nosnippet>750</a>        <span class="doccomment">/// Environment definition document name e.g. `my-spin-env:1.2`. For hosted environments
-<a href=#751 id=751 data-nosnippet>751</a>        /// where you always want `latest`, omit the version tag e.g. `my-host`.
-<a href=#752 id=752 data-nosnippet>752</a>        </span>id: String,
-<a href=#753 id=753 data-nosnippet>753</a>    },
-<a href=#754 id=754 data-nosnippet>754</a>    <span class="doccomment">/// A local environment document file. This is expected to contain a serialised
-<a href=#755 id=755 data-nosnippet>755</a>    /// EnvironmentDefinition in TOML format.
-<a href=#756 id=756 data-nosnippet>756</a>    </span>File {
-<a href=#757 id=757 data-nosnippet>757</a>        <span class="doccomment">/// The file path of the document.
-<a href=#758 id=758 data-nosnippet>758</a>        </span>path: PathBuf,
-<a href=#759 id=759 data-nosnippet>759</a>    },
-<a href=#760 id=760 data-nosnippet>760</a>}
-<a href=#761 id=761 data-nosnippet>761</a>
-<a href=#762 id=762 data-nosnippet>762</a><span class="kw">mod </span>kebab_or_snake_case {
-<a href=#763 id=763 data-nosnippet>763</a>    <span class="kw">use </span>serde::{Deserialize, Serialize};
-<a href=#764 id=764 data-nosnippet>764</a>    <span class="kw">pub use </span>spin_serde::{KebabId, SnakeId};
-<a href=#765 id=765 data-nosnippet>765</a>    <span class="kw">pub fn </span>serialize&lt;S&gt;(value: <span class="kw-2">&amp;</span>[String], serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
-<a href=#766 id=766 data-nosnippet>766</a>    <span class="kw">where
-<a href=#767 id=767 data-nosnippet>767</a>        </span>S: serde::ser::Serializer,
-<a href=#768 id=768 data-nosnippet>768</a>    {
-<a href=#769 id=769 data-nosnippet>769</a>        <span class="kw">if </span>value.iter().all(|s| {
-<a href=#770 id=770 data-nosnippet>770</a>            KebabId::try_from(s.clone()).is_ok() || SnakeId::try_from(s.to_owned()).is_ok()
-<a href=#771 id=771 data-nosnippet>771</a>        }) {
-<a href=#772 id=772 data-nosnippet>772</a>            value.serialize(serializer)
-<a href=#773 id=773 data-nosnippet>773</a>        } <span class="kw">else </span>{
-<a href=#774 id=774 data-nosnippet>774</a>            <span class="prelude-val">Err</span>(serde::ser::Error::custom(
-<a href=#775 id=775 data-nosnippet>775</a>                <span class="string">"expected kebab-case or snake_case"</span>,
-<a href=#776 id=776 data-nosnippet>776</a>            ))
-<a href=#777 id=777 data-nosnippet>777</a>        }
-<a href=#778 id=778 data-nosnippet>778</a>    }
-<a href=#779 id=779 data-nosnippet>779</a>
-<a href=#780 id=780 data-nosnippet>780</a>    <span class="kw">pub fn </span>deserialize&lt;<span class="lifetime">'de</span>, D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;String&gt;, D::Error&gt;
-<a href=#781 id=781 data-nosnippet>781</a>    <span class="kw">where
-<a href=#782 id=782 data-nosnippet>782</a>        </span>D: serde::Deserializer&lt;<span class="lifetime">'de</span>&gt;,
-<a href=#783 id=783 data-nosnippet>783</a>    {
-<a href=#784 id=784 data-nosnippet>784</a>        <span class="kw">let </span>value = toml::Value::deserialize(deserializer)<span class="question-mark">?</span>;
-<a href=#785 id=785 data-nosnippet>785</a>        <span class="kw">let </span>list: Vec&lt;String&gt; = Vec::deserialize(value).map_err(serde::de::Error::custom)<span class="question-mark">?</span>;
-<a href=#786 id=786 data-nosnippet>786</a>        <span class="kw">if </span>list.iter().all(|s| {
-<a href=#787 id=787 data-nosnippet>787</a>            KebabId::try_from(s.clone()).is_ok() || SnakeId::try_from(s.to_owned()).is_ok()
-<a href=#788 id=788 data-nosnippet>788</a>        }) {
-<a href=#789 id=789 data-nosnippet>789</a>            <span class="prelude-val">Ok</span>(list)
-<a href=#790 id=790 data-nosnippet>790</a>        } <span class="kw">else </span>{
-<a href=#791 id=791 data-nosnippet>791</a>            <span class="prelude-val">Err</span>(serde::de::Error::custom(
-<a href=#792 id=792 data-nosnippet>792</a>                <span class="string">"expected kebab-case or snake_case"</span>,
-<a href=#793 id=793 data-nosnippet>793</a>            ))
-<a href=#794 id=794 data-nosnippet>794</a>        }
-<a href=#795 id=795 data-nosnippet>795</a>    }
-<a href=#796 id=796 data-nosnippet>796</a>}
-<a href=#797 id=797 data-nosnippet>797</a>
-<a href=#798 id=798 data-nosnippet>798</a><span class="kw">impl </span>Component {
-<a href=#799 id=799 data-nosnippet>799</a>    <span class="doccomment">/// Combine `allowed_outbound_hosts` with the deprecated `allowed_http_hosts` into
-<a href=#800 id=800 data-nosnippet>800</a>    /// one array all normalized to the syntax of `allowed_outbound_hosts`.
-<a href=#801 id=801 data-nosnippet>801</a>    </span><span class="kw">pub fn </span>normalized_allowed_outbound_hosts(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; anyhow::Result&lt;Vec&lt;String&gt;&gt; {
-<a href=#802 id=802 data-nosnippet>802</a>        <span class="attr">#[allow(deprecated)]
-<a href=#803 id=803 data-nosnippet>803</a>        </span><span class="kw">let </span>normalized =
-<a href=#804 id=804 data-nosnippet>804</a>            <span class="kw">crate</span>::compat::convert_allowed_http_to_allowed_hosts(<span class="kw-2">&amp;</span><span class="self">self</span>.allowed_http_hosts, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
-<a href=#805 id=805 data-nosnippet>805</a>        <span class="kw">if </span>!normalized.is_empty() {
-<a href=#806 id=806 data-nosnippet>806</a>            <span class="macro">terminal::warn!</span>(
-<a href=#807 id=807 data-nosnippet>807</a>                <span class="string">"Use of the deprecated field `allowed_http_hosts` - to fix, \
-<a href=#808 id=808 data-nosnippet>808</a>            replace `allowed_http_hosts` with `allowed_outbound_hosts = {normalized:?}`"</span>,
-<a href=#809 id=809 data-nosnippet>809</a>            )
-<a href=#810 id=810 data-nosnippet>810</a>        }
-<a href=#811 id=811 data-nosnippet>811</a>
-<a href=#812 id=812 data-nosnippet>812</a>        <span class="prelude-val">Ok</span>(<span class="self">self
-<a href=#813 id=813 data-nosnippet>813</a>            </span>.allowed_outbound_hosts
-<a href=#814 id=814 data-nosnippet>814</a>            .iter()
-<a href=#815 id=815 data-nosnippet>815</a>            .cloned()
-<a href=#816 id=816 data-nosnippet>816</a>            .chain(normalized)
-<a href=#817 id=817 data-nosnippet>817</a>            .collect())
-<a href=#818 id=818 data-nosnippet>818</a>    }
-<a href=#819 id=819 data-nosnippet>819</a>}
-<a href=#820 id=820 data-nosnippet>820</a>
-<a href=#821 id=821 data-nosnippet>821</a><span class="kw">mod </span>one_or_many {
-<a href=#822 id=822 data-nosnippet>822</a>    <span class="kw">use </span>serde::{Deserialize, Deserializer, Serialize, Serializer};
-<a href=#823 id=823 data-nosnippet>823</a>
-<a href=#824 id=824 data-nosnippet>824</a>    <span class="kw">pub fn </span>serialize&lt;T, S&gt;(vec: <span class="kw-2">&amp;</span>Vec&lt;T&gt;, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
-<a href=#825 id=825 data-nosnippet>825</a>    <span class="kw">where
-<a href=#826 id=826 data-nosnippet>826</a>        </span>T: Serialize,
-<a href=#827 id=827 data-nosnippet>827</a>        S: Serializer,
-<a href=#828 id=828 data-nosnippet>828</a>    {
-<a href=#829 id=829 data-nosnippet>829</a>        <span class="kw">if </span>vec.len() == <span class="number">1 </span>{
-<a href=#830 id=830 data-nosnippet>830</a>            vec[<span class="number">0</span>].serialize(serializer)
-<a href=#831 id=831 data-nosnippet>831</a>        } <span class="kw">else </span>{
-<a href=#832 id=832 data-nosnippet>832</a>            vec.serialize(serializer)
-<a href=#833 id=833 data-nosnippet>833</a>        }
-<a href=#834 id=834 data-nosnippet>834</a>    }
-<a href=#835 id=835 data-nosnippet>835</a>
-<a href=#836 id=836 data-nosnippet>836</a>    <span class="kw">pub fn </span>deserialize&lt;<span class="lifetime">'de</span>, T, D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;T&gt;, D::Error&gt;
-<a href=#837 id=837 data-nosnippet>837</a>    <span class="kw">where
-<a href=#838 id=838 data-nosnippet>838</a>        </span>T: Deserialize&lt;<span class="lifetime">'de</span>&gt;,
-<a href=#839 id=839 data-nosnippet>839</a>        D: Deserializer&lt;<span class="lifetime">'de</span>&gt;,
-<a href=#840 id=840 data-nosnippet>840</a>    {
-<a href=#841 id=841 data-nosnippet>841</a>        <span class="kw">let </span>value = toml::Value::deserialize(deserializer)<span class="question-mark">?</span>;
-<a href=#842 id=842 data-nosnippet>842</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(val) = T::deserialize(value.clone()) {
-<a href=#843 id=843 data-nosnippet>843</a>            <span class="prelude-val">Ok</span>(<span class="macro">vec!</span>[val])
-<a href=#844 id=844 data-nosnippet>844</a>        } <span class="kw">else </span>{
-<a href=#845 id=845 data-nosnippet>845</a>            Vec::deserialize(value).map_err(serde::de::Error::custom)
-<a href=#846 id=846 data-nosnippet>846</a>        }
-<a href=#847 id=847 data-nosnippet>847</a>    }
-<a href=#848 id=848 data-nosnippet>848</a>}
-<a href=#849 id=849 data-nosnippet>849</a>
-<a href=#850 id=850 data-nosnippet>850</a><span class="attr">#[cfg(test)]
-<a href=#851 id=851 data-nosnippet>851</a></span><span class="kw">mod </span>tests {
-<a href=#852 id=852 data-nosnippet>852</a>    <span class="kw">use </span>toml::toml;
+<a href=#703 id=703 data-nosnippet>703</a>            <span class="kw">return </span><span class="prelude-val">Ok</span>(());
+<a href=#704 id=704 data-nosnippet>704</a>        }
+<a href=#705 id=705 data-nosnippet>705</a>
+<a href=#706 id=706 data-nosnippet>706</a>        <span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(<span class="string">"{this:?} dependency conflicts with {other:?}"</span>))
+<a href=#707 id=707 data-nosnippet>707</a>    }
+<a href=#708 id=708 data-nosnippet>708</a>
+<a href=#709 id=709 data-nosnippet>709</a>    <span class="doccomment">/// Normalize version to perform a compatibility check against another version.
+<a href=#710 id=710 data-nosnippet>710</a>    ///
+<a href=#711 id=711 data-nosnippet>711</a>    /// See backwards comptabilitiy rules at https://semver.org/
+<a href=#712 id=712 data-nosnippet>712</a>    </span><span class="kw">fn </span>normalize_compatible_version(<span class="kw-2">mut </span>version: semver::Version) -&gt; semver::Version {
+<a href=#713 id=713 data-nosnippet>713</a>        version.build = semver::BuildMetadata::EMPTY;
+<a href=#714 id=714 data-nosnippet>714</a>
+<a href=#715 id=715 data-nosnippet>715</a>        <span class="kw">if </span>version.pre != semver::Prerelease::EMPTY {
+<a href=#716 id=716 data-nosnippet>716</a>            <span class="kw">return </span>version;
+<a href=#717 id=717 data-nosnippet>717</a>        }
+<a href=#718 id=718 data-nosnippet>718</a>        <span class="kw">if </span>version.major &gt; <span class="number">0 </span>{
+<a href=#719 id=719 data-nosnippet>719</a>            version.minor = <span class="number">0</span>;
+<a href=#720 id=720 data-nosnippet>720</a>            version.patch = <span class="number">0</span>;
+<a href=#721 id=721 data-nosnippet>721</a>            <span class="kw">return </span>version;
+<a href=#722 id=722 data-nosnippet>722</a>        }
+<a href=#723 id=723 data-nosnippet>723</a>
+<a href=#724 id=724 data-nosnippet>724</a>        <span class="kw">if </span>version.minor &gt; <span class="number">0 </span>{
+<a href=#725 id=725 data-nosnippet>725</a>            version.patch = <span class="number">0</span>;
+<a href=#726 id=726 data-nosnippet>726</a>            <span class="kw">return </span>version;
+<a href=#727 id=727 data-nosnippet>727</a>        }
+<a href=#728 id=728 data-nosnippet>728</a>
+<a href=#729 id=729 data-nosnippet>729</a>        version
+<a href=#730 id=730 data-nosnippet>730</a>    }
+<a href=#731 id=731 data-nosnippet>731</a>
+<a href=#732 id=732 data-nosnippet>732</a>    <span class="kw">fn </span>is_empty(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; bool {
+<a href=#733 id=733 data-nosnippet>733</a>        <span class="self">self</span>.inner.is_empty()
+<a href=#734 id=734 data-nosnippet>734</a>    }
+<a href=#735 id=735 data-nosnippet>735</a>}
+<a href=#736 id=736 data-nosnippet>736</a>
+<a href=#737 id=737 data-nosnippet>737</a><span class="doccomment">/// Identifies a deployment target.
+<a href=#738 id=738 data-nosnippet>738</a></span><span class="attr">#[derive(Clone, Debug, PartialEq, Eq, Hash, Serialize, Deserialize, JsonSchema)]
+<a href=#739 id=739 data-nosnippet>739</a>#[serde(untagged, deny_unknown_fields)]
+<a href=#740 id=740 data-nosnippet>740</a></span><span class="kw">pub enum </span>TargetEnvironmentRef {
+<a href=#741 id=741 data-nosnippet>741</a>    <span class="doccomment">/// Environment definition doc reference e.g. `spin-up:3.2`, `my-host`. This is looked up
+<a href=#742 id=742 data-nosnippet>742</a>    /// in the default environment catalogue (registry).
+<a href=#743 id=743 data-nosnippet>743</a>    </span>DefaultRegistry(String),
+<a href=#744 id=744 data-nosnippet>744</a>    <span class="doccomment">/// An environment definition doc in an OCI registry other than the default
+<a href=#745 id=745 data-nosnippet>745</a>    </span>Registry {
+<a href=#746 id=746 data-nosnippet>746</a>        <span class="doccomment">/// Registry or prefix hosting the environment document e.g. `ghcr.io/my/environments`.
+<a href=#747 id=747 data-nosnippet>747</a>        </span>registry: String,
+<a href=#748 id=748 data-nosnippet>748</a>        <span class="doccomment">/// Environment definition document name e.g. `my-spin-env:1.2`. For hosted environments
+<a href=#749 id=749 data-nosnippet>749</a>        /// where you always want `latest`, omit the version tag e.g. `my-host`.
+<a href=#750 id=750 data-nosnippet>750</a>        </span>id: String,
+<a href=#751 id=751 data-nosnippet>751</a>    },
+<a href=#752 id=752 data-nosnippet>752</a>    <span class="doccomment">/// A local environment document file. This is expected to contain a serialised
+<a href=#753 id=753 data-nosnippet>753</a>    /// EnvironmentDefinition in TOML format.
+<a href=#754 id=754 data-nosnippet>754</a>    </span>File {
+<a href=#755 id=755 data-nosnippet>755</a>        <span class="doccomment">/// The file path of the document.
+<a href=#756 id=756 data-nosnippet>756</a>        </span>path: PathBuf,
+<a href=#757 id=757 data-nosnippet>757</a>    },
+<a href=#758 id=758 data-nosnippet>758</a>}
+<a href=#759 id=759 data-nosnippet>759</a>
+<a href=#760 id=760 data-nosnippet>760</a><span class="kw">mod </span>kebab_or_snake_case {
+<a href=#761 id=761 data-nosnippet>761</a>    <span class="kw">use </span>serde::{Deserialize, Serialize};
+<a href=#762 id=762 data-nosnippet>762</a>    <span class="kw">pub use </span>spin_serde::{KebabId, SnakeId};
+<a href=#763 id=763 data-nosnippet>763</a>    <span class="kw">pub fn </span>serialize&lt;S&gt;(value: <span class="kw-2">&amp;</span>[String], serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+<a href=#764 id=764 data-nosnippet>764</a>    <span class="kw">where
+<a href=#765 id=765 data-nosnippet>765</a>        </span>S: serde::ser::Serializer,
+<a href=#766 id=766 data-nosnippet>766</a>    {
+<a href=#767 id=767 data-nosnippet>767</a>        <span class="kw">if </span>value.iter().all(|s| {
+<a href=#768 id=768 data-nosnippet>768</a>            KebabId::try_from(s.clone()).is_ok() || SnakeId::try_from(s.to_owned()).is_ok()
+<a href=#769 id=769 data-nosnippet>769</a>        }) {
+<a href=#770 id=770 data-nosnippet>770</a>            value.serialize(serializer)
+<a href=#771 id=771 data-nosnippet>771</a>        } <span class="kw">else </span>{
+<a href=#772 id=772 data-nosnippet>772</a>            <span class="prelude-val">Err</span>(serde::ser::Error::custom(
+<a href=#773 id=773 data-nosnippet>773</a>                <span class="string">"expected kebab-case or snake_case"</span>,
+<a href=#774 id=774 data-nosnippet>774</a>            ))
+<a href=#775 id=775 data-nosnippet>775</a>        }
+<a href=#776 id=776 data-nosnippet>776</a>    }
+<a href=#777 id=777 data-nosnippet>777</a>
+<a href=#778 id=778 data-nosnippet>778</a>    <span class="kw">pub fn </span>deserialize&lt;<span class="lifetime">'de</span>, D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;String&gt;, D::Error&gt;
+<a href=#779 id=779 data-nosnippet>779</a>    <span class="kw">where
+<a href=#780 id=780 data-nosnippet>780</a>        </span>D: serde::Deserializer&lt;<span class="lifetime">'de</span>&gt;,
+<a href=#781 id=781 data-nosnippet>781</a>    {
+<a href=#782 id=782 data-nosnippet>782</a>        <span class="kw">let </span>value = toml::Value::deserialize(deserializer)<span class="question-mark">?</span>;
+<a href=#783 id=783 data-nosnippet>783</a>        <span class="kw">let </span>list: Vec&lt;String&gt; = Vec::deserialize(value).map_err(serde::de::Error::custom)<span class="question-mark">?</span>;
+<a href=#784 id=784 data-nosnippet>784</a>        <span class="kw">if </span>list.iter().all(|s| {
+<a href=#785 id=785 data-nosnippet>785</a>            KebabId::try_from(s.clone()).is_ok() || SnakeId::try_from(s.to_owned()).is_ok()
+<a href=#786 id=786 data-nosnippet>786</a>        }) {
+<a href=#787 id=787 data-nosnippet>787</a>            <span class="prelude-val">Ok</span>(list)
+<a href=#788 id=788 data-nosnippet>788</a>        } <span class="kw">else </span>{
+<a href=#789 id=789 data-nosnippet>789</a>            <span class="prelude-val">Err</span>(serde::de::Error::custom(
+<a href=#790 id=790 data-nosnippet>790</a>                <span class="string">"expected kebab-case or snake_case"</span>,
+<a href=#791 id=791 data-nosnippet>791</a>            ))
+<a href=#792 id=792 data-nosnippet>792</a>        }
+<a href=#793 id=793 data-nosnippet>793</a>    }
+<a href=#794 id=794 data-nosnippet>794</a>}
+<a href=#795 id=795 data-nosnippet>795</a>
+<a href=#796 id=796 data-nosnippet>796</a><span class="kw">impl </span>Component {
+<a href=#797 id=797 data-nosnippet>797</a>    <span class="doccomment">/// Combine `allowed_outbound_hosts` with the deprecated `allowed_http_hosts` into
+<a href=#798 id=798 data-nosnippet>798</a>    /// one array all normalized to the syntax of `allowed_outbound_hosts`.
+<a href=#799 id=799 data-nosnippet>799</a>    </span><span class="kw">pub fn </span>normalized_allowed_outbound_hosts(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; anyhow::Result&lt;Vec&lt;String&gt;&gt; {
+<a href=#800 id=800 data-nosnippet>800</a>        <span class="attr">#[allow(deprecated)]
+<a href=#801 id=801 data-nosnippet>801</a>        </span><span class="kw">let </span>normalized =
+<a href=#802 id=802 data-nosnippet>802</a>            <span class="kw">crate</span>::compat::convert_allowed_http_to_allowed_hosts(<span class="kw-2">&amp;</span><span class="self">self</span>.allowed_http_hosts, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
+<a href=#803 id=803 data-nosnippet>803</a>        <span class="kw">if </span>!normalized.is_empty() {
+<a href=#804 id=804 data-nosnippet>804</a>            <span class="macro">terminal::warn!</span>(
+<a href=#805 id=805 data-nosnippet>805</a>                <span class="string">"Use of the deprecated field `allowed_http_hosts` - to fix, \
+<a href=#806 id=806 data-nosnippet>806</a>            replace `allowed_http_hosts` with `allowed_outbound_hosts = {normalized:?}`"</span>,
+<a href=#807 id=807 data-nosnippet>807</a>            )
+<a href=#808 id=808 data-nosnippet>808</a>        }
+<a href=#809 id=809 data-nosnippet>809</a>
+<a href=#810 id=810 data-nosnippet>810</a>        <span class="prelude-val">Ok</span>(<span class="self">self
+<a href=#811 id=811 data-nosnippet>811</a>            </span>.allowed_outbound_hosts
+<a href=#812 id=812 data-nosnippet>812</a>            .iter()
+<a href=#813 id=813 data-nosnippet>813</a>            .cloned()
+<a href=#814 id=814 data-nosnippet>814</a>            .chain(normalized)
+<a href=#815 id=815 data-nosnippet>815</a>            .collect())
+<a href=#816 id=816 data-nosnippet>816</a>    }
+<a href=#817 id=817 data-nosnippet>817</a>}
+<a href=#818 id=818 data-nosnippet>818</a>
+<a href=#819 id=819 data-nosnippet>819</a><span class="kw">mod </span>one_or_many {
+<a href=#820 id=820 data-nosnippet>820</a>    <span class="kw">use </span>serde::{Deserialize, Deserializer, Serialize, Serializer};
+<a href=#821 id=821 data-nosnippet>821</a>
+<a href=#822 id=822 data-nosnippet>822</a>    <span class="kw">pub fn </span>serialize&lt;T, S&gt;(vec: <span class="kw-2">&amp;</span>Vec&lt;T&gt;, serializer: S) -&gt; <span class="prelude-ty">Result</span>&lt;S::Ok, S::Error&gt;
+<a href=#823 id=823 data-nosnippet>823</a>    <span class="kw">where
+<a href=#824 id=824 data-nosnippet>824</a>        </span>T: Serialize,
+<a href=#825 id=825 data-nosnippet>825</a>        S: Serializer,
+<a href=#826 id=826 data-nosnippet>826</a>    {
+<a href=#827 id=827 data-nosnippet>827</a>        <span class="kw">if </span>vec.len() == <span class="number">1 </span>{
+<a href=#828 id=828 data-nosnippet>828</a>            vec[<span class="number">0</span>].serialize(serializer)
+<a href=#829 id=829 data-nosnippet>829</a>        } <span class="kw">else </span>{
+<a href=#830 id=830 data-nosnippet>830</a>            vec.serialize(serializer)
+<a href=#831 id=831 data-nosnippet>831</a>        }
+<a href=#832 id=832 data-nosnippet>832</a>    }
+<a href=#833 id=833 data-nosnippet>833</a>
+<a href=#834 id=834 data-nosnippet>834</a>    <span class="kw">pub fn </span>deserialize&lt;<span class="lifetime">'de</span>, T, D&gt;(deserializer: D) -&gt; <span class="prelude-ty">Result</span>&lt;Vec&lt;T&gt;, D::Error&gt;
+<a href=#835 id=835 data-nosnippet>835</a>    <span class="kw">where
+<a href=#836 id=836 data-nosnippet>836</a>        </span>T: Deserialize&lt;<span class="lifetime">'de</span>&gt;,
+<a href=#837 id=837 data-nosnippet>837</a>        D: Deserializer&lt;<span class="lifetime">'de</span>&gt;,
+<a href=#838 id=838 data-nosnippet>838</a>    {
+<a href=#839 id=839 data-nosnippet>839</a>        <span class="kw">let </span>value = toml::Value::deserialize(deserializer)<span class="question-mark">?</span>;
+<a href=#840 id=840 data-nosnippet>840</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(val) = T::deserialize(value.clone()) {
+<a href=#841 id=841 data-nosnippet>841</a>            <span class="prelude-val">Ok</span>(<span class="macro">vec!</span>[val])
+<a href=#842 id=842 data-nosnippet>842</a>        } <span class="kw">else </span>{
+<a href=#843 id=843 data-nosnippet>843</a>            Vec::deserialize(value).map_err(serde::de::Error::custom)
+<a href=#844 id=844 data-nosnippet>844</a>        }
+<a href=#845 id=845 data-nosnippet>845</a>    }
+<a href=#846 id=846 data-nosnippet>846</a>}
+<a href=#847 id=847 data-nosnippet>847</a>
+<a href=#848 id=848 data-nosnippet>848</a><span class="attr">#[cfg(test)]
+<a href=#849 id=849 data-nosnippet>849</a></span><span class="kw">mod </span>tests {
+<a href=#850 id=850 data-nosnippet>850</a>    <span class="kw">use </span>toml::toml;
+<a href=#851 id=851 data-nosnippet>851</a>
+<a href=#852 id=852 data-nosnippet>852</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
 <a href=#853 id=853 data-nosnippet>853</a>
-<a href=#854 id=854 data-nosnippet>854</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
-<a href=#855 id=855 data-nosnippet>855</a>
-<a href=#856 id=856 data-nosnippet>856</a>    <span class="attr">#[derive(Deserialize)]
-<a href=#857 id=857 data-nosnippet>857</a>    #[allow(dead_code)]
-<a href=#858 id=858 data-nosnippet>858</a>    </span><span class="kw">struct </span>FakeGlobalTriggerConfig {
-<a href=#859 id=859 data-nosnippet>859</a>        global_option: bool,
-<a href=#860 id=860 data-nosnippet>860</a>    }
-<a href=#861 id=861 data-nosnippet>861</a>
-<a href=#862 id=862 data-nosnippet>862</a>    <span class="attr">#[derive(Deserialize)]
-<a href=#863 id=863 data-nosnippet>863</a>    #[allow(dead_code)]
-<a href=#864 id=864 data-nosnippet>864</a>    </span><span class="kw">struct </span>FakeTriggerConfig {
-<a href=#865 id=865 data-nosnippet>865</a>        option: <span class="prelude-ty">Option</span>&lt;bool&gt;,
-<a href=#866 id=866 data-nosnippet>866</a>    }
-<a href=#867 id=867 data-nosnippet>867</a>
-<a href=#868 id=868 data-nosnippet>868</a>    <span class="attr">#[test]
-<a href=#869 id=869 data-nosnippet>869</a>    </span><span class="kw">fn </span>deserializing_trigger_configs() {
-<a href=#870 id=870 data-nosnippet>870</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#871 id=871 data-nosnippet>871</a>            spin_manifest_version = <span class="number">2
-<a href=#872 id=872 data-nosnippet>872</a>            </span>[application]
-<a href=#873 id=873 data-nosnippet>873</a>            name = <span class="string">"trigger-configs"
-<a href=#874 id=874 data-nosnippet>874</a>            </span>[application.trigger.fake]
-<a href=#875 id=875 data-nosnippet>875</a>            global_option = <span class="bool-val">true
-<a href=#876 id=876 data-nosnippet>876</a>            </span>[[trigger.fake]]
-<a href=#877 id=877 data-nosnippet>877</a>            component = { source = <span class="string">"inline.wasm" </span>}
-<a href=#878 id=878 data-nosnippet>878</a>            option = <span class="bool-val">true
-<a href=#879 id=879 data-nosnippet>879</a>        </span>})
-<a href=#880 id=880 data-nosnippet>880</a>        .unwrap();
-<a href=#881 id=881 data-nosnippet>881</a>
-<a href=#882 id=882 data-nosnippet>882</a>        FakeGlobalTriggerConfig::deserialize(
-<a href=#883 id=883 data-nosnippet>883</a>            manifest.application.trigger_global_configs[<span class="string">"fake"</span>].clone(),
-<a href=#884 id=884 data-nosnippet>884</a>        )
-<a href=#885 id=885 data-nosnippet>885</a>        .unwrap();
-<a href=#886 id=886 data-nosnippet>886</a>
-<a href=#887 id=887 data-nosnippet>887</a>        FakeTriggerConfig::deserialize(manifest.triggers[<span class="string">"fake"</span>][<span class="number">0</span>].config.clone()).unwrap();
-<a href=#888 id=888 data-nosnippet>888</a>    }
-<a href=#889 id=889 data-nosnippet>889</a>
-<a href=#890 id=890 data-nosnippet>890</a>    <span class="attr">#[derive(Deserialize)]
-<a href=#891 id=891 data-nosnippet>891</a>    #[allow(dead_code)]
-<a href=#892 id=892 data-nosnippet>892</a>    </span><span class="kw">struct </span>FakeGlobalToolConfig {
-<a href=#893 id=893 data-nosnippet>893</a>        lint_level: String,
-<a href=#894 id=894 data-nosnippet>894</a>    }
-<a href=#895 id=895 data-nosnippet>895</a>
-<a href=#896 id=896 data-nosnippet>896</a>    <span class="attr">#[derive(Deserialize)]
-<a href=#897 id=897 data-nosnippet>897</a>    #[allow(dead_code)]
-<a href=#898 id=898 data-nosnippet>898</a>    </span><span class="kw">struct </span>FakeComponentToolConfig {
-<a href=#899 id=899 data-nosnippet>899</a>        command: String,
-<a href=#900 id=900 data-nosnippet>900</a>    }
-<a href=#901 id=901 data-nosnippet>901</a>
-<a href=#902 id=902 data-nosnippet>902</a>    <span class="attr">#[test]
-<a href=#903 id=903 data-nosnippet>903</a>    </span><span class="kw">fn </span>deserialising_custom_tool_settings() {
-<a href=#904 id=904 data-nosnippet>904</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#905 id=905 data-nosnippet>905</a>            spin_manifest_version = <span class="number">2
-<a href=#906 id=906 data-nosnippet>906</a>            </span>[application]
-<a href=#907 id=907 data-nosnippet>907</a>            name = <span class="string">"trigger-configs"
-<a href=#908 id=908 data-nosnippet>908</a>            </span>[application.tool.lint]
-<a href=#909 id=909 data-nosnippet>909</a>            lint_level = <span class="string">"savage"
-<a href=#910 id=910 data-nosnippet>910</a>            </span>[[trigger.fake]]
-<a href=#911 id=911 data-nosnippet>911</a>            something = <span class="string">"something else"
-<a href=#912 id=912 data-nosnippet>912</a>            </span>[component.fake]
-<a href=#913 id=913 data-nosnippet>913</a>            source = <span class="string">"dummy"
-<a href=#914 id=914 data-nosnippet>914</a>            </span>[component.fake.tool.clean]
-<a href=#915 id=915 data-nosnippet>915</a>            command = <span class="string">"cargo clean"
-<a href=#916 id=916 data-nosnippet>916</a>        </span>})
-<a href=#917 id=917 data-nosnippet>917</a>        .unwrap();
-<a href=#918 id=918 data-nosnippet>918</a>
-<a href=#919 id=919 data-nosnippet>919</a>        FakeGlobalToolConfig::deserialize(manifest.application.tool[<span class="string">"lint"</span>].clone()).unwrap();
-<a href=#920 id=920 data-nosnippet>920</a>        <span class="kw">let </span>fake_id: KebabId = <span class="string">"fake"</span>.to_owned().try_into().unwrap();
-<a href=#921 id=921 data-nosnippet>921</a>        FakeComponentToolConfig::deserialize(manifest.components[<span class="kw-2">&amp;</span>fake_id].tool[<span class="string">"clean"</span>].clone())
-<a href=#922 id=922 data-nosnippet>922</a>            .unwrap();
-<a href=#923 id=923 data-nosnippet>923</a>    }
-<a href=#924 id=924 data-nosnippet>924</a>
-<a href=#925 id=925 data-nosnippet>925</a>    <span class="attr">#[test]
-<a href=#926 id=926 data-nosnippet>926</a>    </span><span class="kw">fn </span>deserializing_labels() {
-<a href=#927 id=927 data-nosnippet>927</a>        AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#928 id=928 data-nosnippet>928</a>            spin_manifest_version = <span class="number">2
-<a href=#929 id=929 data-nosnippet>929</a>            </span>[application]
-<a href=#930 id=930 data-nosnippet>930</a>            name = <span class="string">"trigger-configs"
-<a href=#931 id=931 data-nosnippet>931</a>            </span>[[trigger.fake]]
-<a href=#932 id=932 data-nosnippet>932</a>            something = <span class="string">"something else"
-<a href=#933 id=933 data-nosnippet>933</a>            </span>[component.fake]
-<a href=#934 id=934 data-nosnippet>934</a>            source = <span class="string">"dummy"
-<a href=#935 id=935 data-nosnippet>935</a>            </span>key_value_stores = [<span class="string">"default"</span>, <span class="string">"snake_case"</span>, <span class="string">"kebab-case"</span>]
-<a href=#936 id=936 data-nosnippet>936</a>            sqlite_databases = [<span class="string">"default"</span>, <span class="string">"snake_case"</span>, <span class="string">"kebab-case"</span>]
-<a href=#937 id=937 data-nosnippet>937</a>        })
-<a href=#938 id=938 data-nosnippet>938</a>        .unwrap();
-<a href=#939 id=939 data-nosnippet>939</a>    }
-<a href=#940 id=940 data-nosnippet>940</a>
-<a href=#941 id=941 data-nosnippet>941</a>    <span class="attr">#[test]
-<a href=#942 id=942 data-nosnippet>942</a>    </span><span class="kw">fn </span>deserializing_labels_fails_for_non_kebab_or_snake() {
-<a href=#943 id=943 data-nosnippet>943</a>        <span class="macro">assert!</span>(AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#944 id=944 data-nosnippet>944</a>            spin_manifest_version = <span class="number">2
-<a href=#945 id=945 data-nosnippet>945</a>            </span>[application]
-<a href=#946 id=946 data-nosnippet>946</a>            name = <span class="string">"trigger-configs"
-<a href=#947 id=947 data-nosnippet>947</a>            </span>[[trigger.fake]]
-<a href=#948 id=948 data-nosnippet>948</a>            something = <span class="string">"something else"
-<a href=#949 id=949 data-nosnippet>949</a>            </span>[component.fake]
-<a href=#950 id=950 data-nosnippet>950</a>            source = <span class="string">"dummy"
-<a href=#951 id=951 data-nosnippet>951</a>            </span>key_value_stores = [<span class="string">"b@dlabel"</span>]
-<a href=#952 id=952 data-nosnippet>952</a>        })
-<a href=#953 id=953 data-nosnippet>953</a>        .is_err());
+<a href=#854 id=854 data-nosnippet>854</a>    <span class="attr">#[derive(Deserialize)]
+<a href=#855 id=855 data-nosnippet>855</a>    #[allow(dead_code)]
+<a href=#856 id=856 data-nosnippet>856</a>    </span><span class="kw">struct </span>FakeGlobalTriggerConfig {
+<a href=#857 id=857 data-nosnippet>857</a>        global_option: bool,
+<a href=#858 id=858 data-nosnippet>858</a>    }
+<a href=#859 id=859 data-nosnippet>859</a>
+<a href=#860 id=860 data-nosnippet>860</a>    <span class="attr">#[derive(Deserialize)]
+<a href=#861 id=861 data-nosnippet>861</a>    #[allow(dead_code)]
+<a href=#862 id=862 data-nosnippet>862</a>    </span><span class="kw">struct </span>FakeTriggerConfig {
+<a href=#863 id=863 data-nosnippet>863</a>        option: <span class="prelude-ty">Option</span>&lt;bool&gt;,
+<a href=#864 id=864 data-nosnippet>864</a>    }
+<a href=#865 id=865 data-nosnippet>865</a>
+<a href=#866 id=866 data-nosnippet>866</a>    <span class="attr">#[test]
+<a href=#867 id=867 data-nosnippet>867</a>    </span><span class="kw">fn </span>deserializing_trigger_configs() {
+<a href=#868 id=868 data-nosnippet>868</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#869 id=869 data-nosnippet>869</a>            spin_manifest_version = <span class="number">2
+<a href=#870 id=870 data-nosnippet>870</a>            </span>[application]
+<a href=#871 id=871 data-nosnippet>871</a>            name = <span class="string">"trigger-configs"
+<a href=#872 id=872 data-nosnippet>872</a>            </span>[application.trigger.fake]
+<a href=#873 id=873 data-nosnippet>873</a>            global_option = <span class="bool-val">true
+<a href=#874 id=874 data-nosnippet>874</a>            </span>[[trigger.fake]]
+<a href=#875 id=875 data-nosnippet>875</a>            component = { source = <span class="string">"inline.wasm" </span>}
+<a href=#876 id=876 data-nosnippet>876</a>            option = <span class="bool-val">true
+<a href=#877 id=877 data-nosnippet>877</a>        </span>})
+<a href=#878 id=878 data-nosnippet>878</a>        .unwrap();
+<a href=#879 id=879 data-nosnippet>879</a>
+<a href=#880 id=880 data-nosnippet>880</a>        FakeGlobalTriggerConfig::deserialize(
+<a href=#881 id=881 data-nosnippet>881</a>            manifest.application.trigger_global_configs[<span class="string">"fake"</span>].clone(),
+<a href=#882 id=882 data-nosnippet>882</a>        )
+<a href=#883 id=883 data-nosnippet>883</a>        .unwrap();
+<a href=#884 id=884 data-nosnippet>884</a>
+<a href=#885 id=885 data-nosnippet>885</a>        FakeTriggerConfig::deserialize(manifest.triggers[<span class="string">"fake"</span>][<span class="number">0</span>].config.clone()).unwrap();
+<a href=#886 id=886 data-nosnippet>886</a>    }
+<a href=#887 id=887 data-nosnippet>887</a>
+<a href=#888 id=888 data-nosnippet>888</a>    <span class="attr">#[derive(Deserialize)]
+<a href=#889 id=889 data-nosnippet>889</a>    #[allow(dead_code)]
+<a href=#890 id=890 data-nosnippet>890</a>    </span><span class="kw">struct </span>FakeGlobalToolConfig {
+<a href=#891 id=891 data-nosnippet>891</a>        lint_level: String,
+<a href=#892 id=892 data-nosnippet>892</a>    }
+<a href=#893 id=893 data-nosnippet>893</a>
+<a href=#894 id=894 data-nosnippet>894</a>    <span class="attr">#[derive(Deserialize)]
+<a href=#895 id=895 data-nosnippet>895</a>    #[allow(dead_code)]
+<a href=#896 id=896 data-nosnippet>896</a>    </span><span class="kw">struct </span>FakeComponentToolConfig {
+<a href=#897 id=897 data-nosnippet>897</a>        command: String,
+<a href=#898 id=898 data-nosnippet>898</a>    }
+<a href=#899 id=899 data-nosnippet>899</a>
+<a href=#900 id=900 data-nosnippet>900</a>    <span class="attr">#[test]
+<a href=#901 id=901 data-nosnippet>901</a>    </span><span class="kw">fn </span>deserialising_custom_tool_settings() {
+<a href=#902 id=902 data-nosnippet>902</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#903 id=903 data-nosnippet>903</a>            spin_manifest_version = <span class="number">2
+<a href=#904 id=904 data-nosnippet>904</a>            </span>[application]
+<a href=#905 id=905 data-nosnippet>905</a>            name = <span class="string">"trigger-configs"
+<a href=#906 id=906 data-nosnippet>906</a>            </span>[application.tool.lint]
+<a href=#907 id=907 data-nosnippet>907</a>            lint_level = <span class="string">"savage"
+<a href=#908 id=908 data-nosnippet>908</a>            </span>[[trigger.fake]]
+<a href=#909 id=909 data-nosnippet>909</a>            something = <span class="string">"something else"
+<a href=#910 id=910 data-nosnippet>910</a>            </span>[component.fake]
+<a href=#911 id=911 data-nosnippet>911</a>            source = <span class="string">"dummy"
+<a href=#912 id=912 data-nosnippet>912</a>            </span>[component.fake.tool.clean]
+<a href=#913 id=913 data-nosnippet>913</a>            command = <span class="string">"cargo clean"
+<a href=#914 id=914 data-nosnippet>914</a>        </span>})
+<a href=#915 id=915 data-nosnippet>915</a>        .unwrap();
+<a href=#916 id=916 data-nosnippet>916</a>
+<a href=#917 id=917 data-nosnippet>917</a>        FakeGlobalToolConfig::deserialize(manifest.application.tool[<span class="string">"lint"</span>].clone()).unwrap();
+<a href=#918 id=918 data-nosnippet>918</a>        <span class="kw">let </span>fake_id: KebabId = <span class="string">"fake"</span>.to_owned().try_into().unwrap();
+<a href=#919 id=919 data-nosnippet>919</a>        FakeComponentToolConfig::deserialize(manifest.components[<span class="kw-2">&amp;</span>fake_id].tool[<span class="string">"clean"</span>].clone())
+<a href=#920 id=920 data-nosnippet>920</a>            .unwrap();
+<a href=#921 id=921 data-nosnippet>921</a>    }
+<a href=#922 id=922 data-nosnippet>922</a>
+<a href=#923 id=923 data-nosnippet>923</a>    <span class="attr">#[test]
+<a href=#924 id=924 data-nosnippet>924</a>    </span><span class="kw">fn </span>deserializing_labels() {
+<a href=#925 id=925 data-nosnippet>925</a>        AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#926 id=926 data-nosnippet>926</a>            spin_manifest_version = <span class="number">2
+<a href=#927 id=927 data-nosnippet>927</a>            </span>[application]
+<a href=#928 id=928 data-nosnippet>928</a>            name = <span class="string">"trigger-configs"
+<a href=#929 id=929 data-nosnippet>929</a>            </span>[[trigger.fake]]
+<a href=#930 id=930 data-nosnippet>930</a>            something = <span class="string">"something else"
+<a href=#931 id=931 data-nosnippet>931</a>            </span>[component.fake]
+<a href=#932 id=932 data-nosnippet>932</a>            source = <span class="string">"dummy"
+<a href=#933 id=933 data-nosnippet>933</a>            </span>key_value_stores = [<span class="string">"default"</span>, <span class="string">"snake_case"</span>, <span class="string">"kebab-case"</span>]
+<a href=#934 id=934 data-nosnippet>934</a>            sqlite_databases = [<span class="string">"default"</span>, <span class="string">"snake_case"</span>, <span class="string">"kebab-case"</span>]
+<a href=#935 id=935 data-nosnippet>935</a>        })
+<a href=#936 id=936 data-nosnippet>936</a>        .unwrap();
+<a href=#937 id=937 data-nosnippet>937</a>    }
+<a href=#938 id=938 data-nosnippet>938</a>
+<a href=#939 id=939 data-nosnippet>939</a>    <span class="attr">#[test]
+<a href=#940 id=940 data-nosnippet>940</a>    </span><span class="kw">fn </span>deserializing_labels_fails_for_non_kebab_or_snake() {
+<a href=#941 id=941 data-nosnippet>941</a>        <span class="macro">assert!</span>(
+<a href=#942 id=942 data-nosnippet>942</a>            AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#943 id=943 data-nosnippet>943</a>                spin_manifest_version = <span class="number">2
+<a href=#944 id=944 data-nosnippet>944</a>                </span>[application]
+<a href=#945 id=945 data-nosnippet>945</a>                name = <span class="string">"trigger-configs"
+<a href=#946 id=946 data-nosnippet>946</a>                </span>[[trigger.fake]]
+<a href=#947 id=947 data-nosnippet>947</a>                something = <span class="string">"something else"
+<a href=#948 id=948 data-nosnippet>948</a>                </span>[component.fake]
+<a href=#949 id=949 data-nosnippet>949</a>                source = <span class="string">"dummy"
+<a href=#950 id=950 data-nosnippet>950</a>                </span>key_value_stores = [<span class="string">"b@dlabel"</span>]
+<a href=#951 id=951 data-nosnippet>951</a>            })
+<a href=#952 id=952 data-nosnippet>952</a>            .is_err()
+<a href=#953 id=953 data-nosnippet>953</a>        );
 <a href=#954 id=954 data-nosnippet>954</a>    }
 <a href=#955 id=955 data-nosnippet>955</a>
 <a href=#956 id=956 data-nosnippet>956</a>    <span class="kw">fn </span>get_test_component_with_labels(labels: Vec&lt;String&gt;) -&gt; Component {
@@ -1059,325 +1059,349 @@
 <a href=#1059 id=1059 data-nosnippet>1059</a>    <span class="attr">#[test]
 <a href=#1060 id=1060 data-nosnippet>1060</a>    </span><span class="kw">fn </span>test_validate_dependencies() {
 <a href=#1061 id=1061 data-nosnippet>1061</a>        <span class="comment">// Specifying a dependency name as a plain-name without a package is an error
-<a href=#1062 id=1062 data-nosnippet>1062</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1063 id=1063 data-nosnippet>1063</a>            <span class="string">"plain-name" </span>= <span class="string">"0.1.0"
-<a href=#1064 id=1064 data-nosnippet>1064</a>        </span>})
-<a href=#1065 id=1065 data-nosnippet>1065</a>        .unwrap()
-<a href=#1066 id=1066 data-nosnippet>1066</a>        .validate()
-<a href=#1067 id=1067 data-nosnippet>1067</a>        .is_err());
-<a href=#1068 id=1068 data-nosnippet>1068</a>
-<a href=#1069 id=1069 data-nosnippet>1069</a>        <span class="comment">// Specifying a dependency name as a plain-name without a package is an error
-<a href=#1070 id=1070 data-nosnippet>1070</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1071 id=1071 data-nosnippet>1071</a>            <span class="string">"plain-name" </span>= { version = <span class="string">"0.1.0" </span>}
-<a href=#1072 id=1072 data-nosnippet>1072</a>        })
-<a href=#1073 id=1073 data-nosnippet>1073</a>        .unwrap()
-<a href=#1074 id=1074 data-nosnippet>1074</a>        .validate()
-<a href=#1075 id=1075 data-nosnippet>1075</a>        .is_err());
-<a href=#1076 id=1076 data-nosnippet>1076</a>
-<a href=#1077 id=1077 data-nosnippet>1077</a>        <span class="comment">// Specifying an export to satisfy a package dependency name is an error
-<a href=#1078 id=1078 data-nosnippet>1078</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1079 id=1079 data-nosnippet>1079</a>            <span class="string">"foo:baz@0.1.0" </span>= { path = <span class="string">"foo.wasm"</span>, export = <span class="string">"foo"</span>}
-<a href=#1080 id=1080 data-nosnippet>1080</a>        })
-<a href=#1081 id=1081 data-nosnippet>1081</a>        .unwrap()
-<a href=#1082 id=1082 data-nosnippet>1082</a>        .validate()
-<a href=#1083 id=1083 data-nosnippet>1083</a>        .is_err());
-<a href=#1084 id=1084 data-nosnippet>1084</a>
-<a href=#1085 id=1085 data-nosnippet>1085</a>        <span class="comment">// Two compatible versions of the same package is an error
-<a href=#1086 id=1086 data-nosnippet>1086</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1087 id=1087 data-nosnippet>1087</a>            <span class="string">"foo:baz@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1088 id=1088 data-nosnippet>1088</a>            "foo:bar@0.2.1" </span>= <span class="string">"0.2.1"
-<a href=#1089 id=1089 data-nosnippet>1089</a>            "foo:bar@0.2.2" </span>= <span class="string">"0.2.2"
-<a href=#1090 id=1090 data-nosnippet>1090</a>        </span>})
-<a href=#1091 id=1091 data-nosnippet>1091</a>        .unwrap()
-<a href=#1092 id=1092 data-nosnippet>1092</a>        .validate()
-<a href=#1093 id=1093 data-nosnippet>1093</a>        .is_err());
-<a href=#1094 id=1094 data-nosnippet>1094</a>
-<a href=#1095 id=1095 data-nosnippet>1095</a>        <span class="comment">// Two disjoint versions of the same package is ok
-<a href=#1096 id=1096 data-nosnippet>1096</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1097 id=1097 data-nosnippet>1097</a>            <span class="string">"foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1098 id=1098 data-nosnippet>1098</a>            "foo:bar@0.2.0" </span>= <span class="string">"0.2.0"
-<a href=#1099 id=1099 data-nosnippet>1099</a>            "foo:baz@0.2.0" </span>= <span class="string">"0.1.0"
-<a href=#1100 id=1100 data-nosnippet>1100</a>        </span>})
-<a href=#1101 id=1101 data-nosnippet>1101</a>        .unwrap()
-<a href=#1102 id=1102 data-nosnippet>1102</a>        .validate()
-<a href=#1103 id=1103 data-nosnippet>1103</a>        .is_ok());
-<a href=#1104 id=1104 data-nosnippet>1104</a>
-<a href=#1105 id=1105 data-nosnippet>1105</a>        <span class="comment">// Unversioned and versioned dependencies of the same package is an error
-<a href=#1106 id=1106 data-nosnippet>1106</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1107 id=1107 data-nosnippet>1107</a>            <span class="string">"foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1108 id=1108 data-nosnippet>1108</a>            "foo:bar" </span>= <span class="string">"&gt;= 0.2.0"
-<a href=#1109 id=1109 data-nosnippet>1109</a>        </span>})
-<a href=#1110 id=1110 data-nosnippet>1110</a>        .unwrap()
-<a href=#1111 id=1111 data-nosnippet>1111</a>        .validate()
-<a href=#1112 id=1112 data-nosnippet>1112</a>        .is_err());
-<a href=#1113 id=1113 data-nosnippet>1113</a>
-<a href=#1114 id=1114 data-nosnippet>1114</a>        <span class="comment">// Two interfaces of two disjoint versions of a package is ok
-<a href=#1115 id=1115 data-nosnippet>1115</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1116 id=1116 data-nosnippet>1116</a>            <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1117 id=1117 data-nosnippet>1117</a>            "foo:bar/baz@0.2.0" </span>= <span class="string">"0.2.0"
-<a href=#1118 id=1118 data-nosnippet>1118</a>        </span>})
-<a href=#1119 id=1119 data-nosnippet>1119</a>        .unwrap()
-<a href=#1120 id=1120 data-nosnippet>1120</a>        .validate()
-<a href=#1121 id=1121 data-nosnippet>1121</a>        .is_ok());
-<a href=#1122 id=1122 data-nosnippet>1122</a>
-<a href=#1123 id=1123 data-nosnippet>1123</a>        <span class="comment">// A versioned interface and a different versioned package is ok
-<a href=#1124 id=1124 data-nosnippet>1124</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1125 id=1125 data-nosnippet>1125</a>            <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1126 id=1126 data-nosnippet>1126</a>            "foo:bar@0.2.0" </span>= <span class="string">"0.2.0"
-<a href=#1127 id=1127 data-nosnippet>1127</a>        </span>})
-<a href=#1128 id=1128 data-nosnippet>1128</a>        .unwrap()
-<a href=#1129 id=1129 data-nosnippet>1129</a>        .validate()
-<a href=#1130 id=1130 data-nosnippet>1130</a>        .is_ok());
-<a href=#1131 id=1131 data-nosnippet>1131</a>
-<a href=#1132 id=1132 data-nosnippet>1132</a>        <span class="comment">// A versioned interface and package of the same version is an error
-<a href=#1133 id=1133 data-nosnippet>1133</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1134 id=1134 data-nosnippet>1134</a>            <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1135 id=1135 data-nosnippet>1135</a>            "foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1136 id=1136 data-nosnippet>1136</a>        </span>})
-<a href=#1137 id=1137 data-nosnippet>1137</a>        .unwrap()
-<a href=#1138 id=1138 data-nosnippet>1138</a>        .validate()
-<a href=#1139 id=1139 data-nosnippet>1139</a>        .is_err());
-<a href=#1140 id=1140 data-nosnippet>1140</a>
-<a href=#1141 id=1141 data-nosnippet>1141</a>        <span class="comment">// A versioned interface and unversioned package is an error
-<a href=#1142 id=1142 data-nosnippet>1142</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1143 id=1143 data-nosnippet>1143</a>            <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1144 id=1144 data-nosnippet>1144</a>            "foo:bar" </span>= <span class="string">"0.1.0"
-<a href=#1145 id=1145 data-nosnippet>1145</a>        </span>})
-<a href=#1146 id=1146 data-nosnippet>1146</a>        .unwrap()
-<a href=#1147 id=1147 data-nosnippet>1147</a>        .validate()
-<a href=#1148 id=1148 data-nosnippet>1148</a>        .is_err());
-<a href=#1149 id=1149 data-nosnippet>1149</a>
-<a href=#1150 id=1150 data-nosnippet>1150</a>        <span class="comment">// An unversioned interface and versioned package is an error
-<a href=#1151 id=1151 data-nosnippet>1151</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1152 id=1152 data-nosnippet>1152</a>            <span class="string">"foo:bar/baz" </span>= <span class="string">"0.1.0"
-<a href=#1153 id=1153 data-nosnippet>1153</a>            "foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
-<a href=#1154 id=1154 data-nosnippet>1154</a>        </span>})
-<a href=#1155 id=1155 data-nosnippet>1155</a>        .unwrap()
-<a href=#1156 id=1156 data-nosnippet>1156</a>        .validate()
-<a href=#1157 id=1157 data-nosnippet>1157</a>        .is_err());
+<a href=#1062 id=1062 data-nosnippet>1062</a>        </span><span class="macro">assert!</span>(
+<a href=#1063 id=1063 data-nosnippet>1063</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1064 id=1064 data-nosnippet>1064</a>                <span class="string">"plain-name" </span>= <span class="string">"0.1.0"
+<a href=#1065 id=1065 data-nosnippet>1065</a>            </span>})
+<a href=#1066 id=1066 data-nosnippet>1066</a>            .unwrap()
+<a href=#1067 id=1067 data-nosnippet>1067</a>            .validate()
+<a href=#1068 id=1068 data-nosnippet>1068</a>            .is_err()
+<a href=#1069 id=1069 data-nosnippet>1069</a>        );
+<a href=#1070 id=1070 data-nosnippet>1070</a>
+<a href=#1071 id=1071 data-nosnippet>1071</a>        <span class="comment">// Specifying a dependency name as a plain-name without a package is an error
+<a href=#1072 id=1072 data-nosnippet>1072</a>        </span><span class="macro">assert!</span>(
+<a href=#1073 id=1073 data-nosnippet>1073</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1074 id=1074 data-nosnippet>1074</a>                <span class="string">"plain-name" </span>= { version = <span class="string">"0.1.0" </span>}
+<a href=#1075 id=1075 data-nosnippet>1075</a>            })
+<a href=#1076 id=1076 data-nosnippet>1076</a>            .unwrap()
+<a href=#1077 id=1077 data-nosnippet>1077</a>            .validate()
+<a href=#1078 id=1078 data-nosnippet>1078</a>            .is_err()
+<a href=#1079 id=1079 data-nosnippet>1079</a>        );
+<a href=#1080 id=1080 data-nosnippet>1080</a>
+<a href=#1081 id=1081 data-nosnippet>1081</a>        <span class="comment">// Specifying an export to satisfy a package dependency name is an error
+<a href=#1082 id=1082 data-nosnippet>1082</a>        </span><span class="macro">assert!</span>(
+<a href=#1083 id=1083 data-nosnippet>1083</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1084 id=1084 data-nosnippet>1084</a>                <span class="string">"foo:baz@0.1.0" </span>= { path = <span class="string">"foo.wasm"</span>, export = <span class="string">"foo"</span>}
+<a href=#1085 id=1085 data-nosnippet>1085</a>            })
+<a href=#1086 id=1086 data-nosnippet>1086</a>            .unwrap()
+<a href=#1087 id=1087 data-nosnippet>1087</a>            .validate()
+<a href=#1088 id=1088 data-nosnippet>1088</a>            .is_err()
+<a href=#1089 id=1089 data-nosnippet>1089</a>        );
+<a href=#1090 id=1090 data-nosnippet>1090</a>
+<a href=#1091 id=1091 data-nosnippet>1091</a>        <span class="comment">// Two compatible versions of the same package is an error
+<a href=#1092 id=1092 data-nosnippet>1092</a>        </span><span class="macro">assert!</span>(
+<a href=#1093 id=1093 data-nosnippet>1093</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1094 id=1094 data-nosnippet>1094</a>                <span class="string">"foo:baz@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1095 id=1095 data-nosnippet>1095</a>                "foo:bar@0.2.1" </span>= <span class="string">"0.2.1"
+<a href=#1096 id=1096 data-nosnippet>1096</a>                "foo:bar@0.2.2" </span>= <span class="string">"0.2.2"
+<a href=#1097 id=1097 data-nosnippet>1097</a>            </span>})
+<a href=#1098 id=1098 data-nosnippet>1098</a>            .unwrap()
+<a href=#1099 id=1099 data-nosnippet>1099</a>            .validate()
+<a href=#1100 id=1100 data-nosnippet>1100</a>            .is_err()
+<a href=#1101 id=1101 data-nosnippet>1101</a>        );
+<a href=#1102 id=1102 data-nosnippet>1102</a>
+<a href=#1103 id=1103 data-nosnippet>1103</a>        <span class="comment">// Two disjoint versions of the same package is ok
+<a href=#1104 id=1104 data-nosnippet>1104</a>        </span><span class="macro">assert!</span>(
+<a href=#1105 id=1105 data-nosnippet>1105</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1106 id=1106 data-nosnippet>1106</a>                <span class="string">"foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1107 id=1107 data-nosnippet>1107</a>                "foo:bar@0.2.0" </span>= <span class="string">"0.2.0"
+<a href=#1108 id=1108 data-nosnippet>1108</a>                "foo:baz@0.2.0" </span>= <span class="string">"0.1.0"
+<a href=#1109 id=1109 data-nosnippet>1109</a>            </span>})
+<a href=#1110 id=1110 data-nosnippet>1110</a>            .unwrap()
+<a href=#1111 id=1111 data-nosnippet>1111</a>            .validate()
+<a href=#1112 id=1112 data-nosnippet>1112</a>            .is_ok()
+<a href=#1113 id=1113 data-nosnippet>1113</a>        );
+<a href=#1114 id=1114 data-nosnippet>1114</a>
+<a href=#1115 id=1115 data-nosnippet>1115</a>        <span class="comment">// Unversioned and versioned dependencies of the same package is an error
+<a href=#1116 id=1116 data-nosnippet>1116</a>        </span><span class="macro">assert!</span>(
+<a href=#1117 id=1117 data-nosnippet>1117</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1118 id=1118 data-nosnippet>1118</a>                <span class="string">"foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1119 id=1119 data-nosnippet>1119</a>                "foo:bar" </span>= <span class="string">"&gt;= 0.2.0"
+<a href=#1120 id=1120 data-nosnippet>1120</a>            </span>})
+<a href=#1121 id=1121 data-nosnippet>1121</a>            .unwrap()
+<a href=#1122 id=1122 data-nosnippet>1122</a>            .validate()
+<a href=#1123 id=1123 data-nosnippet>1123</a>            .is_err()
+<a href=#1124 id=1124 data-nosnippet>1124</a>        );
+<a href=#1125 id=1125 data-nosnippet>1125</a>
+<a href=#1126 id=1126 data-nosnippet>1126</a>        <span class="comment">// Two interfaces of two disjoint versions of a package is ok
+<a href=#1127 id=1127 data-nosnippet>1127</a>        </span><span class="macro">assert!</span>(
+<a href=#1128 id=1128 data-nosnippet>1128</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1129 id=1129 data-nosnippet>1129</a>                <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1130 id=1130 data-nosnippet>1130</a>                "foo:bar/baz@0.2.0" </span>= <span class="string">"0.2.0"
+<a href=#1131 id=1131 data-nosnippet>1131</a>            </span>})
+<a href=#1132 id=1132 data-nosnippet>1132</a>            .unwrap()
+<a href=#1133 id=1133 data-nosnippet>1133</a>            .validate()
+<a href=#1134 id=1134 data-nosnippet>1134</a>            .is_ok()
+<a href=#1135 id=1135 data-nosnippet>1135</a>        );
+<a href=#1136 id=1136 data-nosnippet>1136</a>
+<a href=#1137 id=1137 data-nosnippet>1137</a>        <span class="comment">// A versioned interface and a different versioned package is ok
+<a href=#1138 id=1138 data-nosnippet>1138</a>        </span><span class="macro">assert!</span>(
+<a href=#1139 id=1139 data-nosnippet>1139</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1140 id=1140 data-nosnippet>1140</a>                <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1141 id=1141 data-nosnippet>1141</a>                "foo:bar@0.2.0" </span>= <span class="string">"0.2.0"
+<a href=#1142 id=1142 data-nosnippet>1142</a>            </span>})
+<a href=#1143 id=1143 data-nosnippet>1143</a>            .unwrap()
+<a href=#1144 id=1144 data-nosnippet>1144</a>            .validate()
+<a href=#1145 id=1145 data-nosnippet>1145</a>            .is_ok()
+<a href=#1146 id=1146 data-nosnippet>1146</a>        );
+<a href=#1147 id=1147 data-nosnippet>1147</a>
+<a href=#1148 id=1148 data-nosnippet>1148</a>        <span class="comment">// A versioned interface and package of the same version is an error
+<a href=#1149 id=1149 data-nosnippet>1149</a>        </span><span class="macro">assert!</span>(
+<a href=#1150 id=1150 data-nosnippet>1150</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1151 id=1151 data-nosnippet>1151</a>                <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1152 id=1152 data-nosnippet>1152</a>                "foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1153 id=1153 data-nosnippet>1153</a>            </span>})
+<a href=#1154 id=1154 data-nosnippet>1154</a>            .unwrap()
+<a href=#1155 id=1155 data-nosnippet>1155</a>            .validate()
+<a href=#1156 id=1156 data-nosnippet>1156</a>            .is_err()
+<a href=#1157 id=1157 data-nosnippet>1157</a>        );
 <a href=#1158 id=1158 data-nosnippet>1158</a>
-<a href=#1159 id=1159 data-nosnippet>1159</a>        <span class="comment">// An unversioned interface and unversioned package is an error
-<a href=#1160 id=1160 data-nosnippet>1160</a>        </span><span class="macro">assert!</span>(ComponentDependencies::deserialize(<span class="macro">toml!</span> {
-<a href=#1161 id=1161 data-nosnippet>1161</a>            <span class="string">"foo:bar/baz" </span>= <span class="string">"0.1.0"
-<a href=#1162 id=1162 data-nosnippet>1162</a>            "foo:bar" </span>= <span class="string">"0.1.0"
-<a href=#1163 id=1163 data-nosnippet>1163</a>        </span>})
-<a href=#1164 id=1164 data-nosnippet>1164</a>        .unwrap()
-<a href=#1165 id=1165 data-nosnippet>1165</a>        .validate()
-<a href=#1166 id=1166 data-nosnippet>1166</a>        .is_err());
-<a href=#1167 id=1167 data-nosnippet>1167</a>    }
-<a href=#1168 id=1168 data-nosnippet>1168</a>
-<a href=#1169 id=1169 data-nosnippet>1169</a>    <span class="kw">fn </span>normalized_component(
-<a href=#1170 id=1170 data-nosnippet>1170</a>        manifest: <span class="kw-2">&amp;</span>AppManifest,
-<a href=#1171 id=1171 data-nosnippet>1171</a>        component: <span class="kw-2">&amp;</span>str,
-<a href=#1172 id=1172 data-nosnippet>1172</a>        profile: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
-<a href=#1173 id=1173 data-nosnippet>1173</a>    ) -&gt; Component {
-<a href=#1174 id=1174 data-nosnippet>1174</a>        <span class="kw">use </span><span class="kw">crate</span>::normalize::normalize_manifest;
-<a href=#1175 id=1175 data-nosnippet>1175</a>
-<a href=#1176 id=1176 data-nosnippet>1176</a>        <span class="kw">let </span>id =
-<a href=#1177 id=1177 data-nosnippet>1177</a>            KebabId::try_from(component.to_owned()).expect(<span class="string">"component ID should have been kebab"</span>);
-<a href=#1178 id=1178 data-nosnippet>1178</a>
-<a href=#1179 id=1179 data-nosnippet>1179</a>        <span class="kw">let </span><span class="kw-2">mut </span>manifest = manifest.clone();
-<a href=#1180 id=1180 data-nosnippet>1180</a>        normalize_manifest(<span class="kw-2">&amp;mut </span>manifest, profile).expect(<span class="string">"should have normalised"</span>);
-<a href=#1181 id=1181 data-nosnippet>1181</a>        manifest
-<a href=#1182 id=1182 data-nosnippet>1182</a>            .components
-<a href=#1183 id=1183 data-nosnippet>1183</a>            .get(<span class="kw-2">&amp;</span>id)
-<a href=#1184 id=1184 data-nosnippet>1184</a>            .expect(<span class="string">"should have compopnent with id profile-test"</span>)
-<a href=#1185 id=1185 data-nosnippet>1185</a>            .clone()
-<a href=#1186 id=1186 data-nosnippet>1186</a>    }
-<a href=#1187 id=1187 data-nosnippet>1187</a>
-<a href=#1188 id=1188 data-nosnippet>1188</a>    <span class="attr">#[test]
-<a href=#1189 id=1189 data-nosnippet>1189</a>    </span><span class="kw">fn </span>profiles_override_source() {
-<a href=#1190 id=1190 data-nosnippet>1190</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#1191 id=1191 data-nosnippet>1191</a>            spin_manifest_version = <span class="number">2
-<a href=#1192 id=1192 data-nosnippet>1192</a>            </span>[application]
-<a href=#1193 id=1193 data-nosnippet>1193</a>            name = <span class="string">"trigger-configs"
-<a href=#1194 id=1194 data-nosnippet>1194</a>            </span>[[trigger.fake]]
-<a href=#1195 id=1195 data-nosnippet>1195</a>            component = <span class="string">"profile-test"
-<a href=#1196 id=1196 data-nosnippet>1196</a>            </span>[component.profile-test]
-<a href=#1197 id=1197 data-nosnippet>1197</a>            source = <span class="string">"original"
-<a href=#1198 id=1198 data-nosnippet>1198</a>            </span>[component.profile-test.profile.fancy]
-<a href=#1199 id=1199 data-nosnippet>1199</a>            source = <span class="string">"fancy-schmancy"
-<a href=#1200 id=1200 data-nosnippet>1200</a>        </span>})
-<a href=#1201 id=1201 data-nosnippet>1201</a>        .expect(<span class="string">"manifest should be valid"</span>);
+<a href=#1159 id=1159 data-nosnippet>1159</a>        <span class="comment">// A versioned interface and unversioned package is an error
+<a href=#1160 id=1160 data-nosnippet>1160</a>        </span><span class="macro">assert!</span>(
+<a href=#1161 id=1161 data-nosnippet>1161</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1162 id=1162 data-nosnippet>1162</a>                <span class="string">"foo:bar/baz@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1163 id=1163 data-nosnippet>1163</a>                "foo:bar" </span>= <span class="string">"0.1.0"
+<a href=#1164 id=1164 data-nosnippet>1164</a>            </span>})
+<a href=#1165 id=1165 data-nosnippet>1165</a>            .unwrap()
+<a href=#1166 id=1166 data-nosnippet>1166</a>            .validate()
+<a href=#1167 id=1167 data-nosnippet>1167</a>            .is_err()
+<a href=#1168 id=1168 data-nosnippet>1168</a>        );
+<a href=#1169 id=1169 data-nosnippet>1169</a>
+<a href=#1170 id=1170 data-nosnippet>1170</a>        <span class="comment">// An unversioned interface and versioned package is an error
+<a href=#1171 id=1171 data-nosnippet>1171</a>        </span><span class="macro">assert!</span>(
+<a href=#1172 id=1172 data-nosnippet>1172</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1173 id=1173 data-nosnippet>1173</a>                <span class="string">"foo:bar/baz" </span>= <span class="string">"0.1.0"
+<a href=#1174 id=1174 data-nosnippet>1174</a>                "foo:bar@0.1.0" </span>= <span class="string">"0.1.0"
+<a href=#1175 id=1175 data-nosnippet>1175</a>            </span>})
+<a href=#1176 id=1176 data-nosnippet>1176</a>            .unwrap()
+<a href=#1177 id=1177 data-nosnippet>1177</a>            .validate()
+<a href=#1178 id=1178 data-nosnippet>1178</a>            .is_err()
+<a href=#1179 id=1179 data-nosnippet>1179</a>        );
+<a href=#1180 id=1180 data-nosnippet>1180</a>
+<a href=#1181 id=1181 data-nosnippet>1181</a>        <span class="comment">// An unversioned interface and unversioned package is an error
+<a href=#1182 id=1182 data-nosnippet>1182</a>        </span><span class="macro">assert!</span>(
+<a href=#1183 id=1183 data-nosnippet>1183</a>            ComponentDependencies::deserialize(<span class="macro">toml!</span> {
+<a href=#1184 id=1184 data-nosnippet>1184</a>                <span class="string">"foo:bar/baz" </span>= <span class="string">"0.1.0"
+<a href=#1185 id=1185 data-nosnippet>1185</a>                "foo:bar" </span>= <span class="string">"0.1.0"
+<a href=#1186 id=1186 data-nosnippet>1186</a>            </span>})
+<a href=#1187 id=1187 data-nosnippet>1187</a>            .unwrap()
+<a href=#1188 id=1188 data-nosnippet>1188</a>            .validate()
+<a href=#1189 id=1189 data-nosnippet>1189</a>            .is_err()
+<a href=#1190 id=1190 data-nosnippet>1190</a>        );
+<a href=#1191 id=1191 data-nosnippet>1191</a>    }
+<a href=#1192 id=1192 data-nosnippet>1192</a>
+<a href=#1193 id=1193 data-nosnippet>1193</a>    <span class="kw">fn </span>normalized_component(
+<a href=#1194 id=1194 data-nosnippet>1194</a>        manifest: <span class="kw-2">&amp;</span>AppManifest,
+<a href=#1195 id=1195 data-nosnippet>1195</a>        component: <span class="kw-2">&amp;</span>str,
+<a href=#1196 id=1196 data-nosnippet>1196</a>        profile: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
+<a href=#1197 id=1197 data-nosnippet>1197</a>    ) -&gt; Component {
+<a href=#1198 id=1198 data-nosnippet>1198</a>        <span class="kw">use </span><span class="kw">crate</span>::normalize::normalize_manifest;
+<a href=#1199 id=1199 data-nosnippet>1199</a>
+<a href=#1200 id=1200 data-nosnippet>1200</a>        <span class="kw">let </span>id =
+<a href=#1201 id=1201 data-nosnippet>1201</a>            KebabId::try_from(component.to_owned()).expect(<span class="string">"component ID should have been kebab"</span>);
 <a href=#1202 id=1202 data-nosnippet>1202</a>
-<a href=#1203 id=1203 data-nosnippet>1203</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
-<a href=#1204 id=1204 data-nosnippet>1204</a>
-<a href=#1205 id=1205 data-nosnippet>1205</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>);
-<a href=#1206 id=1206 data-nosnippet>1206</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="kw-2">&amp;</span>component.source, ComponentSource::Local(p) <span class="kw">if </span>p == <span class="string">"original"</span>));
-<a href=#1207 id=1207 data-nosnippet>1207</a>
-<a href=#1208 id=1208 data-nosnippet>1208</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
-<a href=#1209 id=1209 data-nosnippet>1209</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="kw-2">&amp;</span>component.source, ComponentSource::Local(p) <span class="kw">if </span>p == <span class="string">"fancy-schmancy"</span>));
-<a href=#1210 id=1210 data-nosnippet>1210</a>
-<a href=#1211 id=1211 data-nosnippet>1211</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"non-existent"</span>));
-<a href=#1212 id=1212 data-nosnippet>1212</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="kw-2">&amp;</span>component.source, ComponentSource::Local(p) <span class="kw">if </span>p == <span class="string">"original"</span>));
-<a href=#1213 id=1213 data-nosnippet>1213</a>    }
-<a href=#1214 id=1214 data-nosnippet>1214</a>
-<a href=#1215 id=1215 data-nosnippet>1215</a>    <span class="attr">#[test]
-<a href=#1216 id=1216 data-nosnippet>1216</a>    </span><span class="kw">fn </span>profiles_override_build_command() {
-<a href=#1217 id=1217 data-nosnippet>1217</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#1218 id=1218 data-nosnippet>1218</a>            spin_manifest_version = <span class="number">2
-<a href=#1219 id=1219 data-nosnippet>1219</a>            </span>[application]
-<a href=#1220 id=1220 data-nosnippet>1220</a>            name = <span class="string">"trigger-configs"
-<a href=#1221 id=1221 data-nosnippet>1221</a>            </span>[[trigger.fake]]
-<a href=#1222 id=1222 data-nosnippet>1222</a>            component = <span class="string">"profile-test"
-<a href=#1223 id=1223 data-nosnippet>1223</a>            </span>[component.profile-test]
-<a href=#1224 id=1224 data-nosnippet>1224</a>            source = <span class="string">"original"
-<a href=#1225 id=1225 data-nosnippet>1225</a>            </span>build.command = <span class="string">"buildme --release"
-<a href=#1226 id=1226 data-nosnippet>1226</a>            </span>[component.profile-test.profile.fancy]
-<a href=#1227 id=1227 data-nosnippet>1227</a>            source = <span class="string">"fancy-schmancy"
-<a href=#1228 id=1228 data-nosnippet>1228</a>            </span>build.command = [<span class="string">"buildme --fancy"</span>, <span class="string">"lintme"</span>]
-<a href=#1229 id=1229 data-nosnippet>1229</a>        })
-<a href=#1230 id=1230 data-nosnippet>1230</a>        .expect(<span class="string">"manifest should be valid"</span>);
+<a href=#1203 id=1203 data-nosnippet>1203</a>        <span class="kw">let </span><span class="kw-2">mut </span>manifest = manifest.clone();
+<a href=#1204 id=1204 data-nosnippet>1204</a>        normalize_manifest(<span class="kw-2">&amp;mut </span>manifest, profile).expect(<span class="string">"should have normalised"</span>);
+<a href=#1205 id=1205 data-nosnippet>1205</a>        manifest
+<a href=#1206 id=1206 data-nosnippet>1206</a>            .components
+<a href=#1207 id=1207 data-nosnippet>1207</a>            .get(<span class="kw-2">&amp;</span>id)
+<a href=#1208 id=1208 data-nosnippet>1208</a>            .expect(<span class="string">"should have compopnent with id profile-test"</span>)
+<a href=#1209 id=1209 data-nosnippet>1209</a>            .clone()
+<a href=#1210 id=1210 data-nosnippet>1210</a>    }
+<a href=#1211 id=1211 data-nosnippet>1211</a>
+<a href=#1212 id=1212 data-nosnippet>1212</a>    <span class="attr">#[test]
+<a href=#1213 id=1213 data-nosnippet>1213</a>    </span><span class="kw">fn </span>profiles_override_source() {
+<a href=#1214 id=1214 data-nosnippet>1214</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#1215 id=1215 data-nosnippet>1215</a>            spin_manifest_version = <span class="number">2
+<a href=#1216 id=1216 data-nosnippet>1216</a>            </span>[application]
+<a href=#1217 id=1217 data-nosnippet>1217</a>            name = <span class="string">"trigger-configs"
+<a href=#1218 id=1218 data-nosnippet>1218</a>            </span>[[trigger.fake]]
+<a href=#1219 id=1219 data-nosnippet>1219</a>            component = <span class="string">"profile-test"
+<a href=#1220 id=1220 data-nosnippet>1220</a>            </span>[component.profile-test]
+<a href=#1221 id=1221 data-nosnippet>1221</a>            source = <span class="string">"original"
+<a href=#1222 id=1222 data-nosnippet>1222</a>            </span>[component.profile-test.profile.fancy]
+<a href=#1223 id=1223 data-nosnippet>1223</a>            source = <span class="string">"fancy-schmancy"
+<a href=#1224 id=1224 data-nosnippet>1224</a>        </span>})
+<a href=#1225 id=1225 data-nosnippet>1225</a>        .expect(<span class="string">"manifest should be valid"</span>);
+<a href=#1226 id=1226 data-nosnippet>1226</a>
+<a href=#1227 id=1227 data-nosnippet>1227</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
+<a href=#1228 id=1228 data-nosnippet>1228</a>
+<a href=#1229 id=1229 data-nosnippet>1229</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>);
+<a href=#1230 id=1230 data-nosnippet>1230</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="kw-2">&amp;</span>component.source, ComponentSource::Local(p) <span class="kw">if </span>p == <span class="string">"original"</span>));
 <a href=#1231 id=1231 data-nosnippet>1231</a>
-<a href=#1232 id=1232 data-nosnippet>1232</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
-<a href=#1233 id=1233 data-nosnippet>1233</a>
-<a href=#1234 id=1234 data-nosnippet>1234</a>        <span class="kw">let </span>build = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>)
-<a href=#1235 id=1235 data-nosnippet>1235</a>            .build
-<a href=#1236 id=1236 data-nosnippet>1236</a>            .expect(<span class="string">"should have default build"</span>);
-<a href=#1237 id=1237 data-nosnippet>1237</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, build.commands().len());
-<a href=#1238 id=1238 data-nosnippet>1238</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --release"</span>, build.commands().next().unwrap());
-<a href=#1239 id=1239 data-nosnippet>1239</a>
-<a href=#1240 id=1240 data-nosnippet>1240</a>        <span class="kw">let </span>build = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>))
-<a href=#1241 id=1241 data-nosnippet>1241</a>            .build
-<a href=#1242 id=1242 data-nosnippet>1242</a>            .expect(<span class="string">"should have fancy build"</span>);
-<a href=#1243 id=1243 data-nosnippet>1243</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, build.commands().len());
-<a href=#1244 id=1244 data-nosnippet>1244</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --fancy"</span>, build.commands().next().unwrap());
-<a href=#1245 id=1245 data-nosnippet>1245</a>        <span class="macro">assert_eq!</span>(<span class="string">"lintme"</span>, build.commands().nth(<span class="number">1</span>).unwrap());
-<a href=#1246 id=1246 data-nosnippet>1246</a>
-<a href=#1247 id=1247 data-nosnippet>1247</a>        <span class="kw">let </span>build = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"non-existent"</span>))
-<a href=#1248 id=1248 data-nosnippet>1248</a>            .build
-<a href=#1249 id=1249 data-nosnippet>1249</a>            .expect(<span class="string">"should fall back to default build"</span>);
-<a href=#1250 id=1250 data-nosnippet>1250</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, build.commands().len());
-<a href=#1251 id=1251 data-nosnippet>1251</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --release"</span>, build.commands().next().unwrap());
-<a href=#1252 id=1252 data-nosnippet>1252</a>    }
-<a href=#1253 id=1253 data-nosnippet>1253</a>
-<a href=#1254 id=1254 data-nosnippet>1254</a>    <span class="attr">#[test]
-<a href=#1255 id=1255 data-nosnippet>1255</a>    </span><span class="kw">fn </span>profiles_can_have_build_command_when_default_doesnt() {
-<a href=#1256 id=1256 data-nosnippet>1256</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#1257 id=1257 data-nosnippet>1257</a>            spin_manifest_version = <span class="number">2
-<a href=#1258 id=1258 data-nosnippet>1258</a>            </span>[application]
-<a href=#1259 id=1259 data-nosnippet>1259</a>            name = <span class="string">"trigger-configs"
-<a href=#1260 id=1260 data-nosnippet>1260</a>            </span>[[trigger.fake]]
-<a href=#1261 id=1261 data-nosnippet>1261</a>            component = <span class="string">"profile-test"
-<a href=#1262 id=1262 data-nosnippet>1262</a>            </span>[component.profile-test]
-<a href=#1263 id=1263 data-nosnippet>1263</a>            source = <span class="string">"original"
-<a href=#1264 id=1264 data-nosnippet>1264</a>            </span>[component.profile-test.profile.fancy]
-<a href=#1265 id=1265 data-nosnippet>1265</a>            source = <span class="string">"fancy-schmancy"
-<a href=#1266 id=1266 data-nosnippet>1266</a>            </span>build.command = [<span class="string">"buildme --fancy"</span>, <span class="string">"lintme"</span>]
-<a href=#1267 id=1267 data-nosnippet>1267</a>        })
-<a href=#1268 id=1268 data-nosnippet>1268</a>        .expect(<span class="string">"manifest should be valid"</span>);
-<a href=#1269 id=1269 data-nosnippet>1269</a>
-<a href=#1270 id=1270 data-nosnippet>1270</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, <span class="string">"profile-test"</span>, <span class="prelude-val">None</span>);
-<a href=#1271 id=1271 data-nosnippet>1271</a>        <span class="macro">assert!</span>(component.build.is_none(), <span class="string">"shouldn't have default build"</span>);
-<a href=#1272 id=1272 data-nosnippet>1272</a>
-<a href=#1273 id=1273 data-nosnippet>1273</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, <span class="string">"profile-test"</span>, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
-<a href=#1274 id=1274 data-nosnippet>1274</a>        <span class="macro">assert!</span>(component.build.is_some(), <span class="string">"should have fancy build"</span>);
-<a href=#1275 id=1275 data-nosnippet>1275</a>
-<a href=#1276 id=1276 data-nosnippet>1276</a>        <span class="kw">let </span>build = component.build.expect(<span class="string">"should have fancy build"</span>);
+<a href=#1232 id=1232 data-nosnippet>1232</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
+<a href=#1233 id=1233 data-nosnippet>1233</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="kw-2">&amp;</span>component.source, ComponentSource::Local(p) <span class="kw">if </span>p == <span class="string">"fancy-schmancy"</span>));
+<a href=#1234 id=1234 data-nosnippet>1234</a>
+<a href=#1235 id=1235 data-nosnippet>1235</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"non-existent"</span>));
+<a href=#1236 id=1236 data-nosnippet>1236</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(<span class="kw-2">&amp;</span>component.source, ComponentSource::Local(p) <span class="kw">if </span>p == <span class="string">"original"</span>));
+<a href=#1237 id=1237 data-nosnippet>1237</a>    }
+<a href=#1238 id=1238 data-nosnippet>1238</a>
+<a href=#1239 id=1239 data-nosnippet>1239</a>    <span class="attr">#[test]
+<a href=#1240 id=1240 data-nosnippet>1240</a>    </span><span class="kw">fn </span>profiles_override_build_command() {
+<a href=#1241 id=1241 data-nosnippet>1241</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#1242 id=1242 data-nosnippet>1242</a>            spin_manifest_version = <span class="number">2
+<a href=#1243 id=1243 data-nosnippet>1243</a>            </span>[application]
+<a href=#1244 id=1244 data-nosnippet>1244</a>            name = <span class="string">"trigger-configs"
+<a href=#1245 id=1245 data-nosnippet>1245</a>            </span>[[trigger.fake]]
+<a href=#1246 id=1246 data-nosnippet>1246</a>            component = <span class="string">"profile-test"
+<a href=#1247 id=1247 data-nosnippet>1247</a>            </span>[component.profile-test]
+<a href=#1248 id=1248 data-nosnippet>1248</a>            source = <span class="string">"original"
+<a href=#1249 id=1249 data-nosnippet>1249</a>            </span>build.command = <span class="string">"buildme --release"
+<a href=#1250 id=1250 data-nosnippet>1250</a>            </span>[component.profile-test.profile.fancy]
+<a href=#1251 id=1251 data-nosnippet>1251</a>            source = <span class="string">"fancy-schmancy"
+<a href=#1252 id=1252 data-nosnippet>1252</a>            </span>build.command = [<span class="string">"buildme --fancy"</span>, <span class="string">"lintme"</span>]
+<a href=#1253 id=1253 data-nosnippet>1253</a>        })
+<a href=#1254 id=1254 data-nosnippet>1254</a>        .expect(<span class="string">"manifest should be valid"</span>);
+<a href=#1255 id=1255 data-nosnippet>1255</a>
+<a href=#1256 id=1256 data-nosnippet>1256</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
+<a href=#1257 id=1257 data-nosnippet>1257</a>
+<a href=#1258 id=1258 data-nosnippet>1258</a>        <span class="kw">let </span>build = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>)
+<a href=#1259 id=1259 data-nosnippet>1259</a>            .build
+<a href=#1260 id=1260 data-nosnippet>1260</a>            .expect(<span class="string">"should have default build"</span>);
+<a href=#1261 id=1261 data-nosnippet>1261</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, build.commands().len());
+<a href=#1262 id=1262 data-nosnippet>1262</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --release"</span>, build.commands().next().unwrap());
+<a href=#1263 id=1263 data-nosnippet>1263</a>
+<a href=#1264 id=1264 data-nosnippet>1264</a>        <span class="kw">let </span>build = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>))
+<a href=#1265 id=1265 data-nosnippet>1265</a>            .build
+<a href=#1266 id=1266 data-nosnippet>1266</a>            .expect(<span class="string">"should have fancy build"</span>);
+<a href=#1267 id=1267 data-nosnippet>1267</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, build.commands().len());
+<a href=#1268 id=1268 data-nosnippet>1268</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --fancy"</span>, build.commands().next().unwrap());
+<a href=#1269 id=1269 data-nosnippet>1269</a>        <span class="macro">assert_eq!</span>(<span class="string">"lintme"</span>, build.commands().nth(<span class="number">1</span>).unwrap());
+<a href=#1270 id=1270 data-nosnippet>1270</a>
+<a href=#1271 id=1271 data-nosnippet>1271</a>        <span class="kw">let </span>build = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"non-existent"</span>))
+<a href=#1272 id=1272 data-nosnippet>1272</a>            .build
+<a href=#1273 id=1273 data-nosnippet>1273</a>            .expect(<span class="string">"should fall back to default build"</span>);
+<a href=#1274 id=1274 data-nosnippet>1274</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, build.commands().len());
+<a href=#1275 id=1275 data-nosnippet>1275</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --release"</span>, build.commands().next().unwrap());
+<a href=#1276 id=1276 data-nosnippet>1276</a>    }
 <a href=#1277 id=1277 data-nosnippet>1277</a>
-<a href=#1278 id=1278 data-nosnippet>1278</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, build.commands().len());
-<a href=#1279 id=1279 data-nosnippet>1279</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --fancy"</span>, build.commands().next().unwrap());
-<a href=#1280 id=1280 data-nosnippet>1280</a>        <span class="macro">assert_eq!</span>(<span class="string">"lintme"</span>, build.commands().nth(<span class="number">1</span>).unwrap());
-<a href=#1281 id=1281 data-nosnippet>1281</a>    }
-<a href=#1282 id=1282 data-nosnippet>1282</a>
-<a href=#1283 id=1283 data-nosnippet>1283</a>    <span class="attr">#[test]
-<a href=#1284 id=1284 data-nosnippet>1284</a>    </span><span class="kw">fn </span>profiles_override_env_vars() {
-<a href=#1285 id=1285 data-nosnippet>1285</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#1286 id=1286 data-nosnippet>1286</a>            spin_manifest_version = <span class="number">2
-<a href=#1287 id=1287 data-nosnippet>1287</a>            </span>[application]
-<a href=#1288 id=1288 data-nosnippet>1288</a>            name = <span class="string">"trigger-configs"
-<a href=#1289 id=1289 data-nosnippet>1289</a>            </span>[[trigger.fake]]
-<a href=#1290 id=1290 data-nosnippet>1290</a>            component = <span class="string">"profile-test"
-<a href=#1291 id=1291 data-nosnippet>1291</a>            </span>[component.profile-test]
-<a href=#1292 id=1292 data-nosnippet>1292</a>            source = <span class="string">"original"
-<a href=#1293 id=1293 data-nosnippet>1293</a>            </span>environment = { DB_URL = <span class="string">"pg://production" </span>}
-<a href=#1294 id=1294 data-nosnippet>1294</a>            [component.profile-test.profile.fancy]
-<a href=#1295 id=1295 data-nosnippet>1295</a>            environment = { DB_URL = <span class="string">"pg://fancy"</span>, FANCINESS = <span class="string">"1" </span>}
-<a href=#1296 id=1296 data-nosnippet>1296</a>        })
-<a href=#1297 id=1297 data-nosnippet>1297</a>        .expect(<span class="string">"manifest should be valid"</span>);
-<a href=#1298 id=1298 data-nosnippet>1298</a>
-<a href=#1299 id=1299 data-nosnippet>1299</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
-<a href=#1300 id=1300 data-nosnippet>1300</a>
-<a href=#1301 id=1301 data-nosnippet>1301</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>);
-<a href=#1302 id=1302 data-nosnippet>1302</a>
-<a href=#1303 id=1303 data-nosnippet>1303</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, component.environment.len());
-<a href=#1304 id=1304 data-nosnippet>1304</a>        <span class="macro">assert_eq!</span>(
-<a href=#1305 id=1305 data-nosnippet>1305</a>            <span class="string">"pg://production"</span>,
-<a href=#1306 id=1306 data-nosnippet>1306</a>            component
-<a href=#1307 id=1307 data-nosnippet>1307</a>                .environment
-<a href=#1308 id=1308 data-nosnippet>1308</a>                .get(<span class="string">"DB_URL"</span>)
-<a href=#1309 id=1309 data-nosnippet>1309</a>                .expect(<span class="string">"DB_URL should have been set"</span>)
-<a href=#1310 id=1310 data-nosnippet>1310</a>        );
-<a href=#1311 id=1311 data-nosnippet>1311</a>
-<a href=#1312 id=1312 data-nosnippet>1312</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
-<a href=#1313 id=1313 data-nosnippet>1313</a>
-<a href=#1314 id=1314 data-nosnippet>1314</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, component.environment.len());
-<a href=#1315 id=1315 data-nosnippet>1315</a>        <span class="macro">assert_eq!</span>(
-<a href=#1316 id=1316 data-nosnippet>1316</a>            <span class="string">"pg://fancy"</span>,
-<a href=#1317 id=1317 data-nosnippet>1317</a>            component
-<a href=#1318 id=1318 data-nosnippet>1318</a>                .environment
-<a href=#1319 id=1319 data-nosnippet>1319</a>                .get(<span class="string">"DB_URL"</span>)
-<a href=#1320 id=1320 data-nosnippet>1320</a>                .expect(<span class="string">"DB_URL should have been set"</span>)
-<a href=#1321 id=1321 data-nosnippet>1321</a>        );
-<a href=#1322 id=1322 data-nosnippet>1322</a>        <span class="macro">assert_eq!</span>(
-<a href=#1323 id=1323 data-nosnippet>1323</a>            <span class="string">"1"</span>,
-<a href=#1324 id=1324 data-nosnippet>1324</a>            component
-<a href=#1325 id=1325 data-nosnippet>1325</a>                .environment
-<a href=#1326 id=1326 data-nosnippet>1326</a>                .get(<span class="string">"FANCINESS"</span>)
-<a href=#1327 id=1327 data-nosnippet>1327</a>                .expect(<span class="string">"FANCINESS should have been set"</span>)
-<a href=#1328 id=1328 data-nosnippet>1328</a>        );
-<a href=#1329 id=1329 data-nosnippet>1329</a>    }
-<a href=#1330 id=1330 data-nosnippet>1330</a>
-<a href=#1331 id=1331 data-nosnippet>1331</a>    <span class="attr">#[test]
-<a href=#1332 id=1332 data-nosnippet>1332</a>    </span><span class="kw">fn </span>profiles_dependencies() {
-<a href=#1333 id=1333 data-nosnippet>1333</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
-<a href=#1334 id=1334 data-nosnippet>1334</a>            spin_manifest_version = <span class="number">2
-<a href=#1335 id=1335 data-nosnippet>1335</a>            </span>[application]
-<a href=#1336 id=1336 data-nosnippet>1336</a>            name = <span class="string">"trigger-configs"
-<a href=#1337 id=1337 data-nosnippet>1337</a>            </span>[[trigger.fake]]
-<a href=#1338 id=1338 data-nosnippet>1338</a>            component = <span class="string">"profile-test"
-<a href=#1339 id=1339 data-nosnippet>1339</a>            </span>[component.profile-test]
-<a href=#1340 id=1340 data-nosnippet>1340</a>            source = <span class="string">"original"
-<a href=#1341 id=1341 data-nosnippet>1341</a>            </span>[component.profile-test.dependencies]
-<a href=#1342 id=1342 data-nosnippet>1342</a>            <span class="string">"foo-bar" </span>= <span class="string">"1.0.0"
-<a href=#1343 id=1343 data-nosnippet>1343</a>            </span>[component.profile-test.profile.fancy]
-<a href=#1344 id=1344 data-nosnippet>1344</a>            dependencies = { <span class="string">"foo-bar" </span>= { path = <span class="string">"local.wasm" </span>}, <span class="string">"fancy-thing" </span>= <span class="string">"1.2.3" </span>}
-<a href=#1345 id=1345 data-nosnippet>1345</a>        })
-<a href=#1346 id=1346 data-nosnippet>1346</a>        .expect(<span class="string">"manifest should be valid"</span>);
-<a href=#1347 id=1347 data-nosnippet>1347</a>
-<a href=#1348 id=1348 data-nosnippet>1348</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
-<a href=#1349 id=1349 data-nosnippet>1349</a>
-<a href=#1350 id=1350 data-nosnippet>1350</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>);
-<a href=#1351 id=1351 data-nosnippet>1351</a>
-<a href=#1352 id=1352 data-nosnippet>1352</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, component.dependencies.inner.len());
-<a href=#1353 id=1353 data-nosnippet>1353</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
-<a href=#1354 id=1354 data-nosnippet>1354</a>            component
-<a href=#1355 id=1355 data-nosnippet>1355</a>                .dependencies
-<a href=#1356 id=1356 data-nosnippet>1356</a>                .inner
-<a href=#1357 id=1357 data-nosnippet>1357</a>                .get(<span class="kw-2">&amp;</span>DependencyName::Plain(KebabId::try_from(<span class="string">"foo-bar"</span>.to_owned()).unwrap()))
-<a href=#1358 id=1358 data-nosnippet>1358</a>                .expect(<span class="string">"foo-bar dep should have been set"</span>),
-<a href=#1359 id=1359 data-nosnippet>1359</a>            ComponentDependency::Version(v) <span class="kw">if </span>v == <span class="string">"1.0.0"</span>,
-<a href=#1360 id=1360 data-nosnippet>1360</a>        ));
-<a href=#1361 id=1361 data-nosnippet>1361</a>
-<a href=#1362 id=1362 data-nosnippet>1362</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
-<a href=#1363 id=1363 data-nosnippet>1363</a>
-<a href=#1364 id=1364 data-nosnippet>1364</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, component.dependencies.inner.len());
-<a href=#1365 id=1365 data-nosnippet>1365</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
-<a href=#1366 id=1366 data-nosnippet>1366</a>            component
-<a href=#1367 id=1367 data-nosnippet>1367</a>                .dependencies
-<a href=#1368 id=1368 data-nosnippet>1368</a>                .inner
-<a href=#1369 id=1369 data-nosnippet>1369</a>                .get(<span class="kw-2">&amp;</span>DependencyName::Plain(KebabId::try_from(<span class="string">"foo-bar"</span>.to_owned()).unwrap()))
-<a href=#1370 id=1370 data-nosnippet>1370</a>                .expect(<span class="string">"foo-bar dep should have been set"</span>),
-<a href=#1371 id=1371 data-nosnippet>1371</a>            ComponentDependency::Local { path, .. } <span class="kw">if </span>path == <span class="kw-2">&amp;</span>PathBuf::from(<span class="string">"local.wasm"</span>),
-<a href=#1372 id=1372 data-nosnippet>1372</a>        ));
-<a href=#1373 id=1373 data-nosnippet>1373</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
-<a href=#1374 id=1374 data-nosnippet>1374</a>            component
-<a href=#1375 id=1375 data-nosnippet>1375</a>                .dependencies
-<a href=#1376 id=1376 data-nosnippet>1376</a>                .inner
-<a href=#1377 id=1377 data-nosnippet>1377</a>                .get(<span class="kw-2">&amp;</span>DependencyName::Plain(KebabId::try_from(<span class="string">"fancy-thing"</span>.to_owned()).unwrap()))
-<a href=#1378 id=1378 data-nosnippet>1378</a>                .expect(<span class="string">"fancy-thing dep should have been set"</span>),
-<a href=#1379 id=1379 data-nosnippet>1379</a>            ComponentDependency::Version(v) <span class="kw">if </span>v == <span class="string">"1.2.3"</span>,
-<a href=#1380 id=1380 data-nosnippet>1380</a>        ));
-<a href=#1381 id=1381 data-nosnippet>1381</a>    }
-<a href=#1382 id=1382 data-nosnippet>1382</a>}
+<a href=#1278 id=1278 data-nosnippet>1278</a>    <span class="attr">#[test]
+<a href=#1279 id=1279 data-nosnippet>1279</a>    </span><span class="kw">fn </span>profiles_can_have_build_command_when_default_doesnt() {
+<a href=#1280 id=1280 data-nosnippet>1280</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#1281 id=1281 data-nosnippet>1281</a>            spin_manifest_version = <span class="number">2
+<a href=#1282 id=1282 data-nosnippet>1282</a>            </span>[application]
+<a href=#1283 id=1283 data-nosnippet>1283</a>            name = <span class="string">"trigger-configs"
+<a href=#1284 id=1284 data-nosnippet>1284</a>            </span>[[trigger.fake]]
+<a href=#1285 id=1285 data-nosnippet>1285</a>            component = <span class="string">"profile-test"
+<a href=#1286 id=1286 data-nosnippet>1286</a>            </span>[component.profile-test]
+<a href=#1287 id=1287 data-nosnippet>1287</a>            source = <span class="string">"original"
+<a href=#1288 id=1288 data-nosnippet>1288</a>            </span>[component.profile-test.profile.fancy]
+<a href=#1289 id=1289 data-nosnippet>1289</a>            source = <span class="string">"fancy-schmancy"
+<a href=#1290 id=1290 data-nosnippet>1290</a>            </span>build.command = [<span class="string">"buildme --fancy"</span>, <span class="string">"lintme"</span>]
+<a href=#1291 id=1291 data-nosnippet>1291</a>        })
+<a href=#1292 id=1292 data-nosnippet>1292</a>        .expect(<span class="string">"manifest should be valid"</span>);
+<a href=#1293 id=1293 data-nosnippet>1293</a>
+<a href=#1294 id=1294 data-nosnippet>1294</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, <span class="string">"profile-test"</span>, <span class="prelude-val">None</span>);
+<a href=#1295 id=1295 data-nosnippet>1295</a>        <span class="macro">assert!</span>(component.build.is_none(), <span class="string">"shouldn't have default build"</span>);
+<a href=#1296 id=1296 data-nosnippet>1296</a>
+<a href=#1297 id=1297 data-nosnippet>1297</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, <span class="string">"profile-test"</span>, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
+<a href=#1298 id=1298 data-nosnippet>1298</a>        <span class="macro">assert!</span>(component.build.is_some(), <span class="string">"should have fancy build"</span>);
+<a href=#1299 id=1299 data-nosnippet>1299</a>
+<a href=#1300 id=1300 data-nosnippet>1300</a>        <span class="kw">let </span>build = component.build.expect(<span class="string">"should have fancy build"</span>);
+<a href=#1301 id=1301 data-nosnippet>1301</a>
+<a href=#1302 id=1302 data-nosnippet>1302</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, build.commands().len());
+<a href=#1303 id=1303 data-nosnippet>1303</a>        <span class="macro">assert_eq!</span>(<span class="string">"buildme --fancy"</span>, build.commands().next().unwrap());
+<a href=#1304 id=1304 data-nosnippet>1304</a>        <span class="macro">assert_eq!</span>(<span class="string">"lintme"</span>, build.commands().nth(<span class="number">1</span>).unwrap());
+<a href=#1305 id=1305 data-nosnippet>1305</a>    }
+<a href=#1306 id=1306 data-nosnippet>1306</a>
+<a href=#1307 id=1307 data-nosnippet>1307</a>    <span class="attr">#[test]
+<a href=#1308 id=1308 data-nosnippet>1308</a>    </span><span class="kw">fn </span>profiles_override_env_vars() {
+<a href=#1309 id=1309 data-nosnippet>1309</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#1310 id=1310 data-nosnippet>1310</a>            spin_manifest_version = <span class="number">2
+<a href=#1311 id=1311 data-nosnippet>1311</a>            </span>[application]
+<a href=#1312 id=1312 data-nosnippet>1312</a>            name = <span class="string">"trigger-configs"
+<a href=#1313 id=1313 data-nosnippet>1313</a>            </span>[[trigger.fake]]
+<a href=#1314 id=1314 data-nosnippet>1314</a>            component = <span class="string">"profile-test"
+<a href=#1315 id=1315 data-nosnippet>1315</a>            </span>[component.profile-test]
+<a href=#1316 id=1316 data-nosnippet>1316</a>            source = <span class="string">"original"
+<a href=#1317 id=1317 data-nosnippet>1317</a>            </span>environment = { DB_URL = <span class="string">"pg://production" </span>}
+<a href=#1318 id=1318 data-nosnippet>1318</a>            [component.profile-test.profile.fancy]
+<a href=#1319 id=1319 data-nosnippet>1319</a>            environment = { DB_URL = <span class="string">"pg://fancy"</span>, FANCINESS = <span class="string">"1" </span>}
+<a href=#1320 id=1320 data-nosnippet>1320</a>        })
+<a href=#1321 id=1321 data-nosnippet>1321</a>        .expect(<span class="string">"manifest should be valid"</span>);
+<a href=#1322 id=1322 data-nosnippet>1322</a>
+<a href=#1323 id=1323 data-nosnippet>1323</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
+<a href=#1324 id=1324 data-nosnippet>1324</a>
+<a href=#1325 id=1325 data-nosnippet>1325</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>);
+<a href=#1326 id=1326 data-nosnippet>1326</a>
+<a href=#1327 id=1327 data-nosnippet>1327</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, component.environment.len());
+<a href=#1328 id=1328 data-nosnippet>1328</a>        <span class="macro">assert_eq!</span>(
+<a href=#1329 id=1329 data-nosnippet>1329</a>            <span class="string">"pg://production"</span>,
+<a href=#1330 id=1330 data-nosnippet>1330</a>            component
+<a href=#1331 id=1331 data-nosnippet>1331</a>                .environment
+<a href=#1332 id=1332 data-nosnippet>1332</a>                .get(<span class="string">"DB_URL"</span>)
+<a href=#1333 id=1333 data-nosnippet>1333</a>                .expect(<span class="string">"DB_URL should have been set"</span>)
+<a href=#1334 id=1334 data-nosnippet>1334</a>        );
+<a href=#1335 id=1335 data-nosnippet>1335</a>
+<a href=#1336 id=1336 data-nosnippet>1336</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
+<a href=#1337 id=1337 data-nosnippet>1337</a>
+<a href=#1338 id=1338 data-nosnippet>1338</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, component.environment.len());
+<a href=#1339 id=1339 data-nosnippet>1339</a>        <span class="macro">assert_eq!</span>(
+<a href=#1340 id=1340 data-nosnippet>1340</a>            <span class="string">"pg://fancy"</span>,
+<a href=#1341 id=1341 data-nosnippet>1341</a>            component
+<a href=#1342 id=1342 data-nosnippet>1342</a>                .environment
+<a href=#1343 id=1343 data-nosnippet>1343</a>                .get(<span class="string">"DB_URL"</span>)
+<a href=#1344 id=1344 data-nosnippet>1344</a>                .expect(<span class="string">"DB_URL should have been set"</span>)
+<a href=#1345 id=1345 data-nosnippet>1345</a>        );
+<a href=#1346 id=1346 data-nosnippet>1346</a>        <span class="macro">assert_eq!</span>(
+<a href=#1347 id=1347 data-nosnippet>1347</a>            <span class="string">"1"</span>,
+<a href=#1348 id=1348 data-nosnippet>1348</a>            component
+<a href=#1349 id=1349 data-nosnippet>1349</a>                .environment
+<a href=#1350 id=1350 data-nosnippet>1350</a>                .get(<span class="string">"FANCINESS"</span>)
+<a href=#1351 id=1351 data-nosnippet>1351</a>                .expect(<span class="string">"FANCINESS should have been set"</span>)
+<a href=#1352 id=1352 data-nosnippet>1352</a>        );
+<a href=#1353 id=1353 data-nosnippet>1353</a>    }
+<a href=#1354 id=1354 data-nosnippet>1354</a>
+<a href=#1355 id=1355 data-nosnippet>1355</a>    <span class="attr">#[test]
+<a href=#1356 id=1356 data-nosnippet>1356</a>    </span><span class="kw">fn </span>profiles_dependencies() {
+<a href=#1357 id=1357 data-nosnippet>1357</a>        <span class="kw">let </span>manifest = AppManifest::deserialize(<span class="macro">toml!</span> {
+<a href=#1358 id=1358 data-nosnippet>1358</a>            spin_manifest_version = <span class="number">2
+<a href=#1359 id=1359 data-nosnippet>1359</a>            </span>[application]
+<a href=#1360 id=1360 data-nosnippet>1360</a>            name = <span class="string">"trigger-configs"
+<a href=#1361 id=1361 data-nosnippet>1361</a>            </span>[[trigger.fake]]
+<a href=#1362 id=1362 data-nosnippet>1362</a>            component = <span class="string">"profile-test"
+<a href=#1363 id=1363 data-nosnippet>1363</a>            </span>[component.profile-test]
+<a href=#1364 id=1364 data-nosnippet>1364</a>            source = <span class="string">"original"
+<a href=#1365 id=1365 data-nosnippet>1365</a>            </span>[component.profile-test.dependencies]
+<a href=#1366 id=1366 data-nosnippet>1366</a>            <span class="string">"foo-bar" </span>= <span class="string">"1.0.0"
+<a href=#1367 id=1367 data-nosnippet>1367</a>            </span>[component.profile-test.profile.fancy]
+<a href=#1368 id=1368 data-nosnippet>1368</a>            dependencies = { <span class="string">"foo-bar" </span>= { path = <span class="string">"local.wasm" </span>}, <span class="string">"fancy-thing" </span>= <span class="string">"1.2.3" </span>}
+<a href=#1369 id=1369 data-nosnippet>1369</a>        })
+<a href=#1370 id=1370 data-nosnippet>1370</a>        .expect(<span class="string">"manifest should be valid"</span>);
+<a href=#1371 id=1371 data-nosnippet>1371</a>
+<a href=#1372 id=1372 data-nosnippet>1372</a>        <span class="kw">let </span>id = <span class="string">"profile-test"</span>;
+<a href=#1373 id=1373 data-nosnippet>1373</a>
+<a href=#1374 id=1374 data-nosnippet>1374</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">None</span>);
+<a href=#1375 id=1375 data-nosnippet>1375</a>
+<a href=#1376 id=1376 data-nosnippet>1376</a>        <span class="macro">assert_eq!</span>(<span class="number">1</span>, component.dependencies.inner.len());
+<a href=#1377 id=1377 data-nosnippet>1377</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
+<a href=#1378 id=1378 data-nosnippet>1378</a>            component
+<a href=#1379 id=1379 data-nosnippet>1379</a>                .dependencies
+<a href=#1380 id=1380 data-nosnippet>1380</a>                .inner
+<a href=#1381 id=1381 data-nosnippet>1381</a>                .get(<span class="kw-2">&amp;</span>DependencyName::Plain(KebabId::try_from(<span class="string">"foo-bar"</span>.to_owned()).unwrap()))
+<a href=#1382 id=1382 data-nosnippet>1382</a>                .expect(<span class="string">"foo-bar dep should have been set"</span>),
+<a href=#1383 id=1383 data-nosnippet>1383</a>            ComponentDependency::Version(v) <span class="kw">if </span>v == <span class="string">"1.0.0"</span>,
+<a href=#1384 id=1384 data-nosnippet>1384</a>        ));
+<a href=#1385 id=1385 data-nosnippet>1385</a>
+<a href=#1386 id=1386 data-nosnippet>1386</a>        <span class="kw">let </span>component = normalized_component(<span class="kw-2">&amp;</span>manifest, id, <span class="prelude-val">Some</span>(<span class="string">"fancy"</span>));
+<a href=#1387 id=1387 data-nosnippet>1387</a>
+<a href=#1388 id=1388 data-nosnippet>1388</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, component.dependencies.inner.len());
+<a href=#1389 id=1389 data-nosnippet>1389</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
+<a href=#1390 id=1390 data-nosnippet>1390</a>            component
+<a href=#1391 id=1391 data-nosnippet>1391</a>                .dependencies
+<a href=#1392 id=1392 data-nosnippet>1392</a>                .inner
+<a href=#1393 id=1393 data-nosnippet>1393</a>                .get(<span class="kw-2">&amp;</span>DependencyName::Plain(KebabId::try_from(<span class="string">"foo-bar"</span>.to_owned()).unwrap()))
+<a href=#1394 id=1394 data-nosnippet>1394</a>                .expect(<span class="string">"foo-bar dep should have been set"</span>),
+<a href=#1395 id=1395 data-nosnippet>1395</a>            ComponentDependency::Local { path, .. } <span class="kw">if </span>path == <span class="kw-2">&amp;</span>PathBuf::from(<span class="string">"local.wasm"</span>),
+<a href=#1396 id=1396 data-nosnippet>1396</a>        ));
+<a href=#1397 id=1397 data-nosnippet>1397</a>        <span class="macro">assert!</span>(<span class="macro">matches!</span>(
+<a href=#1398 id=1398 data-nosnippet>1398</a>            component
+<a href=#1399 id=1399 data-nosnippet>1399</a>                .dependencies
+<a href=#1400 id=1400 data-nosnippet>1400</a>                .inner
+<a href=#1401 id=1401 data-nosnippet>1401</a>                .get(<span class="kw-2">&amp;</span>DependencyName::Plain(KebabId::try_from(<span class="string">"fancy-thing"</span>.to_owned()).unwrap()))
+<a href=#1402 id=1402 data-nosnippet>1402</a>                .expect(<span class="string">"fancy-thing dep should have been set"</span>),
+<a href=#1403 id=1403 data-nosnippet>1403</a>            ComponentDependency::Version(v) <span class="kw">if </span>v == <span class="string">"1.2.3"</span>,
+<a href=#1404 id=1404 data-nosnippet>1404</a>        ));
+<a href=#1405 id=1405 data-nosnippet>1405</a>    }
+<a href=#1406 id=1406 data-nosnippet>1406</a>}
 </code></pre></div></section></main></body></html>

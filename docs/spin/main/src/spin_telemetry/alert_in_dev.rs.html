@@ -4,14 +4,14 @@
 <a href=#4 id=4 data-nosnippet>4</a>//! want application developers to know they have a problem.
 <a href=#5 id=5 data-nosnippet>5</a>
 <a href=#6 id=6 data-nosnippet>6</a></span><span class="kw">use </span>tracing::{Event, Subscriber};
-<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>tracing_subscriber::{filter::filter_fn, registry::LookupSpan, Layer};
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>tracing_subscriber::{Layer, filter::filter_fn, registry::LookupSpan};
 <a href=#8 id=8 data-nosnippet>8</a>
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">const </span>ALERT_IN_DEV_TAG: <span class="kw-2">&amp;</span>str = <span class="string">"alert_in_dev"</span>;
 <a href=#10 id=10 data-nosnippet>10</a>
 <a href=#11 id=11 data-nosnippet>11</a><span class="doccomment">/// A layer which prints a terminal warning (using [terminal::warn!]) if
 <a href=#12 id=12 data-nosnippet>12</a>/// a trace event contains the tag "alert_in_dev" (with any value).
-<a href=#13 id=13 data-nosnippet>13</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>alert_in_dev_layer&lt;S: Subscriber + <span class="kw">for</span>&lt;<span class="lifetime">'span</span>&gt; LookupSpan&lt;<span class="lifetime">'span</span>&gt; + <span class="lifetime">'static</span>&gt;(
-<a href=#14 id=14 data-nosnippet>14</a>) -&gt; <span class="kw">impl </span>Layer&lt;S&gt; {
+<a href=#13 id=13 data-nosnippet>13</a></span><span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn </span>alert_in_dev_layer&lt;S: Subscriber + <span class="kw">for</span>&lt;<span class="lifetime">'span</span>&gt; LookupSpan&lt;<span class="lifetime">'span</span>&gt; + <span class="lifetime">'static</span>&gt;()
+<a href=#14 id=14 data-nosnippet>14</a>-&gt; <span class="kw">impl </span>Layer&lt;S&gt; {
 <a href=#15 id=15 data-nosnippet>15</a>    CommandLineAlertingLayer.with_filter(filter_fn(|meta| {
 <a href=#16 id=16 data-nosnippet>16</a>        meta.fields().field(ALERT_IN_DEV_TAG).is_some()
 <a href=#17 id=17 data-nosnippet>17</a>    }))

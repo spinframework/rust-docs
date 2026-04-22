@@ -6,7 +6,7 @@
 <a href=#6 id=6 data-nosnippet>6</a>    error::Error,
 <a href=#7 id=7 data-nosnippet>7</a>    schema::{v1, v2},
 <a href=#8 id=8 data-nosnippet>8</a>};
-<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>allowed_http_hosts::{parse_allowed_http_hosts, AllowedHttpHosts};
+<a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>allowed_http_hosts::{AllowedHttpHosts, parse_allowed_http_hosts};
 <a href=#10 id=10 data-nosnippet>10</a>
 <a href=#11 id=11 data-nosnippet>11</a><span class="doccomment">/// Converts a V1 app manifest to V2.
 <a href=#12 id=12 data-nosnippet>12</a></span><span class="kw">pub fn </span>v1_to_v2_app(manifest: v1::AppManifestV1) -&gt; <span class="prelude-ty">Result</span>&lt;v2::AppManifest, Error&gt; {

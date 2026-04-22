@@ -1,6 +1,6 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/plugins/src/manifest.rs`."><title>manifest.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_plugins" data-themes="" data-resource-suffix="" data-rustdoc-version="1.97.0-nightly (9ec5d5f32 2026-04-21)" data-channel="nightly" data-search-js="search-b5634cc7.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-aa4d37ac.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_plugins/</div>manifest.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::io::IsTerminal;
 <a href=#2 id=2 data-nosnippet>2</a>
-<a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>anyhow::{anyhow, Context, <span class="prelude-ty">Result</span>};
+<a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>anyhow::{Context, <span class="prelude-ty">Result</span>, anyhow};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>semver::{Version, VersionReq};
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>serde::{Deserialize, Serialize};
 <a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>url::Url;
@@ -73,10 +73,10 @@
 <a href=#73 id=73 data-nosnippet>73</a>
 <a href=#74 id=74 data-nosnippet>74</a>    <span class="comment">// Compares the versions. Returns None if either's version string is invalid semver.
 <a href=#75 id=75 data-nosnippet>75</a>    </span><span class="kw">pub fn </span>compare_versions(<span class="kw-2">&amp;</span><span class="self">self</span>, other: <span class="kw-2">&amp;</span><span class="self">Self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;std::cmp::Ordering&gt; {
-<a href=#76 id=76 data-nosnippet>76</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(this_version) = <span class="self">self</span>.try_version() {
-<a href=#77 id=77 data-nosnippet>77</a>            <span class="kw">if let </span><span class="prelude-val">Ok</span>(other_version) = other.try_version() {
-<a href=#78 id=78 data-nosnippet>78</a>                <span class="kw">return </span><span class="prelude-val">Some</span>(this_version.cmp_precedence(<span class="kw-2">&amp;</span>other_version));
-<a href=#79 id=79 data-nosnippet>79</a>            }
+<a href=#76 id=76 data-nosnippet>76</a>        <span class="kw">if let </span><span class="prelude-val">Ok</span>(this_version) = <span class="self">self</span>.try_version()
+<a href=#77 id=77 data-nosnippet>77</a>            &amp;&amp; <span class="kw">let </span><span class="prelude-val">Ok</span>(other_version) = other.try_version()
+<a href=#78 id=78 data-nosnippet>78</a>        {
+<a href=#79 id=79 data-nosnippet>79</a>            <span class="kw">return </span><span class="prelude-val">Some</span>(this_version.cmp_precedence(<span class="kw-2">&amp;</span>other_version));
 <a href=#80 id=80 data-nosnippet>80</a>        }
 <a href=#81 id=81 data-nosnippet>81</a>        <span class="prelude-val">None
 <a href=#82 id=82 data-nosnippet>82</a>    </span>}
@@ -195,124 +195,128 @@
 <a href=#195 id=195 data-nosnippet>195</a>        <span class="kw">let </span>version = Version::parse(spin_version)<span class="question-mark">?</span>;
 <a href=#196 id=196 data-nosnippet>196</a>        <span class="kw">if </span>!version.pre.is_empty() {
 <a href=#197 id=197 data-nosnippet>197</a>            <span class="kw">if </span>std::io::stderr().is_terminal() &amp;&amp; show_warnings {
-<a href=#198 id=198 data-nosnippet>198</a>                <span class="macro">terminal::warn!</span>(<span class="string">"You're using a pre-release version of Spin ({spin_version}). This plugin might not be compatible (supported: {supported_on}). Continuing anyway."</span>);
-<a href=#199 id=199 data-nosnippet>199</a>            }
-<a href=#200 id=200 data-nosnippet>200</a>        } <span class="kw">else if </span>override_compatibility_check {
-<a href=#201 id=201 data-nosnippet>201</a>            <span class="kw">if </span>show_warnings {
-<a href=#202 id=202 data-nosnippet>202</a>                <span class="macro">terminal::warn!</span>(<span class="string">"Plugin is not compatible with this version of Spin (supported: {supported_on}, actual: {spin_version}). Check overridden ... continuing to install or execute plugin."</span>);
-<a href=#203 id=203 data-nosnippet>203</a>            }
-<a href=#204 id=204 data-nosnippet>204</a>        } <span class="kw">else </span>{
-<a href=#205 id=205 data-nosnippet>205</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(
-<a href=#206 id=206 data-nosnippet>206</a>            <span class="string">"Plugin is not compatible with this version of Spin (supported: {supported_on}, actual: {spin_version}). Try running `spin plugins update &amp;&amp; spin plugins upgrade --all` to install latest or override with `--override-compatibility-check`."
-<a href=#207 id=207 data-nosnippet>207</a>        </span>));
-<a href=#208 id=208 data-nosnippet>208</a>        }
-<a href=#209 id=209 data-nosnippet>209</a>    }
-<a href=#210 id=210 data-nosnippet>210</a>    <span class="prelude-val">Ok</span>(())
-<a href=#211 id=211 data-nosnippet>211</a>}
-<a href=#212 id=212 data-nosnippet>212</a>
-<a href=#213 id=213 data-nosnippet>213</a><span class="kw">fn </span>suppress_compatibility_warnings() -&gt; bool {
-<a href=#214 id=214 data-nosnippet>214</a>    <span class="kw">match </span>std::env::var(<span class="string">"SPIN_PLUGINS_SUPPRESS_COMPATIBILITY_WARNINGS"</span>) {
-<a href=#215 id=215 data-nosnippet>215</a>        <span class="prelude-val">Ok</span>(s) =&gt; !s.is_empty(),
-<a href=#216 id=216 data-nosnippet>216</a>        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
-<a href=#217 id=217 data-nosnippet>217</a>    }
-<a href=#218 id=218 data-nosnippet>218</a>}
-<a href=#219 id=219 data-nosnippet>219</a>
-<a href=#220 id=220 data-nosnippet>220</a><span class="attr">#[cfg(test)]
-<a href=#221 id=221 data-nosnippet>221</a></span><span class="kw">mod </span>test {
-<a href=#222 id=222 data-nosnippet>222</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
+<a href=#198 id=198 data-nosnippet>198</a>                <span class="macro">terminal::warn!</span>(
+<a href=#199 id=199 data-nosnippet>199</a>                    <span class="string">"You're using a pre-release version of Spin ({spin_version}). This plugin might not be compatible (supported: {supported_on}). Continuing anyway."
+<a href=#200 id=200 data-nosnippet>200</a>                </span>);
+<a href=#201 id=201 data-nosnippet>201</a>            }
+<a href=#202 id=202 data-nosnippet>202</a>        } <span class="kw">else if </span>override_compatibility_check {
+<a href=#203 id=203 data-nosnippet>203</a>            <span class="kw">if </span>show_warnings {
+<a href=#204 id=204 data-nosnippet>204</a>                <span class="macro">terminal::warn!</span>(
+<a href=#205 id=205 data-nosnippet>205</a>                    <span class="string">"Plugin is not compatible with this version of Spin (supported: {supported_on}, actual: {spin_version}). Check overridden ... continuing to install or execute plugin."
+<a href=#206 id=206 data-nosnippet>206</a>                </span>);
+<a href=#207 id=207 data-nosnippet>207</a>            }
+<a href=#208 id=208 data-nosnippet>208</a>        } <span class="kw">else </span>{
+<a href=#209 id=209 data-nosnippet>209</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(
+<a href=#210 id=210 data-nosnippet>210</a>                <span class="string">"Plugin is not compatible with this version of Spin (supported: {supported_on}, actual: {spin_version}). Try running `spin plugins update &amp;&amp; spin plugins upgrade --all` to install latest or override with `--override-compatibility-check`."
+<a href=#211 id=211 data-nosnippet>211</a>            </span>));
+<a href=#212 id=212 data-nosnippet>212</a>        }
+<a href=#213 id=213 data-nosnippet>213</a>    }
+<a href=#214 id=214 data-nosnippet>214</a>    <span class="prelude-val">Ok</span>(())
+<a href=#215 id=215 data-nosnippet>215</a>}
+<a href=#216 id=216 data-nosnippet>216</a>
+<a href=#217 id=217 data-nosnippet>217</a><span class="kw">fn </span>suppress_compatibility_warnings() -&gt; bool {
+<a href=#218 id=218 data-nosnippet>218</a>    <span class="kw">match </span>std::env::var(<span class="string">"SPIN_PLUGINS_SUPPRESS_COMPATIBILITY_WARNINGS"</span>) {
+<a href=#219 id=219 data-nosnippet>219</a>        <span class="prelude-val">Ok</span>(s) =&gt; !s.is_empty(),
+<a href=#220 id=220 data-nosnippet>220</a>        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="bool-val">false</span>,
+<a href=#221 id=221 data-nosnippet>221</a>    }
+<a href=#222 id=222 data-nosnippet>222</a>}
 <a href=#223 id=223 data-nosnippet>223</a>
-<a href=#224 id=224 data-nosnippet>224</a>    <span class="kw">fn </span>generate_test_manifest(
-<a href=#225 id=225 data-nosnippet>225</a>        name: <span class="kw-2">&amp;</span>str,
-<a href=#226 id=226 data-nosnippet>226</a>        version: <span class="kw-2">&amp;</span>str,
-<a href=#227 id=227 data-nosnippet>227</a>        license: <span class="kw-2">&amp;</span>str,
-<a href=#228 id=228 data-nosnippet>228</a>        description: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
-<a href=#229 id=229 data-nosnippet>229</a>        homepage: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
-<a href=#230 id=230 data-nosnippet>230</a>    ) -&gt; PluginManifest {
-<a href=#231 id=231 data-nosnippet>231</a>        <span class="kw">let </span><span class="kw-2">mut </span>plugin_json = <span class="macro">serde_json::json!</span>(
-<a href=#232 id=232 data-nosnippet>232</a>        {
-<a href=#233 id=233 data-nosnippet>233</a>            <span class="string">"name"</span>: name,
-<a href=#234 id=234 data-nosnippet>234</a>            <span class="string">"version"</span>: version,
-<a href=#235 id=235 data-nosnippet>235</a>            <span class="string">"spinCompatibility"</span>: <span class="string">"=0.4"</span>,
-<a href=#236 id=236 data-nosnippet>236</a>            <span class="string">"license"</span>: license,
-<a href=#237 id=237 data-nosnippet>237</a>            <span class="string">"packages"</span>: [
-<a href=#238 id=238 data-nosnippet>238</a>                {
-<a href=#239 id=239 data-nosnippet>239</a>                    <span class="string">"os"</span>: <span class="string">"linux"</span>,
-<a href=#240 id=240 data-nosnippet>240</a>                    <span class="string">"arch"</span>: <span class="string">"amd64"</span>,
-<a href=#241 id=241 data-nosnippet>241</a>                    <span class="string">"url"</span>: <span class="string">"www.example.com/releases/1.0/binary.tgz"</span>,
-<a href=#242 id=242 data-nosnippet>242</a>                    <span class="string">"sha256"</span>: <span class="string">"c474f00b12345e38acae2d19b2a707a4fhdjdfdd22875efeefdf052ce19c90b"
-<a href=#243 id=243 data-nosnippet>243</a>                </span>},
-<a href=#244 id=244 data-nosnippet>244</a>                {
-<a href=#245 id=245 data-nosnippet>245</a>                    <span class="string">"os"</span>: <span class="string">"windows"</span>,
-<a href=#246 id=246 data-nosnippet>246</a>                    <span class="string">"arch"</span>: <span class="string">"amd64"</span>,
-<a href=#247 id=247 data-nosnippet>247</a>                    <span class="string">"url"</span>: <span class="string">"www.example.com/releases/1.0/binary.tgz"</span>,
-<a href=#248 id=248 data-nosnippet>248</a>                    <span class="string">"sha256"</span>: <span class="string">"eee4f00b12345e38acae2d19b2a707a4fhdjdfdd22875efeefdf052ce19c90b"
-<a href=#249 id=249 data-nosnippet>249</a>                </span>},
-<a href=#250 id=250 data-nosnippet>250</a>                {
-<a href=#251 id=251 data-nosnippet>251</a>                    <span class="string">"os"</span>: <span class="string">"macos"</span>,
-<a href=#252 id=252 data-nosnippet>252</a>                    <span class="string">"arch"</span>: <span class="string">"aarch64"</span>,
-<a href=#253 id=253 data-nosnippet>253</a>                    <span class="string">"url"</span>: <span class="string">"www.example.com/releases/1.0/binary.tgz"</span>,
-<a href=#254 id=254 data-nosnippet>254</a>                    <span class="string">"sha256"</span>: <span class="string">"eeegf00b12345e38acae2d19b2a707a4fhdjdfdd22875efeefdf052ce19c90b"
-<a href=#255 id=255 data-nosnippet>255</a>                </span>}
-<a href=#256 id=256 data-nosnippet>256</a>            ]
-<a href=#257 id=257 data-nosnippet>257</a>        });
-<a href=#258 id=258 data-nosnippet>258</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(homepage) = homepage {
-<a href=#259 id=259 data-nosnippet>259</a>            plugin_json
-<a href=#260 id=260 data-nosnippet>260</a>                .as_object_mut()
-<a href=#261 id=261 data-nosnippet>261</a>                .unwrap()
-<a href=#262 id=262 data-nosnippet>262</a>                .insert(<span class="string">"homepage"</span>.to_string(), <span class="macro">serde_json::json!</span>(homepage));
-<a href=#263 id=263 data-nosnippet>263</a>        }
-<a href=#264 id=264 data-nosnippet>264</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(description) = description {
-<a href=#265 id=265 data-nosnippet>265</a>            plugin_json
-<a href=#266 id=266 data-nosnippet>266</a>                .as_object_mut()
-<a href=#267 id=267 data-nosnippet>267</a>                .unwrap()
-<a href=#268 id=268 data-nosnippet>268</a>                .insert(<span class="string">"description"</span>.to_string(), <span class="macro">serde_json::json!</span>(description));
-<a href=#269 id=269 data-nosnippet>269</a>        }
-<a href=#270 id=270 data-nosnippet>270</a>        serde_json::from_value(plugin_json).unwrap()
-<a href=#271 id=271 data-nosnippet>271</a>    }
-<a href=#272 id=272 data-nosnippet>272</a>
-<a href=#273 id=273 data-nosnippet>273</a>    <span class="attr">#[test]
-<a href=#274 id=274 data-nosnippet>274</a>    </span><span class="kw">fn </span>test_supported_version() {
-<a href=#275 id=275 data-nosnippet>275</a>        <span class="kw">let </span>test_case = <span class="string">"&gt;=1.2.3, &lt;1.8.0"</span>;
-<a href=#276 id=276 data-nosnippet>276</a>        <span class="kw">let </span>input_output = [
-<a href=#277 id=277 data-nosnippet>277</a>            (<span class="string">"1.3.0"</span>, <span class="bool-val">true</span>),
-<a href=#278 id=278 data-nosnippet>278</a>            (<span class="string">"1.2.3"</span>, <span class="bool-val">true</span>),
-<a href=#279 id=279 data-nosnippet>279</a>            (<span class="string">"1.8.0"</span>, <span class="bool-val">false</span>),
-<a href=#280 id=280 data-nosnippet>280</a>            (<span class="string">"1.9.0"</span>, <span class="bool-val">false</span>),
-<a href=#281 id=281 data-nosnippet>281</a>            (<span class="string">"1.2.0"</span>, <span class="bool-val">false</span>),
-<a href=#282 id=282 data-nosnippet>282</a>        ];
-<a href=#283 id=283 data-nosnippet>283</a>        input_output.into_iter().for_each(|(i, o)| {
-<a href=#284 id=284 data-nosnippet>284</a>            <span class="macro">assert_eq!</span>(
-<a href=#285 id=285 data-nosnippet>285</a>                inner_warn_unsupported_version(test_case, i, <span class="bool-val">false</span>).is_ok(),
-<a href=#286 id=286 data-nosnippet>286</a>                o
-<a href=#287 id=287 data-nosnippet>287</a>            )
-<a href=#288 id=288 data-nosnippet>288</a>        });
-<a href=#289 id=289 data-nosnippet>289</a>    }
-<a href=#290 id=290 data-nosnippet>290</a>
-<a href=#291 id=291 data-nosnippet>291</a>    <span class="attr">#[test]
-<a href=#292 id=292 data-nosnippet>292</a>    </span><span class="kw">fn </span>test_plugin_json() {
-<a href=#293 id=293 data-nosnippet>293</a>        <span class="kw">let </span>name = <span class="string">"test"</span>;
-<a href=#294 id=294 data-nosnippet>294</a>        <span class="kw">let </span>description = <span class="string">"Some description."</span>;
-<a href=#295 id=295 data-nosnippet>295</a>        <span class="kw">let </span>homepage = <span class="string">"www.example.com"</span>;
-<a href=#296 id=296 data-nosnippet>296</a>        <span class="kw">let </span>version = <span class="string">"1.0"</span>;
-<a href=#297 id=297 data-nosnippet>297</a>        <span class="kw">let </span>license = <span class="string">"Mit"</span>;
-<a href=#298 id=298 data-nosnippet>298</a>        <span class="kw">let </span>deserialized_plugin =
-<a href=#299 id=299 data-nosnippet>299</a>            generate_test_manifest(name, version, license, <span class="prelude-val">Some</span>(description), <span class="prelude-val">Some</span>(homepage));
-<a href=#300 id=300 data-nosnippet>300</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.name(), name.to_owned());
-<a href=#301 id=301 data-nosnippet>301</a>        <span class="macro">assert_eq!</span>(
-<a href=#302 id=302 data-nosnippet>302</a>            deserialized_plugin.description,
-<a href=#303 id=303 data-nosnippet>303</a>            <span class="prelude-val">Some</span>(description.to_owned())
-<a href=#304 id=304 data-nosnippet>304</a>        );
-<a href=#305 id=305 data-nosnippet>305</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.homepage, <span class="prelude-val">Some</span>(homepage.to_owned()));
-<a href=#306 id=306 data-nosnippet>306</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.version, version.to_owned());
-<a href=#307 id=307 data-nosnippet>307</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.license, license.to_owned());
-<a href=#308 id=308 data-nosnippet>308</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.packages.len(), <span class="number">3</span>);
-<a href=#309 id=309 data-nosnippet>309</a>    }
-<a href=#310 id=310 data-nosnippet>310</a>
-<a href=#311 id=311 data-nosnippet>311</a>    <span class="attr">#[test]
-<a href=#312 id=312 data-nosnippet>312</a>    </span><span class="kw">fn </span>test_plugin_json_empty_options() {
-<a href=#313 id=313 data-nosnippet>313</a>        <span class="kw">let </span>deserialized_plugin = generate_test_manifest(<span class="string">"name"</span>, <span class="string">"0.1.1"</span>, <span class="string">"Mit"</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
-<a href=#314 id=314 data-nosnippet>314</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.description, <span class="prelude-val">None</span>);
-<a href=#315 id=315 data-nosnippet>315</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.homepage, <span class="prelude-val">None</span>);
-<a href=#316 id=316 data-nosnippet>316</a>    }
-<a href=#317 id=317 data-nosnippet>317</a>}
+<a href=#224 id=224 data-nosnippet>224</a><span class="attr">#[cfg(test)]
+<a href=#225 id=225 data-nosnippet>225</a></span><span class="kw">mod </span>test {
+<a href=#226 id=226 data-nosnippet>226</a>    <span class="kw">use </span>super::<span class="kw-2">*</span>;
+<a href=#227 id=227 data-nosnippet>227</a>
+<a href=#228 id=228 data-nosnippet>228</a>    <span class="kw">fn </span>generate_test_manifest(
+<a href=#229 id=229 data-nosnippet>229</a>        name: <span class="kw-2">&amp;</span>str,
+<a href=#230 id=230 data-nosnippet>230</a>        version: <span class="kw-2">&amp;</span>str,
+<a href=#231 id=231 data-nosnippet>231</a>        license: <span class="kw-2">&amp;</span>str,
+<a href=#232 id=232 data-nosnippet>232</a>        description: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
+<a href=#233 id=233 data-nosnippet>233</a>        homepage: <span class="prelude-ty">Option</span>&lt;<span class="kw-2">&amp;</span>str&gt;,
+<a href=#234 id=234 data-nosnippet>234</a>    ) -&gt; PluginManifest {
+<a href=#235 id=235 data-nosnippet>235</a>        <span class="kw">let </span><span class="kw-2">mut </span>plugin_json = <span class="macro">serde_json::json!</span>(
+<a href=#236 id=236 data-nosnippet>236</a>        {
+<a href=#237 id=237 data-nosnippet>237</a>            <span class="string">"name"</span>: name,
+<a href=#238 id=238 data-nosnippet>238</a>            <span class="string">"version"</span>: version,
+<a href=#239 id=239 data-nosnippet>239</a>            <span class="string">"spinCompatibility"</span>: <span class="string">"=0.4"</span>,
+<a href=#240 id=240 data-nosnippet>240</a>            <span class="string">"license"</span>: license,
+<a href=#241 id=241 data-nosnippet>241</a>            <span class="string">"packages"</span>: [
+<a href=#242 id=242 data-nosnippet>242</a>                {
+<a href=#243 id=243 data-nosnippet>243</a>                    <span class="string">"os"</span>: <span class="string">"linux"</span>,
+<a href=#244 id=244 data-nosnippet>244</a>                    <span class="string">"arch"</span>: <span class="string">"amd64"</span>,
+<a href=#245 id=245 data-nosnippet>245</a>                    <span class="string">"url"</span>: <span class="string">"www.example.com/releases/1.0/binary.tgz"</span>,
+<a href=#246 id=246 data-nosnippet>246</a>                    <span class="string">"sha256"</span>: <span class="string">"c474f00b12345e38acae2d19b2a707a4fhdjdfdd22875efeefdf052ce19c90b"
+<a href=#247 id=247 data-nosnippet>247</a>                </span>},
+<a href=#248 id=248 data-nosnippet>248</a>                {
+<a href=#249 id=249 data-nosnippet>249</a>                    <span class="string">"os"</span>: <span class="string">"windows"</span>,
+<a href=#250 id=250 data-nosnippet>250</a>                    <span class="string">"arch"</span>: <span class="string">"amd64"</span>,
+<a href=#251 id=251 data-nosnippet>251</a>                    <span class="string">"url"</span>: <span class="string">"www.example.com/releases/1.0/binary.tgz"</span>,
+<a href=#252 id=252 data-nosnippet>252</a>                    <span class="string">"sha256"</span>: <span class="string">"eee4f00b12345e38acae2d19b2a707a4fhdjdfdd22875efeefdf052ce19c90b"
+<a href=#253 id=253 data-nosnippet>253</a>                </span>},
+<a href=#254 id=254 data-nosnippet>254</a>                {
+<a href=#255 id=255 data-nosnippet>255</a>                    <span class="string">"os"</span>: <span class="string">"macos"</span>,
+<a href=#256 id=256 data-nosnippet>256</a>                    <span class="string">"arch"</span>: <span class="string">"aarch64"</span>,
+<a href=#257 id=257 data-nosnippet>257</a>                    <span class="string">"url"</span>: <span class="string">"www.example.com/releases/1.0/binary.tgz"</span>,
+<a href=#258 id=258 data-nosnippet>258</a>                    <span class="string">"sha256"</span>: <span class="string">"eeegf00b12345e38acae2d19b2a707a4fhdjdfdd22875efeefdf052ce19c90b"
+<a href=#259 id=259 data-nosnippet>259</a>                </span>}
+<a href=#260 id=260 data-nosnippet>260</a>            ]
+<a href=#261 id=261 data-nosnippet>261</a>        });
+<a href=#262 id=262 data-nosnippet>262</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(homepage) = homepage {
+<a href=#263 id=263 data-nosnippet>263</a>            plugin_json
+<a href=#264 id=264 data-nosnippet>264</a>                .as_object_mut()
+<a href=#265 id=265 data-nosnippet>265</a>                .unwrap()
+<a href=#266 id=266 data-nosnippet>266</a>                .insert(<span class="string">"homepage"</span>.to_string(), <span class="macro">serde_json::json!</span>(homepage));
+<a href=#267 id=267 data-nosnippet>267</a>        }
+<a href=#268 id=268 data-nosnippet>268</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(description) = description {
+<a href=#269 id=269 data-nosnippet>269</a>            plugin_json
+<a href=#270 id=270 data-nosnippet>270</a>                .as_object_mut()
+<a href=#271 id=271 data-nosnippet>271</a>                .unwrap()
+<a href=#272 id=272 data-nosnippet>272</a>                .insert(<span class="string">"description"</span>.to_string(), <span class="macro">serde_json::json!</span>(description));
+<a href=#273 id=273 data-nosnippet>273</a>        }
+<a href=#274 id=274 data-nosnippet>274</a>        serde_json::from_value(plugin_json).unwrap()
+<a href=#275 id=275 data-nosnippet>275</a>    }
+<a href=#276 id=276 data-nosnippet>276</a>
+<a href=#277 id=277 data-nosnippet>277</a>    <span class="attr">#[test]
+<a href=#278 id=278 data-nosnippet>278</a>    </span><span class="kw">fn </span>test_supported_version() {
+<a href=#279 id=279 data-nosnippet>279</a>        <span class="kw">let </span>test_case = <span class="string">"&gt;=1.2.3, &lt;1.8.0"</span>;
+<a href=#280 id=280 data-nosnippet>280</a>        <span class="kw">let </span>input_output = [
+<a href=#281 id=281 data-nosnippet>281</a>            (<span class="string">"1.3.0"</span>, <span class="bool-val">true</span>),
+<a href=#282 id=282 data-nosnippet>282</a>            (<span class="string">"1.2.3"</span>, <span class="bool-val">true</span>),
+<a href=#283 id=283 data-nosnippet>283</a>            (<span class="string">"1.8.0"</span>, <span class="bool-val">false</span>),
+<a href=#284 id=284 data-nosnippet>284</a>            (<span class="string">"1.9.0"</span>, <span class="bool-val">false</span>),
+<a href=#285 id=285 data-nosnippet>285</a>            (<span class="string">"1.2.0"</span>, <span class="bool-val">false</span>),
+<a href=#286 id=286 data-nosnippet>286</a>        ];
+<a href=#287 id=287 data-nosnippet>287</a>        input_output.into_iter().for_each(|(i, o)| {
+<a href=#288 id=288 data-nosnippet>288</a>            <span class="macro">assert_eq!</span>(
+<a href=#289 id=289 data-nosnippet>289</a>                inner_warn_unsupported_version(test_case, i, <span class="bool-val">false</span>).is_ok(),
+<a href=#290 id=290 data-nosnippet>290</a>                o
+<a href=#291 id=291 data-nosnippet>291</a>            )
+<a href=#292 id=292 data-nosnippet>292</a>        });
+<a href=#293 id=293 data-nosnippet>293</a>    }
+<a href=#294 id=294 data-nosnippet>294</a>
+<a href=#295 id=295 data-nosnippet>295</a>    <span class="attr">#[test]
+<a href=#296 id=296 data-nosnippet>296</a>    </span><span class="kw">fn </span>test_plugin_json() {
+<a href=#297 id=297 data-nosnippet>297</a>        <span class="kw">let </span>name = <span class="string">"test"</span>;
+<a href=#298 id=298 data-nosnippet>298</a>        <span class="kw">let </span>description = <span class="string">"Some description."</span>;
+<a href=#299 id=299 data-nosnippet>299</a>        <span class="kw">let </span>homepage = <span class="string">"www.example.com"</span>;
+<a href=#300 id=300 data-nosnippet>300</a>        <span class="kw">let </span>version = <span class="string">"1.0"</span>;
+<a href=#301 id=301 data-nosnippet>301</a>        <span class="kw">let </span>license = <span class="string">"Mit"</span>;
+<a href=#302 id=302 data-nosnippet>302</a>        <span class="kw">let </span>deserialized_plugin =
+<a href=#303 id=303 data-nosnippet>303</a>            generate_test_manifest(name, version, license, <span class="prelude-val">Some</span>(description), <span class="prelude-val">Some</span>(homepage));
+<a href=#304 id=304 data-nosnippet>304</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.name(), name.to_owned());
+<a href=#305 id=305 data-nosnippet>305</a>        <span class="macro">assert_eq!</span>(
+<a href=#306 id=306 data-nosnippet>306</a>            deserialized_plugin.description,
+<a href=#307 id=307 data-nosnippet>307</a>            <span class="prelude-val">Some</span>(description.to_owned())
+<a href=#308 id=308 data-nosnippet>308</a>        );
+<a href=#309 id=309 data-nosnippet>309</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.homepage, <span class="prelude-val">Some</span>(homepage.to_owned()));
+<a href=#310 id=310 data-nosnippet>310</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.version, version.to_owned());
+<a href=#311 id=311 data-nosnippet>311</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.license, license.to_owned());
+<a href=#312 id=312 data-nosnippet>312</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.packages.len(), <span class="number">3</span>);
+<a href=#313 id=313 data-nosnippet>313</a>    }
+<a href=#314 id=314 data-nosnippet>314</a>
+<a href=#315 id=315 data-nosnippet>315</a>    <span class="attr">#[test]
+<a href=#316 id=316 data-nosnippet>316</a>    </span><span class="kw">fn </span>test_plugin_json_empty_options() {
+<a href=#317 id=317 data-nosnippet>317</a>        <span class="kw">let </span>deserialized_plugin = generate_test_manifest(<span class="string">"name"</span>, <span class="string">"0.1.1"</span>, <span class="string">"Mit"</span>, <span class="prelude-val">None</span>, <span class="prelude-val">None</span>);
+<a href=#318 id=318 data-nosnippet>318</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.description, <span class="prelude-val">None</span>);
+<a href=#319 id=319 data-nosnippet>319</a>        <span class="macro">assert_eq!</span>(deserialized_plugin.homepage, <span class="prelude-val">None</span>);
+<a href=#320 id=320 data-nosnippet>320</a>    }
+<a href=#321 id=321 data-nosnippet>321</a>}
 </code></pre></div></section></main></body></html>

@@ -3,22 +3,22 @@
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>std::collections::{BTreeMap, HashMap};
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>std::path::{Path, PathBuf};
 <a href=#5 id=5 data-nosnippet>5</a>
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>anyhow::{bail, Context, <span class="prelude-ty">Result</span>};
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>anyhow::{Context, <span class="prelude-ty">Result</span>, bail};
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>docker_credential::DockerCredential;
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>futures_util::future;
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>futures_util::stream::{<span class="self">self</span>, StreamExt, TryStreamExt};
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>itertools::Itertools;
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>oci_distribution::{
-<a href=#12 id=12 data-nosnippet>12</a>    client::ImageLayer, config::ConfigFile, manifest::OciImageManifest, secrets::RegistryAuth,
-<a href=#13 id=13 data-nosnippet>13</a>    token_cache::RegistryTokenType, Reference, RegistryOperation,
+<a href=#12 id=12 data-nosnippet>12</a>    Reference, RegistryOperation, client::ImageLayer, config::ConfigFile,
+<a href=#13 id=13 data-nosnippet>13</a>    manifest::OciImageManifest, secrets::RegistryAuth, token_cache::RegistryTokenType,
 <a href=#14 id=14 data-nosnippet>14</a>};
 <a href=#15 id=15 data-nosnippet>15</a><span class="kw">use </span>reqwest::Url;
 <a href=#16 id=16 data-nosnippet>16</a><span class="kw">use </span>spin_common::sha256;
 <a href=#17 id=17 data-nosnippet>17</a><span class="kw">use </span>spin_common::ui::quoted_path;
 <a href=#18 id=18 data-nosnippet>18</a><span class="kw">use </span>spin_common::url::parse_file_url;
 <a href=#19 id=19 data-nosnippet>19</a><span class="kw">use </span>spin_compose::ComponentSourceLoaderFs;
-<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>spin_loader::cache::Cache;
-<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>spin_loader::FilesMountStrategy;
+<a href=#20 id=20 data-nosnippet>20</a><span class="kw">use </span>spin_loader::FilesMountStrategy;
+<a href=#21 id=21 data-nosnippet>21</a><span class="kw">use </span>spin_loader::cache::Cache;
 <a href=#22 id=22 data-nosnippet>22</a><span class="kw">use </span>spin_locked_app::locked::{ContentPath, ContentRef, LockedApp, LockedComponent};
 <a href=#23 id=23 data-nosnippet>23</a><span class="kw">use </span>tokio::fs;
 <a href=#24 id=24 data-nosnippet>24</a><span class="kw">use </span>walkdir::WalkDir;
@@ -844,7 +844,7 @@
 <a href=#844 id=844 data-nosnippet>844</a>    explicit: <span class="prelude-ty">Option</span>&lt;BTreeMap&lt;String, String&gt;&gt;,
 <a href=#845 id=845 data-nosnippet>845</a>    predefined: InferPredefinedAnnotations,
 <a href=#846 id=846 data-nosnippet>846</a>) -&gt; <span class="prelude-ty">Option</span>&lt;BTreeMap&lt;String, String&gt;&gt; {
-<a href=#847 id=847 data-nosnippet>847</a>    <span class="kw">use </span>spin_locked_app::{MetadataKey, APP_DESCRIPTION_KEY, APP_NAME_KEY, APP_VERSION_KEY};
+<a href=#847 id=847 data-nosnippet>847</a>    <span class="kw">use </span>spin_locked_app::{APP_DESCRIPTION_KEY, APP_NAME_KEY, APP_VERSION_KEY, MetadataKey};
 <a href=#848 id=848 data-nosnippet>848</a>    <span class="kw">const </span>APP_AUTHORS_KEY: MetadataKey&lt;Vec&lt;String&gt;&gt; = MetadataKey::new(<span class="string">"authors"</span>);
 <a href=#849 id=849 data-nosnippet>849</a>
 <a href=#850 id=850 data-nosnippet>850</a>    <span class="kw">if </span>predefined == InferPredefinedAnnotations::None {
@@ -902,10 +902,10 @@
 <a href=#902 id=902 data-nosnippet>902</a>}
 <a href=#903 id=903 data-nosnippet>903</a>
 <a href=#904 id=904 data-nosnippet>904</a><span class="kw">fn </span>add_inferred(map: <span class="kw-2">&amp;mut </span>BTreeMap&lt;String, String&gt;, key: <span class="kw-2">&amp;</span>str, value: <span class="prelude-ty">Option</span>&lt;String&gt;) {
-<a href=#905 id=905 data-nosnippet>905</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(value) = value {
-<a href=#906 id=906 data-nosnippet>906</a>        <span class="kw">if let </span>std::collections::btree_map::Entry::Vacant(e) = map.entry(key.to_string()) {
-<a href=#907 id=907 data-nosnippet>907</a>            e.insert(value);
-<a href=#908 id=908 data-nosnippet>908</a>        }
+<a href=#905 id=905 data-nosnippet>905</a>    <span class="kw">if let </span><span class="prelude-val">Some</span>(value) = value
+<a href=#906 id=906 data-nosnippet>906</a>        &amp;&amp; <span class="kw">let </span>std::collections::btree_map::Entry::Vacant(e) = map.entry(key.to_string())
+<a href=#907 id=907 data-nosnippet>907</a>    {
+<a href=#908 id=908 data-nosnippet>908</a>        e.insert(value);
 <a href=#909 id=909 data-nosnippet>909</a>    }
 <a href=#910 id=910 data-nosnippet>910</a>}
 <a href=#911 id=911 data-nosnippet>911</a>

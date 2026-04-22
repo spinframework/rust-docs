@@ -3,12 +3,12 @@
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>futures::stream::TryStreamExt <span class="kw">as _</span>;
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>http_body_util::BodyExt;
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>spin_factor_outbound_networking::config::blocked_networks::BlockedNetworks;
-<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>spin_world::v1::{
-<a href=#7 id=7 data-nosnippet>7</a>    http <span class="kw">as </span>spin_http,
-<a href=#8 id=8 data-nosnippet>8</a>    http_types::{<span class="self">self</span>, HttpError, Method, Request, Response},
-<a href=#9 id=9 data-nosnippet>9</a>};
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>spin_world::MAX_HOST_BUFFERED_BYTES;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>tracing::{field::Empty, instrument, Span};
+<a href=#6 id=6 data-nosnippet>6</a><span class="kw">use </span>spin_world::MAX_HOST_BUFFERED_BYTES;
+<a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>spin_world::v1::{
+<a href=#8 id=8 data-nosnippet>8</a>    http <span class="kw">as </span>spin_http,
+<a href=#9 id=9 data-nosnippet>9</a>    http_types::{<span class="self">self</span>, HttpError, Method, Request, Response},
+<a href=#10 id=10 data-nosnippet>10</a>};
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>tracing::{Span, field::Empty, instrument};
 <a href=#12 id=12 data-nosnippet>12</a>
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">use </span><span class="kw">crate</span>::intercept::InterceptOutcome;
 <a href=#14 id=14 data-nosnippet>14</a>
@@ -164,12 +164,12 @@
 <a href=#164 id=164 data-nosnippet>164</a>    </span>span.record(<span class="string">"otel.name"</span>, method)
 <a href=#165 id=165 data-nosnippet>165</a>        .record(<span class="string">"http.request.method"</span>, method)
 <a href=#166 id=166 data-nosnippet>166</a>        .record(<span class="string">"url.full"</span>, req.uri.clone());
-<a href=#167 id=167 data-nosnippet>167</a>    <span class="kw">if let </span><span class="prelude-val">Ok</span>(uri) = req.uri.parse::&lt;http::Uri&gt;() {
-<a href=#168 id=168 data-nosnippet>168</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(authority) = uri.authority() {
-<a href=#169 id=169 data-nosnippet>169</a>            span.record(<span class="string">"server.address"</span>, authority.host());
-<a href=#170 id=170 data-nosnippet>170</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(port) = authority.port() {
-<a href=#171 id=171 data-nosnippet>171</a>                span.record(<span class="string">"server.port"</span>, port.as_u16());
-<a href=#172 id=172 data-nosnippet>172</a>            }
+<a href=#167 id=167 data-nosnippet>167</a>    <span class="kw">if let </span><span class="prelude-val">Ok</span>(uri) = req.uri.parse::&lt;http::Uri&gt;()
+<a href=#168 id=168 data-nosnippet>168</a>        &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(authority) = uri.authority()
+<a href=#169 id=169 data-nosnippet>169</a>    {
+<a href=#170 id=170 data-nosnippet>170</a>        span.record(<span class="string">"server.address"</span>, authority.host());
+<a href=#171 id=171 data-nosnippet>171</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(port) = authority.port() {
+<a href=#172 id=172 data-nosnippet>172</a>            span.record(<span class="string">"server.port"</span>, port.as_u16());
 <a href=#173 id=173 data-nosnippet>173</a>        }
 <a href=#174 id=174 data-nosnippet>174</a>    }
 <a href=#175 id=175 data-nosnippet>175</a>}
