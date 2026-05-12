@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["badger","error","lookup","manager","manifest"],"struct":["PluginStore"]};
+window.SIDEBAR_ITEMS = {"mod":["badger","error","manager","manifest"],"struct":["Catalogue","PluginRef"]};
