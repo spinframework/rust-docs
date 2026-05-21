@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"macro":["ceprint","ceprintln","cprint","einfo","error","step","warn"],"mod":["colors"],"struct":["ColorText"]};
+window.SIDEBAR_ITEMS = {"macro":[["ceprint",1],["ceprintln",1],["cprint",1],["einfo",1],["error",1],["step",1],["warn",1]],"mod":["colors"],"struct":["ColorText"]};

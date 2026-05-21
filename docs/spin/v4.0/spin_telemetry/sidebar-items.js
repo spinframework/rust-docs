@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["extract_trace_context","init","inject_trace_context"],"macro":["counter","gauge","histogram","monotonic_counter"],"mod":["detector","env","logs","metrics","traces"]};
+window.SIDEBAR_ITEMS = {"fn":["extract_trace_context","init","inject_trace_context"],"macro":[["counter",1],["gauge",1],["histogram",1],["monotonic_counter",1]],"mod":["detector","env","logs","metrics","traces"]};
