@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["client"],"struct":["InstanceState","OutboundMysqlFactor"]};
+window.SIDEBAR_ITEMS = {"mod":["client"],"struct":["InstanceState","InstanceStateInner","MysqlFactorData","OutboundMysqlFactor"]};
