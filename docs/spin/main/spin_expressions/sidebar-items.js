@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Error"],"mod":["provider"],"struct":["Key","PreparedResolver","ProviderResolver","Resolver","Template"],"type":["Result","SharedPreparedResolver"]};
+window.SIDEBAR_ITEMS = {"enum":["Error"],"mod":["provider"],"struct":["Key","PreparedResolver","ProviderResolver","Resolver","Template"],"trait":["SyncResolver"],"type":["Result","SharedPreparedResolver"]};
