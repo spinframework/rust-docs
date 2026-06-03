@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/build/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_build" data-themes="" data-resource-suffix="" data-rustdoc-version="1.98.0-nightly (6bdf43094 2026-06-01)" data-channel="nightly" data-search-js="search-fd9372ac.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fcd733ba.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_build/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![deny(missing_docs)]
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/build/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-17e0aaed.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_build" data-themes="" data-resource-suffix="" data-rustdoc-version="1.98.0-nightly (d595fce01 2026-06-02)" data-channel="nightly" data-search-js="search-fd9372ac.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-fcd733ba.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_build/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="attr">#![deny(missing_docs)]
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="doccomment">//! A library for building Spin components.
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -589,168 +589,170 @@
 <a href=#589 id=589 data-nosnippet>589</a>
 <a href=#590 id=590 data-nosnippet>590</a>        <span class="macro">assert!</span>(err.contains(<span class="string">"can't run in environment wasi-minimal"</span>));
 <a href=#591 id=591 data-nosnippet>591</a>        <span class="macro">assert!</span>(err.contains(<span class="string">"world wasi:cli/command@0.2.0"</span>));
-<a href=#592 id=592 data-nosnippet>592</a>        <span class="macro">assert!</span>(err.contains(<span class="string">"requires imports named"</span>));
-<a href=#593 id=593 data-nosnippet>593</a>        <span class="macro">assert!</span>(err.contains(<span class="string">"wasi:cli/stdout"</span>));
-<a href=#594 id=594 data-nosnippet>594</a>    }
-<a href=#595 id=595 data-nosnippet>595</a>
-<a href=#596 id=596 data-nosnippet>596</a>    <span class="kw">fn </span>dummy_buildinfo(id: <span class="kw-2">&amp;</span>str) -&gt; ComponentBuildInfo {
-<a href=#597 id=597 data-nosnippet>597</a>        dummy_build_info_deps(id, <span class="kw-2">&amp;</span>[])
-<a href=#598 id=598 data-nosnippet>598</a>    }
-<a href=#599 id=599 data-nosnippet>599</a>
-<a href=#600 id=600 data-nosnippet>600</a>    <span class="kw">fn </span>dummy_build_info_dep(id: <span class="kw-2">&amp;</span>str, dep_on: <span class="kw-2">&amp;</span>str) -&gt; ComponentBuildInfo {
-<a href=#601 id=601 data-nosnippet>601</a>        dummy_build_info_deps(id, <span class="kw-2">&amp;</span>[dep_on])
-<a href=#602 id=602 data-nosnippet>602</a>    }
-<a href=#603 id=603 data-nosnippet>603</a>
-<a href=#604 id=604 data-nosnippet>604</a>    <span class="kw">fn </span>dummy_build_info_deps(id: <span class="kw-2">&amp;</span>str, dep_on: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; ComponentBuildInfo {
-<a href=#605 id=605 data-nosnippet>605</a>        ComponentBuildInfo {
-<a href=#606 id=606 data-nosnippet>606</a>            id: id.into(),
-<a href=#607 id=607 data-nosnippet>607</a>            source: <span class="prelude-val">Some</span>(v2::ComponentSource::Local(<span class="macro">format!</span>(<span class="string">"{id}.wasm"</span>))),
-<a href=#608 id=608 data-nosnippet>608</a>            build: <span class="prelude-val">None</span>,
-<a href=#609 id=609 data-nosnippet>609</a>            dependencies: depends_on(dep_on),
-<a href=#610 id=610 data-nosnippet>610</a>            targets: <span class="prelude-val">None</span>,
-<a href=#611 id=611 data-nosnippet>611</a>        }
-<a href=#612 id=612 data-nosnippet>612</a>    }
-<a href=#613 id=613 data-nosnippet>613</a>
-<a href=#614 id=614 data-nosnippet>614</a>    <span class="kw">fn </span>depends_on(paths: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; v2::ComponentDependencies {
-<a href=#615 id=615 data-nosnippet>615</a>        <span class="kw">let </span><span class="kw-2">mut </span>deps = <span class="macro">vec!</span>[];
-<a href=#616 id=616 data-nosnippet>616</a>        <span class="kw">for </span>(index, path) <span class="kw">in </span>paths.iter().enumerate() {
-<a href=#617 id=617 data-nosnippet>617</a>            <span class="kw">let </span>dep_name =
-<a href=#618 id=618 data-nosnippet>618</a>                spin_serde::DependencyName::Plain(<span class="macro">format!</span>(<span class="string">"dummy{index}"</span>).try_into().unwrap());
-<a href=#619 id=619 data-nosnippet>619</a>            <span class="kw">let </span>dep = v2::ComponentDependency::Local {
-<a href=#620 id=620 data-nosnippet>620</a>                path: path.into(),
-<a href=#621 id=621 data-nosnippet>621</a>                export: <span class="prelude-val">None</span>,
-<a href=#622 id=622 data-nosnippet>622</a>                inherit_configuration: <span class="prelude-val">None</span>,
-<a href=#623 id=623 data-nosnippet>623</a>            };
-<a href=#624 id=624 data-nosnippet>624</a>            deps.push((dep_name, dep));
-<a href=#625 id=625 data-nosnippet>625</a>        }
-<a href=#626 id=626 data-nosnippet>626</a>        v2::ComponentDependencies {
-<a href=#627 id=627 data-nosnippet>627</a>            inner: deps.into_iter().collect(),
-<a href=#628 id=628 data-nosnippet>628</a>        }
-<a href=#629 id=629 data-nosnippet>629</a>    }
-<a href=#630 id=630 data-nosnippet>630</a>
-<a href=#631 id=631 data-nosnippet>631</a>    <span class="doccomment">/// Asserts that id `before` comes before id `after` in collection `cs`
-<a href=#632 id=632 data-nosnippet>632</a>    </span><span class="kw">fn </span>assert_before(cs: <span class="kw-2">&amp;</span>[ComponentBuildInfo], before: <span class="kw-2">&amp;</span>str, after: <span class="kw-2">&amp;</span>str) {
-<a href=#633 id=633 data-nosnippet>633</a>        <span class="macro">assert!</span>(
-<a href=#634 id=634 data-nosnippet>634</a>            cs.iter().position(|c| c.id == before).unwrap()
-<a href=#635 id=635 data-nosnippet>635</a>                &lt; cs.iter().position(|c| c.id == after).unwrap()
-<a href=#636 id=636 data-nosnippet>636</a>        );
-<a href=#637 id=637 data-nosnippet>637</a>    }
-<a href=#638 id=638 data-nosnippet>638</a>
-<a href=#639 id=639 data-nosnippet>639</a>    <span class="attr">#[test]
-<a href=#640 id=640 data-nosnippet>640</a>    </span><span class="kw">fn </span>if_no_dependencies_then_all_build() {
-<a href=#641 id=641 data-nosnippet>641</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[dummy_buildinfo(<span class="string">"1"</span>), dummy_buildinfo(<span class="string">"2"</span>)]);
-<a href=#642 id=642 data-nosnippet>642</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, cs.len());
-<a href=#643 id=643 data-nosnippet>643</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"1"</span>));
-<a href=#644 id=644 data-nosnippet>644</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"2"</span>));
-<a href=#645 id=645 data-nosnippet>645</a>        <span class="macro">assert!</span>(!had_cycle);
-<a href=#646 id=646 data-nosnippet>646</a>    }
-<a href=#647 id=647 data-nosnippet>647</a>
-<a href=#648 id=648 data-nosnippet>648</a>    <span class="attr">#[test]
-<a href=#649 id=649 data-nosnippet>649</a>    </span><span class="kw">fn </span>dependencies_build_before_consumers() {
-<a href=#650 id=650 data-nosnippet>650</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
-<a href=#651 id=651 data-nosnippet>651</a>            dummy_buildinfo(<span class="string">"1"</span>),
-<a href=#652 id=652 data-nosnippet>652</a>            dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>),
-<a href=#653 id=653 data-nosnippet>653</a>            dummy_buildinfo(<span class="string">"3"</span>),
-<a href=#654 id=654 data-nosnippet>654</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
-<a href=#655 id=655 data-nosnippet>655</a>        ]);
-<a href=#656 id=656 data-nosnippet>656</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
-<a href=#657 id=657 data-nosnippet>657</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
-<a href=#658 id=658 data-nosnippet>658</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"2"</span>);
-<a href=#659 id=659 data-nosnippet>659</a>        <span class="macro">assert!</span>(!had_cycle);
-<a href=#660 id=660 data-nosnippet>660</a>    }
-<a href=#661 id=661 data-nosnippet>661</a>
-<a href=#662 id=662 data-nosnippet>662</a>    <span class="attr">#[test]
-<a href=#663 id=663 data-nosnippet>663</a>    </span><span class="kw">fn </span>multiple_dependencies_build_before_consumers() {
-<a href=#664 id=664 data-nosnippet>664</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
-<a href=#665 id=665 data-nosnippet>665</a>            dummy_buildinfo(<span class="string">"1"</span>),
-<a href=#666 id=666 data-nosnippet>666</a>            dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>),
-<a href=#667 id=667 data-nosnippet>667</a>            dummy_buildinfo(<span class="string">"3"</span>),
-<a href=#668 id=668 data-nosnippet>668</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
-<a href=#669 id=669 data-nosnippet>669</a>            dummy_build_info_dep(<span class="string">"5"</span>, <span class="string">"3.wasm"</span>),
-<a href=#670 id=670 data-nosnippet>670</a>            dummy_build_info_deps(<span class="string">"6"</span>, <span class="kw-2">&amp;</span>[<span class="string">"3.wasm"</span>, <span class="string">"2.wasm"</span>]),
-<a href=#671 id=671 data-nosnippet>671</a>            dummy_buildinfo(<span class="string">"7"</span>),
-<a href=#672 id=672 data-nosnippet>672</a>        ]);
-<a href=#673 id=673 data-nosnippet>673</a>        <span class="macro">assert_eq!</span>(<span class="number">7</span>, cs.len());
-<a href=#674 id=674 data-nosnippet>674</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
-<a href=#675 id=675 data-nosnippet>675</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"2"</span>);
-<a href=#676 id=676 data-nosnippet>676</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"5"</span>);
-<a href=#677 id=677 data-nosnippet>677</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"6"</span>);
-<a href=#678 id=678 data-nosnippet>678</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"2"</span>, <span class="string">"6"</span>);
-<a href=#679 id=679 data-nosnippet>679</a>        <span class="macro">assert!</span>(!had_cycle);
-<a href=#680 id=680 data-nosnippet>680</a>    }
-<a href=#681 id=681 data-nosnippet>681</a>
-<a href=#682 id=682 data-nosnippet>682</a>    <span class="attr">#[test]
-<a href=#683 id=683 data-nosnippet>683</a>    </span><span class="kw">fn </span>circular_dependencies_dont_prevent_build() {
-<a href=#684 id=684 data-nosnippet>684</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
-<a href=#685 id=685 data-nosnippet>685</a>            dummy_buildinfo(<span class="string">"1"</span>),
-<a href=#686 id=686 data-nosnippet>686</a>            dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>),
-<a href=#687 id=687 data-nosnippet>687</a>            dummy_build_info_dep(<span class="string">"3"</span>, <span class="string">"2.wasm"</span>),
-<a href=#688 id=688 data-nosnippet>688</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
-<a href=#689 id=689 data-nosnippet>689</a>        ]);
-<a href=#690 id=690 data-nosnippet>690</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
-<a href=#691 id=691 data-nosnippet>691</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"1"</span>));
-<a href=#692 id=692 data-nosnippet>692</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"2"</span>));
-<a href=#693 id=693 data-nosnippet>693</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"3"</span>));
-<a href=#694 id=694 data-nosnippet>694</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"4"</span>));
-<a href=#695 id=695 data-nosnippet>695</a>        <span class="macro">assert!</span>(had_cycle);
-<a href=#696 id=696 data-nosnippet>696</a>    }
-<a href=#697 id=697 data-nosnippet>697</a>
-<a href=#698 id=698 data-nosnippet>698</a>    <span class="attr">#[test]
-<a href=#699 id=699 data-nosnippet>699</a>    </span><span class="kw">fn </span>non_path_dependencies_do_not_prevent_sorting() {
-<a href=#700 id=700 data-nosnippet>700</a>        <span class="kw">let </span><span class="kw-2">mut </span>depends_on_remote = dummy_buildinfo(<span class="string">"2"</span>);
-<a href=#701 id=701 data-nosnippet>701</a>        depends_on_remote.dependencies.inner.insert(
-<a href=#702 id=702 data-nosnippet>702</a>            spin_serde::DependencyName::Plain(<span class="string">"remote"</span>.to_owned().try_into().unwrap()),
-<a href=#703 id=703 data-nosnippet>703</a>            v2::ComponentDependency::Version(<span class="string">"1.2.3"</span>.to_owned()),
-<a href=#704 id=704 data-nosnippet>704</a>        );
-<a href=#705 id=705 data-nosnippet>705</a>
-<a href=#706 id=706 data-nosnippet>706</a>        <span class="kw">let </span><span class="kw-2">mut </span>depends_on_local_and_remote = dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>);
-<a href=#707 id=707 data-nosnippet>707</a>        depends_on_local_and_remote.dependencies.inner.insert(
-<a href=#708 id=708 data-nosnippet>708</a>            spin_serde::DependencyName::Plain(<span class="string">"remote"</span>.to_owned().try_into().unwrap()),
-<a href=#709 id=709 data-nosnippet>709</a>            v2::ComponentDependency::Version(<span class="string">"1.2.3"</span>.to_owned()),
-<a href=#710 id=710 data-nosnippet>710</a>        );
-<a href=#711 id=711 data-nosnippet>711</a>
-<a href=#712 id=712 data-nosnippet>712</a>        <span class="kw">let </span>(cs, <span class="kw">_</span>) = sort(<span class="macro">vec!</span>[
-<a href=#713 id=713 data-nosnippet>713</a>            dummy_buildinfo(<span class="string">"1"</span>),
-<a href=#714 id=714 data-nosnippet>714</a>            depends_on_remote,
-<a href=#715 id=715 data-nosnippet>715</a>            dummy_buildinfo(<span class="string">"3"</span>),
-<a href=#716 id=716 data-nosnippet>716</a>            depends_on_local_and_remote,
-<a href=#717 id=717 data-nosnippet>717</a>        ]);
-<a href=#718 id=718 data-nosnippet>718</a>
-<a href=#719 id=719 data-nosnippet>719</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
-<a href=#720 id=720 data-nosnippet>720</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
-<a href=#721 id=721 data-nosnippet>721</a>    }
-<a href=#722 id=722 data-nosnippet>722</a>
-<a href=#723 id=723 data-nosnippet>723</a>    <span class="attr">#[test]
-<a href=#724 id=724 data-nosnippet>724</a>    </span><span class="kw">fn </span>non_path_sources_do_not_prevent_sorting() {
-<a href=#725 id=725 data-nosnippet>725</a>        <span class="kw">let </span><span class="kw-2">mut </span>remote_source = dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>);
-<a href=#726 id=726 data-nosnippet>726</a>        remote_source.source = <span class="prelude-val">Some</span>(v2::ComponentSource::Remote {
-<a href=#727 id=727 data-nosnippet>727</a>            url: <span class="string">"far://away"</span>.into(),
-<a href=#728 id=728 data-nosnippet>728</a>            digest: <span class="string">"loadsa-hex"</span>.into(),
-<a href=#729 id=729 data-nosnippet>729</a>        });
-<a href=#730 id=730 data-nosnippet>730</a>
-<a href=#731 id=731 data-nosnippet>731</a>        <span class="kw">let </span>(cs, <span class="kw">_</span>) = sort(<span class="macro">vec!</span>[
-<a href=#732 id=732 data-nosnippet>732</a>            dummy_buildinfo(<span class="string">"1"</span>),
-<a href=#733 id=733 data-nosnippet>733</a>            remote_source,
-<a href=#734 id=734 data-nosnippet>734</a>            dummy_buildinfo(<span class="string">"3"</span>),
-<a href=#735 id=735 data-nosnippet>735</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
-<a href=#736 id=736 data-nosnippet>736</a>        ]);
-<a href=#737 id=737 data-nosnippet>737</a>
-<a href=#738 id=738 data-nosnippet>738</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
-<a href=#739 id=739 data-nosnippet>739</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
-<a href=#740 id=740 data-nosnippet>740</a>    }
-<a href=#741 id=741 data-nosnippet>741</a>
-<a href=#742 id=742 data-nosnippet>742</a>    <span class="attr">#[test]
-<a href=#743 id=743 data-nosnippet>743</a>    </span><span class="kw">fn </span>dependencies_on_non_manifest_components_do_not_prevent_sorting() {
-<a href=#744 id=744 data-nosnippet>744</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
-<a href=#745 id=745 data-nosnippet>745</a>            dummy_buildinfo(<span class="string">"1"</span>),
-<a href=#746 id=746 data-nosnippet>746</a>            dummy_build_info_deps(<span class="string">"2"</span>, <span class="kw-2">&amp;</span>[<span class="string">"3.wasm"</span>, <span class="string">"crikey.wasm"</span>]),
-<a href=#747 id=747 data-nosnippet>747</a>            dummy_buildinfo(<span class="string">"3"</span>),
-<a href=#748 id=748 data-nosnippet>748</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
-<a href=#749 id=749 data-nosnippet>749</a>        ]);
-<a href=#750 id=750 data-nosnippet>750</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
-<a href=#751 id=751 data-nosnippet>751</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
-<a href=#752 id=752 data-nosnippet>752</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"2"</span>);
-<a href=#753 id=753 data-nosnippet>753</a>        <span class="macro">assert!</span>(!had_cycle);
-<a href=#754 id=754 data-nosnippet>754</a>    }
-<a href=#755 id=755 data-nosnippet>755</a>}
+<a href=#592 id=592 data-nosnippet>592</a>        <span class="macro">assert!</span>(
+<a href=#593 id=593 data-nosnippet>593</a>            err.contains(<span class="string">"requires the following imports, which the environment does not provide"</span>)
+<a href=#594 id=594 data-nosnippet>594</a>        );
+<a href=#595 id=595 data-nosnippet>595</a>        <span class="macro">assert!</span>(err.contains(<span class="string">"wasi:cli/stdout"</span>));
+<a href=#596 id=596 data-nosnippet>596</a>    }
+<a href=#597 id=597 data-nosnippet>597</a>
+<a href=#598 id=598 data-nosnippet>598</a>    <span class="kw">fn </span>dummy_buildinfo(id: <span class="kw-2">&amp;</span>str) -&gt; ComponentBuildInfo {
+<a href=#599 id=599 data-nosnippet>599</a>        dummy_build_info_deps(id, <span class="kw-2">&amp;</span>[])
+<a href=#600 id=600 data-nosnippet>600</a>    }
+<a href=#601 id=601 data-nosnippet>601</a>
+<a href=#602 id=602 data-nosnippet>602</a>    <span class="kw">fn </span>dummy_build_info_dep(id: <span class="kw-2">&amp;</span>str, dep_on: <span class="kw-2">&amp;</span>str) -&gt; ComponentBuildInfo {
+<a href=#603 id=603 data-nosnippet>603</a>        dummy_build_info_deps(id, <span class="kw-2">&amp;</span>[dep_on])
+<a href=#604 id=604 data-nosnippet>604</a>    }
+<a href=#605 id=605 data-nosnippet>605</a>
+<a href=#606 id=606 data-nosnippet>606</a>    <span class="kw">fn </span>dummy_build_info_deps(id: <span class="kw-2">&amp;</span>str, dep_on: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; ComponentBuildInfo {
+<a href=#607 id=607 data-nosnippet>607</a>        ComponentBuildInfo {
+<a href=#608 id=608 data-nosnippet>608</a>            id: id.into(),
+<a href=#609 id=609 data-nosnippet>609</a>            source: <span class="prelude-val">Some</span>(v2::ComponentSource::Local(<span class="macro">format!</span>(<span class="string">"{id}.wasm"</span>))),
+<a href=#610 id=610 data-nosnippet>610</a>            build: <span class="prelude-val">None</span>,
+<a href=#611 id=611 data-nosnippet>611</a>            dependencies: depends_on(dep_on),
+<a href=#612 id=612 data-nosnippet>612</a>            targets: <span class="prelude-val">None</span>,
+<a href=#613 id=613 data-nosnippet>613</a>        }
+<a href=#614 id=614 data-nosnippet>614</a>    }
+<a href=#615 id=615 data-nosnippet>615</a>
+<a href=#616 id=616 data-nosnippet>616</a>    <span class="kw">fn </span>depends_on(paths: <span class="kw-2">&amp;</span>[<span class="kw-2">&amp;</span>str]) -&gt; v2::ComponentDependencies {
+<a href=#617 id=617 data-nosnippet>617</a>        <span class="kw">let </span><span class="kw-2">mut </span>deps = <span class="macro">vec!</span>[];
+<a href=#618 id=618 data-nosnippet>618</a>        <span class="kw">for </span>(index, path) <span class="kw">in </span>paths.iter().enumerate() {
+<a href=#619 id=619 data-nosnippet>619</a>            <span class="kw">let </span>dep_name =
+<a href=#620 id=620 data-nosnippet>620</a>                spin_serde::DependencyName::Plain(<span class="macro">format!</span>(<span class="string">"dummy{index}"</span>).try_into().unwrap());
+<a href=#621 id=621 data-nosnippet>621</a>            <span class="kw">let </span>dep = v2::ComponentDependency::Local {
+<a href=#622 id=622 data-nosnippet>622</a>                path: path.into(),
+<a href=#623 id=623 data-nosnippet>623</a>                export: <span class="prelude-val">None</span>,
+<a href=#624 id=624 data-nosnippet>624</a>                inherit_configuration: <span class="prelude-val">None</span>,
+<a href=#625 id=625 data-nosnippet>625</a>            };
+<a href=#626 id=626 data-nosnippet>626</a>            deps.push((dep_name, dep));
+<a href=#627 id=627 data-nosnippet>627</a>        }
+<a href=#628 id=628 data-nosnippet>628</a>        v2::ComponentDependencies {
+<a href=#629 id=629 data-nosnippet>629</a>            inner: deps.into_iter().collect(),
+<a href=#630 id=630 data-nosnippet>630</a>        }
+<a href=#631 id=631 data-nosnippet>631</a>    }
+<a href=#632 id=632 data-nosnippet>632</a>
+<a href=#633 id=633 data-nosnippet>633</a>    <span class="doccomment">/// Asserts that id `before` comes before id `after` in collection `cs`
+<a href=#634 id=634 data-nosnippet>634</a>    </span><span class="kw">fn </span>assert_before(cs: <span class="kw-2">&amp;</span>[ComponentBuildInfo], before: <span class="kw-2">&amp;</span>str, after: <span class="kw-2">&amp;</span>str) {
+<a href=#635 id=635 data-nosnippet>635</a>        <span class="macro">assert!</span>(
+<a href=#636 id=636 data-nosnippet>636</a>            cs.iter().position(|c| c.id == before).unwrap()
+<a href=#637 id=637 data-nosnippet>637</a>                &lt; cs.iter().position(|c| c.id == after).unwrap()
+<a href=#638 id=638 data-nosnippet>638</a>        );
+<a href=#639 id=639 data-nosnippet>639</a>    }
+<a href=#640 id=640 data-nosnippet>640</a>
+<a href=#641 id=641 data-nosnippet>641</a>    <span class="attr">#[test]
+<a href=#642 id=642 data-nosnippet>642</a>    </span><span class="kw">fn </span>if_no_dependencies_then_all_build() {
+<a href=#643 id=643 data-nosnippet>643</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[dummy_buildinfo(<span class="string">"1"</span>), dummy_buildinfo(<span class="string">"2"</span>)]);
+<a href=#644 id=644 data-nosnippet>644</a>        <span class="macro">assert_eq!</span>(<span class="number">2</span>, cs.len());
+<a href=#645 id=645 data-nosnippet>645</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"1"</span>));
+<a href=#646 id=646 data-nosnippet>646</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"2"</span>));
+<a href=#647 id=647 data-nosnippet>647</a>        <span class="macro">assert!</span>(!had_cycle);
+<a href=#648 id=648 data-nosnippet>648</a>    }
+<a href=#649 id=649 data-nosnippet>649</a>
+<a href=#650 id=650 data-nosnippet>650</a>    <span class="attr">#[test]
+<a href=#651 id=651 data-nosnippet>651</a>    </span><span class="kw">fn </span>dependencies_build_before_consumers() {
+<a href=#652 id=652 data-nosnippet>652</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
+<a href=#653 id=653 data-nosnippet>653</a>            dummy_buildinfo(<span class="string">"1"</span>),
+<a href=#654 id=654 data-nosnippet>654</a>            dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>),
+<a href=#655 id=655 data-nosnippet>655</a>            dummy_buildinfo(<span class="string">"3"</span>),
+<a href=#656 id=656 data-nosnippet>656</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
+<a href=#657 id=657 data-nosnippet>657</a>        ]);
+<a href=#658 id=658 data-nosnippet>658</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
+<a href=#659 id=659 data-nosnippet>659</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
+<a href=#660 id=660 data-nosnippet>660</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"2"</span>);
+<a href=#661 id=661 data-nosnippet>661</a>        <span class="macro">assert!</span>(!had_cycle);
+<a href=#662 id=662 data-nosnippet>662</a>    }
+<a href=#663 id=663 data-nosnippet>663</a>
+<a href=#664 id=664 data-nosnippet>664</a>    <span class="attr">#[test]
+<a href=#665 id=665 data-nosnippet>665</a>    </span><span class="kw">fn </span>multiple_dependencies_build_before_consumers() {
+<a href=#666 id=666 data-nosnippet>666</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
+<a href=#667 id=667 data-nosnippet>667</a>            dummy_buildinfo(<span class="string">"1"</span>),
+<a href=#668 id=668 data-nosnippet>668</a>            dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>),
+<a href=#669 id=669 data-nosnippet>669</a>            dummy_buildinfo(<span class="string">"3"</span>),
+<a href=#670 id=670 data-nosnippet>670</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
+<a href=#671 id=671 data-nosnippet>671</a>            dummy_build_info_dep(<span class="string">"5"</span>, <span class="string">"3.wasm"</span>),
+<a href=#672 id=672 data-nosnippet>672</a>            dummy_build_info_deps(<span class="string">"6"</span>, <span class="kw-2">&amp;</span>[<span class="string">"3.wasm"</span>, <span class="string">"2.wasm"</span>]),
+<a href=#673 id=673 data-nosnippet>673</a>            dummy_buildinfo(<span class="string">"7"</span>),
+<a href=#674 id=674 data-nosnippet>674</a>        ]);
+<a href=#675 id=675 data-nosnippet>675</a>        <span class="macro">assert_eq!</span>(<span class="number">7</span>, cs.len());
+<a href=#676 id=676 data-nosnippet>676</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
+<a href=#677 id=677 data-nosnippet>677</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"2"</span>);
+<a href=#678 id=678 data-nosnippet>678</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"5"</span>);
+<a href=#679 id=679 data-nosnippet>679</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"6"</span>);
+<a href=#680 id=680 data-nosnippet>680</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"2"</span>, <span class="string">"6"</span>);
+<a href=#681 id=681 data-nosnippet>681</a>        <span class="macro">assert!</span>(!had_cycle);
+<a href=#682 id=682 data-nosnippet>682</a>    }
+<a href=#683 id=683 data-nosnippet>683</a>
+<a href=#684 id=684 data-nosnippet>684</a>    <span class="attr">#[test]
+<a href=#685 id=685 data-nosnippet>685</a>    </span><span class="kw">fn </span>circular_dependencies_dont_prevent_build() {
+<a href=#686 id=686 data-nosnippet>686</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
+<a href=#687 id=687 data-nosnippet>687</a>            dummy_buildinfo(<span class="string">"1"</span>),
+<a href=#688 id=688 data-nosnippet>688</a>            dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>),
+<a href=#689 id=689 data-nosnippet>689</a>            dummy_build_info_dep(<span class="string">"3"</span>, <span class="string">"2.wasm"</span>),
+<a href=#690 id=690 data-nosnippet>690</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
+<a href=#691 id=691 data-nosnippet>691</a>        ]);
+<a href=#692 id=692 data-nosnippet>692</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
+<a href=#693 id=693 data-nosnippet>693</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"1"</span>));
+<a href=#694 id=694 data-nosnippet>694</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"2"</span>));
+<a href=#695 id=695 data-nosnippet>695</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"3"</span>));
+<a href=#696 id=696 data-nosnippet>696</a>        <span class="macro">assert!</span>(cs.iter().any(|c| c.id == <span class="string">"4"</span>));
+<a href=#697 id=697 data-nosnippet>697</a>        <span class="macro">assert!</span>(had_cycle);
+<a href=#698 id=698 data-nosnippet>698</a>    }
+<a href=#699 id=699 data-nosnippet>699</a>
+<a href=#700 id=700 data-nosnippet>700</a>    <span class="attr">#[test]
+<a href=#701 id=701 data-nosnippet>701</a>    </span><span class="kw">fn </span>non_path_dependencies_do_not_prevent_sorting() {
+<a href=#702 id=702 data-nosnippet>702</a>        <span class="kw">let </span><span class="kw-2">mut </span>depends_on_remote = dummy_buildinfo(<span class="string">"2"</span>);
+<a href=#703 id=703 data-nosnippet>703</a>        depends_on_remote.dependencies.inner.insert(
+<a href=#704 id=704 data-nosnippet>704</a>            spin_serde::DependencyName::Plain(<span class="string">"remote"</span>.to_owned().try_into().unwrap()),
+<a href=#705 id=705 data-nosnippet>705</a>            v2::ComponentDependency::Version(<span class="string">"1.2.3"</span>.to_owned()),
+<a href=#706 id=706 data-nosnippet>706</a>        );
+<a href=#707 id=707 data-nosnippet>707</a>
+<a href=#708 id=708 data-nosnippet>708</a>        <span class="kw">let </span><span class="kw-2">mut </span>depends_on_local_and_remote = dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>);
+<a href=#709 id=709 data-nosnippet>709</a>        depends_on_local_and_remote.dependencies.inner.insert(
+<a href=#710 id=710 data-nosnippet>710</a>            spin_serde::DependencyName::Plain(<span class="string">"remote"</span>.to_owned().try_into().unwrap()),
+<a href=#711 id=711 data-nosnippet>711</a>            v2::ComponentDependency::Version(<span class="string">"1.2.3"</span>.to_owned()),
+<a href=#712 id=712 data-nosnippet>712</a>        );
+<a href=#713 id=713 data-nosnippet>713</a>
+<a href=#714 id=714 data-nosnippet>714</a>        <span class="kw">let </span>(cs, <span class="kw">_</span>) = sort(<span class="macro">vec!</span>[
+<a href=#715 id=715 data-nosnippet>715</a>            dummy_buildinfo(<span class="string">"1"</span>),
+<a href=#716 id=716 data-nosnippet>716</a>            depends_on_remote,
+<a href=#717 id=717 data-nosnippet>717</a>            dummy_buildinfo(<span class="string">"3"</span>),
+<a href=#718 id=718 data-nosnippet>718</a>            depends_on_local_and_remote,
+<a href=#719 id=719 data-nosnippet>719</a>        ]);
+<a href=#720 id=720 data-nosnippet>720</a>
+<a href=#721 id=721 data-nosnippet>721</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
+<a href=#722 id=722 data-nosnippet>722</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
+<a href=#723 id=723 data-nosnippet>723</a>    }
+<a href=#724 id=724 data-nosnippet>724</a>
+<a href=#725 id=725 data-nosnippet>725</a>    <span class="attr">#[test]
+<a href=#726 id=726 data-nosnippet>726</a>    </span><span class="kw">fn </span>non_path_sources_do_not_prevent_sorting() {
+<a href=#727 id=727 data-nosnippet>727</a>        <span class="kw">let </span><span class="kw-2">mut </span>remote_source = dummy_build_info_dep(<span class="string">"2"</span>, <span class="string">"3.wasm"</span>);
+<a href=#728 id=728 data-nosnippet>728</a>        remote_source.source = <span class="prelude-val">Some</span>(v2::ComponentSource::Remote {
+<a href=#729 id=729 data-nosnippet>729</a>            url: <span class="string">"far://away"</span>.into(),
+<a href=#730 id=730 data-nosnippet>730</a>            digest: <span class="string">"loadsa-hex"</span>.into(),
+<a href=#731 id=731 data-nosnippet>731</a>        });
+<a href=#732 id=732 data-nosnippet>732</a>
+<a href=#733 id=733 data-nosnippet>733</a>        <span class="kw">let </span>(cs, <span class="kw">_</span>) = sort(<span class="macro">vec!</span>[
+<a href=#734 id=734 data-nosnippet>734</a>            dummy_buildinfo(<span class="string">"1"</span>),
+<a href=#735 id=735 data-nosnippet>735</a>            remote_source,
+<a href=#736 id=736 data-nosnippet>736</a>            dummy_buildinfo(<span class="string">"3"</span>),
+<a href=#737 id=737 data-nosnippet>737</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
+<a href=#738 id=738 data-nosnippet>738</a>        ]);
+<a href=#739 id=739 data-nosnippet>739</a>
+<a href=#740 id=740 data-nosnippet>740</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
+<a href=#741 id=741 data-nosnippet>741</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
+<a href=#742 id=742 data-nosnippet>742</a>    }
+<a href=#743 id=743 data-nosnippet>743</a>
+<a href=#744 id=744 data-nosnippet>744</a>    <span class="attr">#[test]
+<a href=#745 id=745 data-nosnippet>745</a>    </span><span class="kw">fn </span>dependencies_on_non_manifest_components_do_not_prevent_sorting() {
+<a href=#746 id=746 data-nosnippet>746</a>        <span class="kw">let </span>(cs, had_cycle) = sort(<span class="macro">vec!</span>[
+<a href=#747 id=747 data-nosnippet>747</a>            dummy_buildinfo(<span class="string">"1"</span>),
+<a href=#748 id=748 data-nosnippet>748</a>            dummy_build_info_deps(<span class="string">"2"</span>, <span class="kw-2">&amp;</span>[<span class="string">"3.wasm"</span>, <span class="string">"crikey.wasm"</span>]),
+<a href=#749 id=749 data-nosnippet>749</a>            dummy_buildinfo(<span class="string">"3"</span>),
+<a href=#750 id=750 data-nosnippet>750</a>            dummy_build_info_dep(<span class="string">"4"</span>, <span class="string">"1.wasm"</span>),
+<a href=#751 id=751 data-nosnippet>751</a>        ]);
+<a href=#752 id=752 data-nosnippet>752</a>        <span class="macro">assert_eq!</span>(<span class="number">4</span>, cs.len());
+<a href=#753 id=753 data-nosnippet>753</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"1"</span>, <span class="string">"4"</span>);
+<a href=#754 id=754 data-nosnippet>754</a>        assert_before(<span class="kw-2">&amp;</span>cs, <span class="string">"3"</span>, <span class="string">"2"</span>);
+<a href=#755 id=755 data-nosnippet>755</a>        <span class="macro">assert!</span>(!had_cycle);
+<a href=#756 id=756 data-nosnippet>756</a>    }
+<a href=#757 id=757 data-nosnippet>757</a>}
 </code></pre></div></section></main></body></html>
