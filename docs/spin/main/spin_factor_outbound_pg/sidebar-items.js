@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"mod":["client"],"struct":["InstanceState","OutboundPgFactor","PgFactorData"]};
+window.SIDEBAR_ITEMS = {"mod":["client","runtime_config"],"struct":["AppState","InstanceState","OutboundPgFactor","PgFactorData"]};
