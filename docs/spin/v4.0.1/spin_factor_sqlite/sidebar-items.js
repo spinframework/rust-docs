@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["ALLOWED_DATABASES_KEY"],"mod":["runtime_config"],"struct":["AppState","QueryAsyncResult","SqliteFactor","SqliteFactorData"],"trait":["Connection","ConnectionCreator"]};

@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["OtlpProtocol"],"fn":["otel_logs_enabled","otel_metrics_enabled","otel_sdk_disabled","otel_tracing_enabled","spin_disable_log_to_tracing"]};

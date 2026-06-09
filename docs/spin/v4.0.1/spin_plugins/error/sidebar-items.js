@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error"],"struct":["ConnectionFailedError","InvalidManifestError","NotFoundError"],"type":["PluginLookupResult"]};

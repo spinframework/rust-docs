@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Connection","ConnectionBuilder","DbDataType","DbValue","Error","ParameterValue","QueryError","RangeBoundKind"],"fn":["add_to_linker"],"struct":["Column","DbError","Interval","RowSet"],"trait":["Host","HostConnection","HostConnectionBuilder","HostConnectionBuilderWithStore","HostConnectionWithStore","HostWithStore"],"type":["Row"]};
