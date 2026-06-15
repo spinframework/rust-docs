@@ -5,7 +5,7 @@
 <a href=#5 id=5 data-nosnippet>5</a><span class="kw">use </span>std::{collections::HashMap, sync::Arc};
 <a href=#6 id=6 data-nosnippet>6</a>
 <a href=#7 id=7 data-nosnippet>7</a><span class="kw">use </span>futures_util::FutureExt <span class="kw">as _</span>;
-<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>opentelemetry_semantic_conventions::attribute::SERVER_PORT;
+<a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>opentelemetry_semantic_conventions::attribute <span class="kw">as </span>otel_attribute;
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>spin_factor_variables::VariablesFactor;
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>spin_factor_wasi::{SocketAddrUse, SocketPermitState, WasiFactor};
 <a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>spin_factors::{
@@ -301,17 +301,22 @@
 <a href=#301 id=301 data-nosnippet>301</a>/// The following fields must be pre-declared as empty on the span or they will not show up.
 <a href=#302 id=302 data-nosnippet>302</a>/// ```
 <a href=#303 id=303 data-nosnippet>303</a>/// use tracing::field::Empty;
-<a href=#304 id=304 data-nosnippet>304</a>/// #[tracing::instrument(fields(db.address = Empty, server.port = Empty, db.namespace = Empty))]
-<a href=#305 id=305 data-nosnippet>305</a>/// fn open() {}
-<a href=#306 id=306 data-nosnippet>306</a>/// ```
-<a href=#307 id=307 data-nosnippet>307</a></span><span class="kw">pub fn </span>record_address_fields(address: <span class="kw-2">&amp;</span>str) {
-<a href=#308 id=308 data-nosnippet>308</a>    <span class="kw">if let </span><span class="prelude-val">Ok</span>(url) = Url::parse(address) {
-<a href=#309 id=309 data-nosnippet>309</a>        <span class="kw">let </span>span = tracing::Span::current();
-<a href=#310 id=310 data-nosnippet>310</a>        <span class="comment">// `db.address` and `db.namespace` are incubating in opentelemetry-semantic-conventions 0.28.
-<a href=#311 id=311 data-nosnippet>311</a>        // Leaving as string literals to avoid enabling the semconv_experimental feature.
-<a href=#312 id=312 data-nosnippet>312</a>        </span>span.record(<span class="string">"db.address"</span>, url.host_str().unwrap_or_default());
-<a href=#313 id=313 data-nosnippet>313</a>        span.record(SERVER_PORT, url.port().unwrap_or_default());
-<a href=#314 id=314 data-nosnippet>314</a>        span.record(<span class="string">"db.namespace"</span>, url.path().trim_start_matches(<span class="string">'/'</span>));
-<a href=#315 id=315 data-nosnippet>315</a>    }
-<a href=#316 id=316 data-nosnippet>316</a>}
+<a href=#304 id=304 data-nosnippet>304</a>/// use opentelemetry_semantic_conventions::attribute as otel_attribute;
+<a href=#305 id=305 data-nosnippet>305</a>/// #[tracing::instrument(fields({otel_attribute::SERVER_ADDRESS} = Empty, {otel_attribute::SERVER_PORT} = Empty, {otel_attribute::DB_NAMESPACE} = Empty))]
+<a href=#306 id=306 data-nosnippet>306</a>/// fn open() {}
+<a href=#307 id=307 data-nosnippet>307</a>/// ```
+<a href=#308 id=308 data-nosnippet>308</a></span><span class="kw">pub fn </span>record_address_fields(address: <span class="kw-2">&amp;</span>str) {
+<a href=#309 id=309 data-nosnippet>309</a>    <span class="kw">if let </span><span class="prelude-val">Ok</span>(url) = Url::parse(address) {
+<a href=#310 id=310 data-nosnippet>310</a>        <span class="kw">let </span>span = tracing::Span::current();
+<a href=#311 id=311 data-nosnippet>311</a>        span.record(
+<a href=#312 id=312 data-nosnippet>312</a>            otel_attribute::SERVER_ADDRESS,
+<a href=#313 id=313 data-nosnippet>313</a>            url.host_str().unwrap_or_default(),
+<a href=#314 id=314 data-nosnippet>314</a>        );
+<a href=#315 id=315 data-nosnippet>315</a>        span.record(otel_attribute::SERVER_PORT, url.port().unwrap_or_default());
+<a href=#316 id=316 data-nosnippet>316</a>        span.record(
+<a href=#317 id=317 data-nosnippet>317</a>            otel_attribute::DB_NAMESPACE,
+<a href=#318 id=318 data-nosnippet>318</a>            url.path().trim_start_matches(<span class="string">'/'</span>),
+<a href=#319 id=319 data-nosnippet>319</a>        );
+<a href=#320 id=320 data-nosnippet>320</a>    }
+<a href=#321 id=321 data-nosnippet>321</a>}
 </code></pre></div></section></main></body></html>
