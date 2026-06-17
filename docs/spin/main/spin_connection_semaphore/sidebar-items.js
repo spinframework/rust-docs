@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["ConnectionPermit","ConnectionSemaphore"]};
+window.SIDEBAR_ITEMS = {"fn":["metric_histogram_buckets"],"struct":["ConnectionPermit","ConnectionSemaphore","LimitedSemaphore"]};
