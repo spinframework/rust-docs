@@ -31,7 +31,7 @@
 <a href=#31 id=31 data-nosnippet>31</a>    // exist are A MILLION TO ONE...
 <a href=#32 id=32 data-nosnippet>32</a>
 <a href=#33 id=33 data-nosnippet>33</a>    // If it doesn't parse as a reference, it isn't a reference
-<a href=#34 id=34 data-nosnippet>34</a>    </span><span class="kw">let </span><span class="prelude-val">Ok</span>(reference) = oci_distribution::Reference::try_from(maybe_oci) <span class="kw">else </span>{
+<a href=#34 id=34 data-nosnippet>34</a>    </span><span class="kw">let </span><span class="prelude-val">Ok</span>(reference) = oci_client::Reference::try_from(maybe_oci) <span class="kw">else </span>{
 <a href=#35 id=35 data-nosnippet>35</a>        <span class="kw">return </span><span class="bool-val">false</span>;
 <a href=#36 id=36 data-nosnippet>36</a>    };
 <a href=#37 id=37 data-nosnippet>37</a>    <span class="comment">// If it has an explicit tag, its probably a reference

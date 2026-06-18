@@ -8,7 +8,7 @@ the given working_dir.</p>
 ) -&gt; <a class="type" href="https://docs.rs/anyhow/1.0.100/anyhow/type.Result.html" title="type anyhow::Result">Result</a>&lt;<a class="enum" href="enum.ExecutableArtifact.html" title="enum spin_oci::ExecutableArtifact">ExecutableArtifact</a>&gt;</h4></section></summary><div class="docblock"><p>Pulls and loads an OCI Artifact and returns a LockedApp with the given OCI client and reference</p>
 </div></details><details class="toggle method-toggle" open><summary><section id="method.load_from_cache" class="method"><a class="src rightside" href="../src/spin_oci/loader.rs.html#54-101">Source</a><h4 class="code-header">pub async fn <a href="#method.load_from_cache" class="fn">load_from_cache</a>(
     &amp;self,
-    manifest: OciImageManifest,
+    manifest: <a class="struct" href="https://docs.rs/oci-client/0.14.0/oci_client/manifest/struct.OciImageManifest.html" title="struct oci_client::manifest::OciImageManifest">OciImageManifest</a>,
     lockfile_path: <a class="struct" href="https://doc.rust-lang.org/nightly/std/path/struct.PathBuf.html" title="struct std::path::PathBuf">PathBuf</a>,
     reference: &amp;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>,
     cache: &amp;Cache,

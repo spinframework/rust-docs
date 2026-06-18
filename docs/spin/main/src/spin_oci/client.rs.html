@@ -8,7 +8,7 @@
 <a href=#8 id=8 data-nosnippet>8</a><span class="kw">use </span>futures_util::future;
 <a href=#9 id=9 data-nosnippet>9</a><span class="kw">use </span>futures_util::stream::{<span class="self">self</span>, StreamExt, TryStreamExt};
 <a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span>itertools::Itertools;
-<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>oci_distribution::{
+<a href=#11 id=11 data-nosnippet>11</a><span class="kw">use </span>oci_client::{
 <a href=#12 id=12 data-nosnippet>12</a>    Reference, RegistryOperation, client::ImageLayer, config::ConfigFile,
 <a href=#13 id=13 data-nosnippet>13</a>    manifest::OciImageManifest, secrets::RegistryAuth, token_cache::RegistryTokenType,
 <a href=#14 id=14 data-nosnippet>14</a>};
@@ -86,7 +86,7 @@
 <a href=#86 id=86 data-nosnippet>86</a>    <span class="doccomment">/// Global cache for the metadata, Wasm modules, and static assets pulled from OCI registries.
 <a href=#87 id=87 data-nosnippet>87</a>    </span><span class="kw">pub </span>cache: Cache,
 <a href=#88 id=88 data-nosnippet>88</a>    <span class="doccomment">/// Underlying OCI client.
-<a href=#89 id=89 data-nosnippet>89</a>    </span>oci: oci_distribution::Client,
+<a href=#89 id=89 data-nosnippet>89</a>    </span>oci: oci_client::Client,
 <a href=#90 id=90 data-nosnippet>90</a>    <span class="doccomment">/// Client options
 <a href=#91 id=91 data-nosnippet>91</a>    </span><span class="kw">pub </span>opts: ClientOpts,
 <a href=#92 id=92 data-nosnippet>92</a>}
@@ -112,7 +112,7 @@
 <a href=#112 id=112 data-nosnippet>112</a><span class="kw">impl </span>Client {
 <a href=#113 id=113 data-nosnippet>113</a>    <span class="doccomment">/// Create a new instance of an OCI client for distributing Spin applications.
 <a href=#114 id=114 data-nosnippet>114</a>    </span><span class="kw">pub async fn </span>new(insecure: bool, cache_root: <span class="prelude-ty">Option</span>&lt;PathBuf&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;<span class="self">Self</span>&gt; {
-<a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">let </span>client = oci_distribution::Client::new(<span class="self">Self</span>::build_config(insecure));
+<a href=#115 id=115 data-nosnippet>115</a>        <span class="kw">let </span>client = oci_client::Client::new(<span class="self">Self</span>::build_config(insecure));
 <a href=#116 id=116 data-nosnippet>116</a>        <span class="kw">let </span>cache = Cache::new(cache_root).<span class="kw">await</span><span class="question-mark">?</span>;
 <a href=#117 id=117 data-nosnippet>117</a>        <span class="kw">let </span>opts = ClientOpts {
 <a href=#118 id=118 data-nosnippet>118</a>            content_ref_inline_max_size: DEFAULT_CONTENT_REF_INLINE_MAX_SIZE,
@@ -243,7 +243,7 @@
 <a href=#243 id=243 data-nosnippet>243</a>            <span class="string">"com.fermyon.spin.lockedAppDigest"</span>.to_string(),
 <a href=#244 id=244 data-nosnippet>244</a>            config_layer_digest,
 <a href=#245 id=245 data-nosnippet>245</a>        );
-<a href=#246 id=246 data-nosnippet>246</a>        <span class="kw">let </span>cfg = oci_distribution::config::Config {
+<a href=#246 id=246 data-nosnippet>246</a>        <span class="kw">let </span>cfg = oci_client::config::Config {
 <a href=#247 id=247 data-nosnippet>247</a>            labels: <span class="prelude-val">Some</span>(labels),
 <a href=#248 id=248 data-nosnippet>248</a>            ..Default::default()
 <a href=#249 id=249 data-nosnippet>249</a>        };
@@ -253,8 +253,8 @@
 <a href=#253 id=253 data-nosnippet>253</a>        // (See https://github.com/opencontainers/image-spec/blob/main/config.md)
 <a href=#254 id=254 data-nosnippet>254</a>        // TODO: Explore adding data applicable to the Spin app being published.
 <a href=#255 id=255 data-nosnippet>255</a>        </span><span class="kw">let </span>oci_config_file = ConfigFile {
-<a href=#256 id=256 data-nosnippet>256</a>            architecture: oci_distribution::config::Architecture::Wasm,
-<a href=#257 id=257 data-nosnippet>257</a>            os: oci_distribution::config::Os::Wasip1,
+<a href=#256 id=256 data-nosnippet>256</a>            architecture: oci_client::config::Architecture::Wasm,
+<a href=#257 id=257 data-nosnippet>257</a>            os: oci_client::config::Os::Other(<span class="string">"Wasip1"</span>.to_string()),
 <a href=#258 id=258 data-nosnippet>258</a>            <span class="comment">// We need to ensure that the image config for different content is updated.
 <a href=#259 id=259 data-nosnippet>259</a>            // Without referencing the digest of the locked application in the OCI image config,
 <a href=#260 id=260 data-nosnippet>260</a>            // all Spin applications would get the same image config digest, resulting in the same
@@ -263,7 +263,7 @@
 <a href=#263 id=263 data-nosnippet>263</a>            ..Default::default()
 <a href=#264 id=264 data-nosnippet>264</a>        };
 <a href=#265 id=265 data-nosnippet>265</a>        <span class="kw">let </span>oci_config =
-<a href=#266 id=266 data-nosnippet>266</a>            oci_distribution::client::Config::oci_v1_from_config_file(oci_config_file, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
+<a href=#266 id=266 data-nosnippet>266</a>            oci_client::client::Config::oci_v1_from_config_file(oci_config_file, <span class="prelude-val">None</span>)<span class="question-mark">?</span>;
 <a href=#267 id=267 data-nosnippet>267</a>        <span class="kw">let </span>manifest = OciImageManifest::build(<span class="kw-2">&amp;</span>layers, <span class="kw-2">&amp;</span>oci_config, annotations);
 <a href=#268 id=268 data-nosnippet>268</a>
 <a href=#269 id=269 data-nosnippet>269</a>        <span class="kw">let </span>response = <span class="self">self
@@ -758,14 +758,14 @@
 <a href=#758 id=758 data-nosnippet>758</a>    }
 <a href=#759 id=759 data-nosnippet>759</a>
 <a href=#760 id=760 data-nosnippet>760</a>    <span class="doccomment">/// Build the OCI client configuration given the insecure option.
-<a href=#761 id=761 data-nosnippet>761</a>    </span><span class="kw">fn </span>build_config(insecure: bool) -&gt; oci_distribution::client::ClientConfig {
+<a href=#761 id=761 data-nosnippet>761</a>    </span><span class="kw">fn </span>build_config(insecure: bool) -&gt; oci_client::client::ClientConfig {
 <a href=#762 id=762 data-nosnippet>762</a>        <span class="kw">let </span>protocol = <span class="kw">if </span>insecure {
-<a href=#763 id=763 data-nosnippet>763</a>            oci_distribution::client::ClientProtocol::Http
+<a href=#763 id=763 data-nosnippet>763</a>            oci_client::client::ClientProtocol::Http
 <a href=#764 id=764 data-nosnippet>764</a>        } <span class="kw">else </span>{
-<a href=#765 id=765 data-nosnippet>765</a>            oci_distribution::client::ClientProtocol::Https
+<a href=#765 id=765 data-nosnippet>765</a>            oci_client::client::ClientProtocol::Https
 <a href=#766 id=766 data-nosnippet>766</a>        };
 <a href=#767 id=767 data-nosnippet>767</a>
-<a href=#768 id=768 data-nosnippet>768</a>        oci_distribution::client::ClientConfig {
+<a href=#768 id=768 data-nosnippet>768</a>        oci_client::client::ClientConfig {
 <a href=#769 id=769 data-nosnippet>769</a>            protocol,
 <a href=#770 id=770 data-nosnippet>770</a>            default_token_expiration_secs: DEFAULT_TOKEN_EXPIRATION_SECS,
 <a href=#771 id=771 data-nosnippet>771</a>            ..Default::default()
@@ -863,7 +863,7 @@
 <a href=#863 id=863 data-nosnippet>863</a>        <span class="kw">let </span>authors = authors.join(<span class="string">", "</span>);
 <a href=#864 id=864 data-nosnippet>864</a>        add_inferred(
 <a href=#865 id=865 data-nosnippet>865</a>            <span class="kw-2">&amp;mut </span>current,
-<a href=#866 id=866 data-nosnippet>866</a>            oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS,
+<a href=#866 id=866 data-nosnippet>866</a>            oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS,
 <a href=#867 id=867 data-nosnippet>867</a>            <span class="prelude-val">Some</span>(authors),
 <a href=#868 id=868 data-nosnippet>868</a>        );
 <a href=#869 id=869 data-nosnippet>869</a>    }
@@ -871,7 +871,7 @@
 <a href=#871 id=871 data-nosnippet>871</a>    <span class="kw">let </span>name = locked_app.get_metadata(APP_NAME_KEY).unwrap_or_default();
 <a href=#872 id=872 data-nosnippet>872</a>    add_inferred(
 <a href=#873 id=873 data-nosnippet>873</a>        <span class="kw-2">&amp;mut </span>current,
-<a href=#874 id=874 data-nosnippet>874</a>        oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_TITLE,
+<a href=#874 id=874 data-nosnippet>874</a>        oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_TITLE,
 <a href=#875 id=875 data-nosnippet>875</a>        name,
 <a href=#876 id=876 data-nosnippet>876</a>    );
 <a href=#877 id=877 data-nosnippet>877</a>
@@ -880,21 +880,21 @@
 <a href=#880 id=880 data-nosnippet>880</a>        .unwrap_or_default();
 <a href=#881 id=881 data-nosnippet>881</a>    add_inferred(
 <a href=#882 id=882 data-nosnippet>882</a>        <span class="kw-2">&amp;mut </span>current,
-<a href=#883 id=883 data-nosnippet>883</a>        oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_DESCRIPTION,
+<a href=#883 id=883 data-nosnippet>883</a>        oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_DESCRIPTION,
 <a href=#884 id=884 data-nosnippet>884</a>        description,
 <a href=#885 id=885 data-nosnippet>885</a>    );
 <a href=#886 id=886 data-nosnippet>886</a>
 <a href=#887 id=887 data-nosnippet>887</a>    <span class="kw">let </span>version = locked_app.get_metadata(APP_VERSION_KEY).unwrap_or_default();
 <a href=#888 id=888 data-nosnippet>888</a>    add_inferred(
 <a href=#889 id=889 data-nosnippet>889</a>        <span class="kw-2">&amp;mut </span>current,
-<a href=#890 id=890 data-nosnippet>890</a>        oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_VERSION,
+<a href=#890 id=890 data-nosnippet>890</a>        oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_VERSION,
 <a href=#891 id=891 data-nosnippet>891</a>        version,
 <a href=#892 id=892 data-nosnippet>892</a>    );
 <a href=#893 id=893 data-nosnippet>893</a>
 <a href=#894 id=894 data-nosnippet>894</a>    <span class="kw">let </span>created = chrono::Utc::now().to_rfc3339();
 <a href=#895 id=895 data-nosnippet>895</a>    add_inferred(
 <a href=#896 id=896 data-nosnippet>896</a>        <span class="kw-2">&amp;mut </span>current,
-<a href=#897 id=897 data-nosnippet>897</a>        oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_CREATED,
+<a href=#897 id=897 data-nosnippet>897</a>        oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_CREATED,
 <a href=#898 id=898 data-nosnippet>898</a>        <span class="prelude-val">Some</span>(created),
 <a href=#899 id=899 data-nosnippet>899</a>    );
 <a href=#900 id=900 data-nosnippet>900</a>
@@ -1423,88 +1423,87 @@
 <a href=#1423 id=1423 data-nosnippet>1423</a>        <span class="macro">assert_eq!</span>(
 <a href=#1424 id=1424 data-nosnippet>1424</a>            <span class="string">"Marty DiBergi, Artie Fufkin"</span>,
 <a href=#1425 id=1425 data-nosnippet>1425</a>            annotations
-<a href=#1426 id=1426 data-nosnippet>1426</a>                .get(oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS)
+<a href=#1426 id=1426 data-nosnippet>1426</a>                .get(oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS)
 <a href=#1427 id=1427 data-nosnippet>1427</a>                .expect(<span class="string">"should have authors annotation"</span>)
 <a href=#1428 id=1428 data-nosnippet>1428</a>        );
 <a href=#1429 id=1429 data-nosnippet>1429</a>        <span class="macro">assert_eq!</span>(
 <a href=#1430 id=1430 data-nosnippet>1430</a>            <span class="string">"this-is-spinal-tap"</span>,
 <a href=#1431 id=1431 data-nosnippet>1431</a>            annotations
-<a href=#1432 id=1432 data-nosnippet>1432</a>                .get(oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_TITLE)
+<a href=#1432 id=1432 data-nosnippet>1432</a>                .get(oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_TITLE)
 <a href=#1433 id=1433 data-nosnippet>1433</a>                .expect(<span class="string">"should have title annotation"</span>)
 <a href=#1434 id=1434 data-nosnippet>1434</a>        );
 <a href=#1435 id=1435 data-nosnippet>1435</a>        <span class="macro">assert_eq!</span>(
 <a href=#1436 id=1436 data-nosnippet>1436</a>            <span class="string">"11.11.11"</span>,
 <a href=#1437 id=1437 data-nosnippet>1437</a>            annotations
-<a href=#1438 id=1438 data-nosnippet>1438</a>                .get(oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_VERSION)
+<a href=#1438 id=1438 data-nosnippet>1438</a>                .get(oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_VERSION)
 <a href=#1439 id=1439 data-nosnippet>1439</a>                .expect(<span class="string">"should have version annotation"</span>)
 <a href=#1440 id=1440 data-nosnippet>1440</a>        );
 <a href=#1441 id=1441 data-nosnippet>1441</a>        <span class="macro">assert!</span>(
 <a href=#1442 id=1442 data-nosnippet>1442</a>            !annotations
-<a href=#1443 id=1443 data-nosnippet>1443</a>                .contains_key(oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_DESCRIPTION),
+<a href=#1443 id=1443 data-nosnippet>1443</a>                .contains_key(oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_DESCRIPTION),
 <a href=#1444 id=1444 data-nosnippet>1444</a>            <span class="string">"empty description should not have generated annotation"
 <a href=#1445 id=1445 data-nosnippet>1445</a>        </span>);
 <a href=#1446 id=1446 data-nosnippet>1446</a>        <span class="macro">assert!</span>(
-<a href=#1447 id=1447 data-nosnippet>1447</a>            annotations
-<a href=#1448 id=1448 data-nosnippet>1448</a>                .contains_key(oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_CREATED),
-<a href=#1449 id=1449 data-nosnippet>1449</a>            <span class="string">"creation annotation should have been generated"
-<a href=#1450 id=1450 data-nosnippet>1450</a>        </span>);
-<a href=#1451 id=1451 data-nosnippet>1451</a>    }
-<a href=#1452 id=1452 data-nosnippet>1452</a>
-<a href=#1453 id=1453 data-nosnippet>1453</a>    <span class="attr">#[test]
-<a href=#1454 id=1454 data-nosnippet>1454</a>    </span><span class="kw">fn </span>explicit_annotations_infer_all_gets_both_sets() {
-<a href=#1455 id=1455 data-nosnippet>1455</a>        <span class="kw">let </span>locked_app = annotatable_app();
-<a href=#1456 id=1456 data-nosnippet>1456</a>        <span class="kw">let </span>explicit = as_annotations(<span class="kw-2">&amp;</span>[(<span class="string">"volume"</span>, <span class="string">"11"</span>), (<span class="string">"dimensions"</span>, <span class="string">"feet"</span>)]);
-<a href=#1457 id=1457 data-nosnippet>1457</a>        <span class="kw">let </span>infer = InferPredefinedAnnotations::All;
-<a href=#1458 id=1458 data-nosnippet>1458</a>
-<a href=#1459 id=1459 data-nosnippet>1459</a>        <span class="kw">let </span>annotations =
-<a href=#1460 id=1460 data-nosnippet>1460</a>            all_annotations(<span class="kw-2">&amp;</span>locked_app, explicit, infer).expect(<span class="string">"should still have annotations"</span>);
-<a href=#1461 id=1461 data-nosnippet>1461</a>        <span class="macro">assert_eq!</span>(<span class="number">6</span>, annotations.len());
-<a href=#1462 id=1462 data-nosnippet>1462</a>        <span class="macro">assert_eq!</span>(
-<a href=#1463 id=1463 data-nosnippet>1463</a>            <span class="string">"11"</span>,
-<a href=#1464 id=1464 data-nosnippet>1464</a>            annotations
-<a href=#1465 id=1465 data-nosnippet>1465</a>                .get(<span class="string">"volume"</span>)
-<a href=#1466 id=1466 data-nosnippet>1466</a>                .expect(<span class="string">"should have retained explicit annotation"</span>)
-<a href=#1467 id=1467 data-nosnippet>1467</a>        );
-<a href=#1468 id=1468 data-nosnippet>1468</a>        <span class="macro">assert_eq!</span>(
-<a href=#1469 id=1469 data-nosnippet>1469</a>            <span class="string">"Marty DiBergi, Artie Fufkin"</span>,
-<a href=#1470 id=1470 data-nosnippet>1470</a>            annotations
-<a href=#1471 id=1471 data-nosnippet>1471</a>                .get(oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS)
-<a href=#1472 id=1472 data-nosnippet>1472</a>                .expect(<span class="string">"should have authors annotation"</span>)
-<a href=#1473 id=1473 data-nosnippet>1473</a>        );
-<a href=#1474 id=1474 data-nosnippet>1474</a>    }
-<a href=#1475 id=1475 data-nosnippet>1475</a>
-<a href=#1476 id=1476 data-nosnippet>1476</a>    <span class="attr">#[test]
-<a href=#1477 id=1477 data-nosnippet>1477</a>    </span><span class="kw">fn </span>explicit_annotations_take_precedence_over_inferred() {
-<a href=#1478 id=1478 data-nosnippet>1478</a>        <span class="kw">let </span>locked_app = annotatable_app();
-<a href=#1479 id=1479 data-nosnippet>1479</a>        <span class="kw">let </span>explicit = as_annotations(<span class="kw-2">&amp;</span>[
-<a href=#1480 id=1480 data-nosnippet>1480</a>            (<span class="string">"volume"</span>, <span class="string">"11"</span>),
-<a href=#1481 id=1481 data-nosnippet>1481</a>            (
-<a href=#1482 id=1482 data-nosnippet>1482</a>                oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS,
-<a href=#1483 id=1483 data-nosnippet>1483</a>                <span class="string">"David St Hubbins, Nigel Tufnel"</span>,
-<a href=#1484 id=1484 data-nosnippet>1484</a>            ),
-<a href=#1485 id=1485 data-nosnippet>1485</a>        ]);
-<a href=#1486 id=1486 data-nosnippet>1486</a>        <span class="kw">let </span>infer = InferPredefinedAnnotations::All;
-<a href=#1487 id=1487 data-nosnippet>1487</a>
-<a href=#1488 id=1488 data-nosnippet>1488</a>        <span class="kw">let </span>annotations =
-<a href=#1489 id=1489 data-nosnippet>1489</a>            all_annotations(<span class="kw-2">&amp;</span>locked_app, explicit, infer).expect(<span class="string">"should still have annotations"</span>);
-<a href=#1490 id=1490 data-nosnippet>1490</a>        <span class="macro">assert_eq!</span>(
-<a href=#1491 id=1491 data-nosnippet>1491</a>            <span class="number">5</span>,
-<a href=#1492 id=1492 data-nosnippet>1492</a>            annotations.len(),
-<a href=#1493 id=1493 data-nosnippet>1493</a>            <span class="string">"should have one custom, one predefined explicit, and three inferred"
-<a href=#1494 id=1494 data-nosnippet>1494</a>        </span>);
-<a href=#1495 id=1495 data-nosnippet>1495</a>        <span class="macro">assert_eq!</span>(
-<a href=#1496 id=1496 data-nosnippet>1496</a>            <span class="string">"11"</span>,
-<a href=#1497 id=1497 data-nosnippet>1497</a>            annotations
-<a href=#1498 id=1498 data-nosnippet>1498</a>                .get(<span class="string">"volume"</span>)
-<a href=#1499 id=1499 data-nosnippet>1499</a>                .expect(<span class="string">"should have retained explicit annotation"</span>)
-<a href=#1500 id=1500 data-nosnippet>1500</a>        );
-<a href=#1501 id=1501 data-nosnippet>1501</a>        <span class="macro">assert_eq!</span>(
-<a href=#1502 id=1502 data-nosnippet>1502</a>            <span class="string">"David St Hubbins, Nigel Tufnel"</span>,
-<a href=#1503 id=1503 data-nosnippet>1503</a>            annotations
-<a href=#1504 id=1504 data-nosnippet>1504</a>                .get(oci_distribution::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS)
-<a href=#1505 id=1505 data-nosnippet>1505</a>                .expect(<span class="string">"should have authors annotation"</span>),
-<a href=#1506 id=1506 data-nosnippet>1506</a>            <span class="string">"explicit authors should have taken precedence"
-<a href=#1507 id=1507 data-nosnippet>1507</a>        </span>);
-<a href=#1508 id=1508 data-nosnippet>1508</a>    }
-<a href=#1509 id=1509 data-nosnippet>1509</a>}
+<a href=#1447 id=1447 data-nosnippet>1447</a>            annotations.contains_key(oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_CREATED),
+<a href=#1448 id=1448 data-nosnippet>1448</a>            <span class="string">"creation annotation should have been generated"
+<a href=#1449 id=1449 data-nosnippet>1449</a>        </span>);
+<a href=#1450 id=1450 data-nosnippet>1450</a>    }
+<a href=#1451 id=1451 data-nosnippet>1451</a>
+<a href=#1452 id=1452 data-nosnippet>1452</a>    <span class="attr">#[test]
+<a href=#1453 id=1453 data-nosnippet>1453</a>    </span><span class="kw">fn </span>explicit_annotations_infer_all_gets_both_sets() {
+<a href=#1454 id=1454 data-nosnippet>1454</a>        <span class="kw">let </span>locked_app = annotatable_app();
+<a href=#1455 id=1455 data-nosnippet>1455</a>        <span class="kw">let </span>explicit = as_annotations(<span class="kw-2">&amp;</span>[(<span class="string">"volume"</span>, <span class="string">"11"</span>), (<span class="string">"dimensions"</span>, <span class="string">"feet"</span>)]);
+<a href=#1456 id=1456 data-nosnippet>1456</a>        <span class="kw">let </span>infer = InferPredefinedAnnotations::All;
+<a href=#1457 id=1457 data-nosnippet>1457</a>
+<a href=#1458 id=1458 data-nosnippet>1458</a>        <span class="kw">let </span>annotations =
+<a href=#1459 id=1459 data-nosnippet>1459</a>            all_annotations(<span class="kw-2">&amp;</span>locked_app, explicit, infer).expect(<span class="string">"should still have annotations"</span>);
+<a href=#1460 id=1460 data-nosnippet>1460</a>        <span class="macro">assert_eq!</span>(<span class="number">6</span>, annotations.len());
+<a href=#1461 id=1461 data-nosnippet>1461</a>        <span class="macro">assert_eq!</span>(
+<a href=#1462 id=1462 data-nosnippet>1462</a>            <span class="string">"11"</span>,
+<a href=#1463 id=1463 data-nosnippet>1463</a>            annotations
+<a href=#1464 id=1464 data-nosnippet>1464</a>                .get(<span class="string">"volume"</span>)
+<a href=#1465 id=1465 data-nosnippet>1465</a>                .expect(<span class="string">"should have retained explicit annotation"</span>)
+<a href=#1466 id=1466 data-nosnippet>1466</a>        );
+<a href=#1467 id=1467 data-nosnippet>1467</a>        <span class="macro">assert_eq!</span>(
+<a href=#1468 id=1468 data-nosnippet>1468</a>            <span class="string">"Marty DiBergi, Artie Fufkin"</span>,
+<a href=#1469 id=1469 data-nosnippet>1469</a>            annotations
+<a href=#1470 id=1470 data-nosnippet>1470</a>                .get(oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS)
+<a href=#1471 id=1471 data-nosnippet>1471</a>                .expect(<span class="string">"should have authors annotation"</span>)
+<a href=#1472 id=1472 data-nosnippet>1472</a>        );
+<a href=#1473 id=1473 data-nosnippet>1473</a>    }
+<a href=#1474 id=1474 data-nosnippet>1474</a>
+<a href=#1475 id=1475 data-nosnippet>1475</a>    <span class="attr">#[test]
+<a href=#1476 id=1476 data-nosnippet>1476</a>    </span><span class="kw">fn </span>explicit_annotations_take_precedence_over_inferred() {
+<a href=#1477 id=1477 data-nosnippet>1477</a>        <span class="kw">let </span>locked_app = annotatable_app();
+<a href=#1478 id=1478 data-nosnippet>1478</a>        <span class="kw">let </span>explicit = as_annotations(<span class="kw-2">&amp;</span>[
+<a href=#1479 id=1479 data-nosnippet>1479</a>            (<span class="string">"volume"</span>, <span class="string">"11"</span>),
+<a href=#1480 id=1480 data-nosnippet>1480</a>            (
+<a href=#1481 id=1481 data-nosnippet>1481</a>                oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS,
+<a href=#1482 id=1482 data-nosnippet>1482</a>                <span class="string">"David St Hubbins, Nigel Tufnel"</span>,
+<a href=#1483 id=1483 data-nosnippet>1483</a>            ),
+<a href=#1484 id=1484 data-nosnippet>1484</a>        ]);
+<a href=#1485 id=1485 data-nosnippet>1485</a>        <span class="kw">let </span>infer = InferPredefinedAnnotations::All;
+<a href=#1486 id=1486 data-nosnippet>1486</a>
+<a href=#1487 id=1487 data-nosnippet>1487</a>        <span class="kw">let </span>annotations =
+<a href=#1488 id=1488 data-nosnippet>1488</a>            all_annotations(<span class="kw-2">&amp;</span>locked_app, explicit, infer).expect(<span class="string">"should still have annotations"</span>);
+<a href=#1489 id=1489 data-nosnippet>1489</a>        <span class="macro">assert_eq!</span>(
+<a href=#1490 id=1490 data-nosnippet>1490</a>            <span class="number">5</span>,
+<a href=#1491 id=1491 data-nosnippet>1491</a>            annotations.len(),
+<a href=#1492 id=1492 data-nosnippet>1492</a>            <span class="string">"should have one custom, one predefined explicit, and three inferred"
+<a href=#1493 id=1493 data-nosnippet>1493</a>        </span>);
+<a href=#1494 id=1494 data-nosnippet>1494</a>        <span class="macro">assert_eq!</span>(
+<a href=#1495 id=1495 data-nosnippet>1495</a>            <span class="string">"11"</span>,
+<a href=#1496 id=1496 data-nosnippet>1496</a>            annotations
+<a href=#1497 id=1497 data-nosnippet>1497</a>                .get(<span class="string">"volume"</span>)
+<a href=#1498 id=1498 data-nosnippet>1498</a>                .expect(<span class="string">"should have retained explicit annotation"</span>)
+<a href=#1499 id=1499 data-nosnippet>1499</a>        );
+<a href=#1500 id=1500 data-nosnippet>1500</a>        <span class="macro">assert_eq!</span>(
+<a href=#1501 id=1501 data-nosnippet>1501</a>            <span class="string">"David St Hubbins, Nigel Tufnel"</span>,
+<a href=#1502 id=1502 data-nosnippet>1502</a>            annotations
+<a href=#1503 id=1503 data-nosnippet>1503</a>                .get(oci_client::annotations::ORG_OPENCONTAINERS_IMAGE_AUTHORS)
+<a href=#1504 id=1504 data-nosnippet>1504</a>                .expect(<span class="string">"should have authors annotation"</span>),
+<a href=#1505 id=1505 data-nosnippet>1505</a>            <span class="string">"explicit authors should have taken precedence"
+<a href=#1506 id=1506 data-nosnippet>1506</a>        </span>);
+<a href=#1507 id=1507 data-nosnippet>1507</a>    }
+<a href=#1508 id=1508 data-nosnippet>1508</a>}
 </code></pre></div></section></main></body></html>
