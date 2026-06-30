@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["FactorsExecutor","FactorsExecutorApp","FactorsInstanceBuilder","InstanceState"],"trait":["ComponentLoader","ExecutorHooks"]};
+window.SIDEBAR_ITEMS = {"enum":["TriggerDependencyData"],"struct":["FactorsExecutor","FactorsExecutorApp","FactorsInstanceBuilder","InstanceState","TriggerDependency"],"trait":["ComponentLoader","ExecutorHooks","TriggerDependenciesComposer"]};
