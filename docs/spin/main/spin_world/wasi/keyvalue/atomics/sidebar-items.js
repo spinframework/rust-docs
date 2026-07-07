@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Cas","CasError"],"fn":["add_to_linker"],"trait":["Host","HostCas","HostCasWithStore","HostWithStore"],"type":["Bucket","Error"]};
+window.SIDEBAR_ITEMS = {"enum":["Cas","CasError"],"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostCas","HostCasWithStore","HostWithStore"],"type":["Bucket","Error"]};

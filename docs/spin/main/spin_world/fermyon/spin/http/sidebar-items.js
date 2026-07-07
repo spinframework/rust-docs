@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"trait":["Host","HostWithStore"],"type":["HttpError","Request","Response"]};
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostWithStore"],"type":["HttpError","Request","Response"]};

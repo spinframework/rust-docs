@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["DbDataType","DbValue","Error","ParameterValue"],"fn":["add_to_linker"],"struct":["Column","RowSet"],"trait":["Host","HostWithStore"],"type":["Row"]};
+window.SIDEBAR_ITEMS = {"enum":["DbDataType","DbValue","Error","ParameterValue"],"fn":["add_to_linker","add_to_linker_instance"],"struct":["Column","RowSet"],"trait":["Host","HostWithStore"],"type":["Row"]};

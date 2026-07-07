@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"struct":["LogRecord"],"trait":["Host","HostWithStore"],"type":["Datetime","InstrumentationScope","KeyValue","Resource","SpanId","TraceFlags","TraceId","Value"]};
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker","add_to_linker_instance"],"struct":["LogRecord"],"trait":["Host","HostWithStore"],"type":["Datetime","InstrumentationScope","KeyValue","Resource","SpanId","TraceFlags","TraceId","Value"]};

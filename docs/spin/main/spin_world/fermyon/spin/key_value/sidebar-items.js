@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["add_to_linker"],"trait":["Host","HostWithStore"],"type":["Store"]};
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostWithStore"],"type":["Store"]};

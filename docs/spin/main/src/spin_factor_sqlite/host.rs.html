@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-sqlite/src/host.rs`."><title>host.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1ed95124.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_sqlite" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.0-nightly (3659db0d3 2026-07-05)" data-channel="nightly" data-search-js="search-9944d736.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_factor_sqlite/</div>host.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::collections::{HashMap, HashSet};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-sqlite/src/host.rs`."><title>host.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1ed95124.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_sqlite" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.0-nightly (c4af71034 2026-07-06)" data-channel="nightly" data-search-js="search-9944d736.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_factor_sqlite/</div>host.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::collections::{HashMap, HashSet};
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::sync::Arc;
 <a href=#3 id=3 data-nosnippet>3</a>
 <a href=#4 id=4 data-nosnippet>4</a><span class="kw">use </span>opentelemetry_semantic_conventions::attribute <span class="kw">as </span>otel_attribute;
@@ -152,8 +152,8 @@
 <a href=#152 id=152 data-nosnippet>152</a>    }
 <a href=#153 id=153 data-nosnippet>153</a>}
 <a href=#154 id=154 data-nosnippet>154</a>
-<a href=#155 id=155 data-nosnippet>155</a><span class="kw">impl </span>v3::HostConnectionWithStore <span class="kw">for </span><span class="kw">crate</span>::SqliteFactorData {
-<a href=#156 id=156 data-nosnippet>156</a>    <span class="kw">async fn </span>open_async&lt;T&gt;(
+<a href=#155 id=155 data-nosnippet>155</a><span class="kw">impl</span>&lt;T&gt; v3::HostConnectionWithStore&lt;T&gt; <span class="kw">for </span><span class="kw">crate</span>::SqliteFactorData {
+<a href=#156 id=156 data-nosnippet>156</a>    <span class="kw">async fn </span>open_async(
 <a href=#157 id=157 data-nosnippet>157</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#158 id=158 data-nosnippet>158</a>        database: String,
 <a href=#159 id=159 data-nosnippet>159</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;Resource&lt;v3::Connection&gt;, v3::Error&gt; {
@@ -186,7 +186,7 @@
 <a href=#186 id=186 data-nosnippet>186</a>        })
 <a href=#187 id=187 data-nosnippet>187</a>    }
 <a href=#188 id=188 data-nosnippet>188</a>
-<a href=#189 id=189 data-nosnippet>189</a>    <span class="kw">async fn </span>execute_async&lt;T&gt;(
+<a href=#189 id=189 data-nosnippet>189</a>    <span class="kw">async fn </span>execute_async(
 <a href=#190 id=190 data-nosnippet>190</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#191 id=191 data-nosnippet>191</a>        connection: Resource&lt;v3::Connection&gt;,
 <a href=#192 id=192 data-nosnippet>192</a>        query: String,
@@ -229,7 +229,7 @@
 <a href=#229 id=229 data-nosnippet>229</a>        <span class="prelude-val">Ok</span>((columns, sr, efr))
 <a href=#230 id=230 data-nosnippet>230</a>    }
 <a href=#231 id=231 data-nosnippet>231</a>
-<a href=#232 id=232 data-nosnippet>232</a>    <span class="kw">async fn </span>changes_async&lt;T&gt;(
+<a href=#232 id=232 data-nosnippet>232</a>    <span class="kw">async fn </span>changes_async(
 <a href=#233 id=233 data-nosnippet>233</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#234 id=234 data-nosnippet>234</a>        connection: Resource&lt;v3::Connection&gt;,
 <a href=#235 id=235 data-nosnippet>235</a>    ) -&gt; anyhow::Result&lt;u64&gt; {
@@ -249,7 +249,7 @@
 <a href=#249 id=249 data-nosnippet>249</a>        conn.changes().<span class="kw">await</span>.map_err(|e| e.into())
 <a href=#250 id=250 data-nosnippet>250</a>    }
 <a href=#251 id=251 data-nosnippet>251</a>
-<a href=#252 id=252 data-nosnippet>252</a>    <span class="kw">async fn </span>last_insert_rowid_async&lt;T&gt;(
+<a href=#252 id=252 data-nosnippet>252</a>    <span class="kw">async fn </span>last_insert_rowid_async(
 <a href=#253 id=253 data-nosnippet>253</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#254 id=254 data-nosnippet>254</a>        connection: Resource&lt;v3::Connection&gt;,
 <a href=#255 id=255 data-nosnippet>255</a>    ) -&gt; anyhow::Result&lt;i64&gt; {

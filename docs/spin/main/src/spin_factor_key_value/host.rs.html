@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-key-value/src/host.rs`."><title>host.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1ed95124.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_key_value" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.0-nightly (3659db0d3 2026-07-05)" data-channel="nightly" data-search-js="search-9944d736.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_factor_key_value/</div>host.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::{Cas, SwapError};
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/factor-key-value/src/host.rs`."><title>host.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-1ed95124.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_factor_key_value" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.0-nightly (c4af71034 2026-07-06)" data-channel="nightly" data-search-js="search-9944d736.js" data-stringdex-js="stringdex-2da4960a.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-f7c3ffd8.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_factor_key_value/</div>host.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use super</span>::{Cas, SwapError};
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>anyhow::{Context, <span class="prelude-ty">Result</span>};
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>spin_core::{
 <a href=#4 id=4 data-nosnippet>4</a>    async_trait,
@@ -248,8 +248,8 @@
 <a href=#248 id=248 data-nosnippet>248</a>    }
 <a href=#249 id=249 data-nosnippet>249</a>}
 <a href=#250 id=250 data-nosnippet>250</a>
-<a href=#251 id=251 data-nosnippet>251</a><span class="kw">impl </span>v3::HostStoreWithStore <span class="kw">for </span><span class="kw">crate</span>::KeyValueFactorData {
-<a href=#252 id=252 data-nosnippet>252</a>    <span class="kw">async fn </span>open&lt;T&gt;(
+<a href=#251 id=251 data-nosnippet>251</a><span class="kw">impl</span>&lt;T&gt; v3::HostStoreWithStore&lt;T&gt; <span class="kw">for </span><span class="kw">crate</span>::KeyValueFactorData {
+<a href=#252 id=252 data-nosnippet>252</a>    <span class="kw">async fn </span>open(
 <a href=#253 id=253 data-nosnippet>253</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#254 id=254 data-nosnippet>254</a>        label: String,
 <a href=#255 id=255 data-nosnippet>255</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;Resource&lt;v3::Store&gt;, v3::Error&gt; {
@@ -275,7 +275,7 @@
 <a href=#275 id=275 data-nosnippet>275</a>        })
 <a href=#276 id=276 data-nosnippet>276</a>    }
 <a href=#277 id=277 data-nosnippet>277</a>
-<a href=#278 id=278 data-nosnippet>278</a>    <span class="kw">async fn </span>get&lt;T&gt;(
+<a href=#278 id=278 data-nosnippet>278</a>    <span class="kw">async fn </span>get(
 <a href=#279 id=279 data-nosnippet>279</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#280 id=280 data-nosnippet>280</a>        store: Resource&lt;v3::Store&gt;,
 <a href=#281 id=281 data-nosnippet>281</a>        key: String,
@@ -294,7 +294,7 @@
 <a href=#294 id=294 data-nosnippet>294</a>            .map_err(track_error_on_span_v3)
 <a href=#295 id=295 data-nosnippet>295</a>    }
 <a href=#296 id=296 data-nosnippet>296</a>
-<a href=#297 id=297 data-nosnippet>297</a>    <span class="kw">async fn </span>set&lt;T&gt;(
+<a href=#297 id=297 data-nosnippet>297</a>    <span class="kw">async fn </span>set(
 <a href=#298 id=298 data-nosnippet>298</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#299 id=299 data-nosnippet>299</a>        store: Resource&lt;v3::Store&gt;,
 <a href=#300 id=300 data-nosnippet>300</a>        key: String,
@@ -314,7 +314,7 @@
 <a href=#314 id=314 data-nosnippet>314</a>            .map_err(track_error_on_span_v3)
 <a href=#315 id=315 data-nosnippet>315</a>    }
 <a href=#316 id=316 data-nosnippet>316</a>
-<a href=#317 id=317 data-nosnippet>317</a>    <span class="kw">async fn </span>delete&lt;T&gt;(
+<a href=#317 id=317 data-nosnippet>317</a>    <span class="kw">async fn </span>delete(
 <a href=#318 id=318 data-nosnippet>318</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#319 id=319 data-nosnippet>319</a>        store: Resource&lt;v3::Store&gt;,
 <a href=#320 id=320 data-nosnippet>320</a>        key: String,
@@ -333,7 +333,7 @@
 <a href=#333 id=333 data-nosnippet>333</a>            .map_err(track_error_on_span_v3)
 <a href=#334 id=334 data-nosnippet>334</a>    }
 <a href=#335 id=335 data-nosnippet>335</a>
-<a href=#336 id=336 data-nosnippet>336</a>    <span class="kw">async fn </span>exists&lt;T&gt;(
+<a href=#336 id=336 data-nosnippet>336</a>    <span class="kw">async fn </span>exists(
 <a href=#337 id=337 data-nosnippet>337</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#338 id=338 data-nosnippet>338</a>        store: Resource&lt;v3::Store&gt;,
 <a href=#339 id=339 data-nosnippet>339</a>        key: String,
@@ -352,7 +352,7 @@
 <a href=#352 id=352 data-nosnippet>352</a>            .map_err(track_error_on_span_v3)
 <a href=#353 id=353 data-nosnippet>353</a>    }
 <a href=#354 id=354 data-nosnippet>354</a>
-<a href=#355 id=355 data-nosnippet>355</a>    <span class="kw">async fn </span>get_keys&lt;T&gt;(
+<a href=#355 id=355 data-nosnippet>355</a>    <span class="kw">async fn </span>get_keys(
 <a href=#356 id=356 data-nosnippet>356</a>        accessor: <span class="kw-2">&amp;</span>Accessor&lt;T, <span class="self">Self</span>&gt;,
 <a href=#357 id=357 data-nosnippet>357</a>        store: Resource&lt;v3::Store&gt;,
 <a href=#358 id=358 data-nosnippet>358</a>    ) -&gt; <span class="prelude-ty">Result</span>&lt;(StreamReader&lt;String&gt;, FutureReader&lt;<span class="prelude-ty">Result</span>&lt;(), v3::Error&gt;&gt;)&gt; {

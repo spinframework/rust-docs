@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"struct":["Instant"],"trait":["Host","HostWithStore"],"type":["Duration"]};
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker","add_to_linker_instance"],"struct":["Instant"],"trait":["Host","HostWithStore"],"type":["Duration"]};

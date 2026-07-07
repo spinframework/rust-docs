@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["InputStream","OutputStream","StreamError"],"fn":["add_to_linker"],"trait":["Host","HostInputStream","HostInputStreamWithStore","HostOutputStream","HostOutputStreamWithStore","HostWithStore"],"type":["Error","Pollable"]};
+window.SIDEBAR_ITEMS = {"enum":["InputStream","OutputStream","StreamError"],"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostInputStream","HostInputStreamWithStore","HostOutputStream","HostOutputStreamWithStore","HostWithStore"],"type":["Error","Pollable"]};

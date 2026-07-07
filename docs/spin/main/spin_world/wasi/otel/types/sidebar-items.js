@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["add_to_linker"],"struct":["InstrumentationScope","KeyValue","Resource"],"trait":["Host","HostWithStore"],"type":["Key","Value"]};
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker","add_to_linker_instance"],"struct":["InstrumentationScope","KeyValue","Resource"],"trait":["Host","HostWithStore"],"type":["Key","Value"]};

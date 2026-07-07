@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["HttpError","Method"],"fn":["add_to_linker"],"struct":["Request","Response"],"trait":["Host","HostWithStore"],"type":["Body","Headers","HttpStatus","Params","Uri"]};
+window.SIDEBAR_ITEMS = {"enum":["HttpError","Method"],"fn":["add_to_linker","add_to_linker_instance"],"struct":["Request","Response"],"trait":["Host","HostWithStore"],"type":["Body","Headers","HttpStatus","Params","Uri"]};

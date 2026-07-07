@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"enum":["Connection","Error","RedisParameter","RedisResult"],"fn":["add_to_linker"],"trait":["Host","HostConnection","HostConnectionWithStore","HostWithStore"],"type":["Payload"]};
+window.SIDEBAR_ITEMS = {"enum":["Connection","Error","RedisParameter","RedisResult"],"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostConnection","HostConnectionWithStore","HostWithStore"],"type":["Payload"]};
