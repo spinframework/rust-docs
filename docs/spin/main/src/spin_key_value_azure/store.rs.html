@@ -197,10 +197,10 @@
 <a href=#197 id=197 data-nosnippet>197</a>            </span>.client
 <a href=#198 id=198 data-nosnippet>198</a>            .document_client(key, <span class="kw-2">&amp;</span><span class="self">self</span>.store_id.clone().unwrap_or(key.to_string()))
 <a href=#199 id=199 data-nosnippet>199</a>            .map_err(log_error)<span class="question-mark">?</span>;
-<a href=#200 id=200 data-nosnippet>200</a>        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = document_client.delete_document().<span class="kw">await </span>{
-<a href=#201 id=201 data-nosnippet>201</a>            <span class="kw">if </span>e.as_http_error().map(|e| e.status() != <span class="number">404</span>).unwrap_or(<span class="bool-val">true</span>) {
-<a href=#202 id=202 data-nosnippet>202</a>                <span class="kw">return </span><span class="prelude-val">Err</span>(log_error(e));
-<a href=#203 id=203 data-nosnippet>203</a>            }
+<a href=#200 id=200 data-nosnippet>200</a>        <span class="kw">if let </span><span class="prelude-val">Err</span>(e) = document_client.delete_document().<span class="kw">await
+<a href=#201 id=201 data-nosnippet>201</a>            </span>&amp;&amp; e.as_http_error().map(|e| e.status() != <span class="number">404</span>).unwrap_or(<span class="bool-val">true</span>)
+<a href=#202 id=202 data-nosnippet>202</a>        {
+<a href=#203 id=203 data-nosnippet>203</a>            <span class="kw">return </span><span class="prelude-val">Err</span>(log_error(e));
 <a href=#204 id=204 data-nosnippet>204</a>        }
 <a href=#205 id=205 data-nosnippet>205</a>        <span class="prelude-val">Ok</span>(())
 <a href=#206 id=206 data-nosnippet>206</a>    }

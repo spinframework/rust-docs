@@ -101,19 +101,19 @@
 <a href=#101 id=101 data-nosnippet>101</a>        <span class="comment">// Remove duplicates.
 <a href=#102 id=102 data-nosnippet>102</a>        </span><span class="kw">for </span>re <span class="kw">in </span>routes_iter {
 <a href=#103 id=103 data-nosnippet>103</a>            <span class="kw">let </span>re = re<span class="question-mark">?</span>;
-<a href=#104 id=104 data-nosnippet>104</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(replaced) = routes.insert(re.raw_route, re) {
-<a href=#105 id=105 data-nosnippet>105</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(duplicate_routes) = <span class="kw-2">&amp;mut </span>duplicate_routes {
-<a href=#106 id=106 data-nosnippet>106</a>                    <span class="kw">let </span>effective_id = routes
-<a href=#107 id=107 data-nosnippet>107</a>                        .get(replaced.raw_route)
-<a href=#108 id=108 data-nosnippet>108</a>                        .unwrap() <span class="comment">// Safe because we just inserted it
-<a href=#109 id=109 data-nosnippet>109</a>                        </span>.lookup_key
-<a href=#110 id=110 data-nosnippet>110</a>                        .to_string();
-<a href=#111 id=111 data-nosnippet>111</a>                    duplicate_routes.push(DuplicateRoute {
-<a href=#112 id=112 data-nosnippet>112</a>                        route: replaced.based_route,
-<a href=#113 id=113 data-nosnippet>113</a>                        replaced_id: replaced.lookup_key.to_string(),
-<a href=#114 id=114 data-nosnippet>114</a>                        effective_id,
-<a href=#115 id=115 data-nosnippet>115</a>                    });
-<a href=#116 id=116 data-nosnippet>116</a>                }
+<a href=#104 id=104 data-nosnippet>104</a>            <span class="kw">if let </span><span class="prelude-val">Some</span>(replaced) = routes.insert(re.raw_route, re)
+<a href=#105 id=105 data-nosnippet>105</a>                &amp;&amp; <span class="kw">let </span><span class="prelude-val">Some</span>(duplicate_routes) = <span class="kw-2">&amp;mut </span>duplicate_routes
+<a href=#106 id=106 data-nosnippet>106</a>            {
+<a href=#107 id=107 data-nosnippet>107</a>                <span class="kw">let </span>effective_id = routes
+<a href=#108 id=108 data-nosnippet>108</a>                    .get(replaced.raw_route)
+<a href=#109 id=109 data-nosnippet>109</a>                    .unwrap() <span class="comment">// Safe because we just inserted it
+<a href=#110 id=110 data-nosnippet>110</a>                    </span>.lookup_key
+<a href=#111 id=111 data-nosnippet>111</a>                    .to_string();
+<a href=#112 id=112 data-nosnippet>112</a>                duplicate_routes.push(DuplicateRoute {
+<a href=#113 id=113 data-nosnippet>113</a>                    route: replaced.based_route,
+<a href=#114 id=114 data-nosnippet>114</a>                    replaced_id: replaced.lookup_key.to_string(),
+<a href=#115 id=115 data-nosnippet>115</a>                    effective_id,
+<a href=#116 id=116 data-nosnippet>116</a>                });
 <a href=#117 id=117 data-nosnippet>117</a>            }
 <a href=#118 id=118 data-nosnippet>118</a>        }
 <a href=#119 id=119 data-nosnippet>119</a>
