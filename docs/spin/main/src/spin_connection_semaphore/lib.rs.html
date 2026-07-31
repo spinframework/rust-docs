@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/connection-semaphore/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-650bd49d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_connection_semaphore" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.0-nightly (1a833e165 2026-07-29)" data-channel="nightly" data-search-js="search-cf4fc35e.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-d4bd101e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_connection_semaphore/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::sync::Arc;
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/connection-semaphore/src/lib.rs`."><title>lib.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-650bd49d.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_connection_semaphore" data-themes="" data-resource-suffix="" data-rustdoc-version="1.99.0-nightly (8ab9fdff5 2026-07-30)" data-channel="nightly" data-search-js="search-cf4fc35e.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-417ebf0a.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-d4bd101e.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_connection_semaphore/</div>lib.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="kw">use </span>std::sync::Arc;
 <a href=#2 id=2 data-nosnippet>2</a><span class="kw">use </span>std::sync::atomic::{AtomicBool, Ordering};
 <a href=#3 id=3 data-nosnippet>3</a><span class="kw">use </span>std::time::Duration;
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -113,7 +113,7 @@
 <a href=#113 id=113 data-nosnippet>113</a>    </span><span class="kw">pub async fn </span>acquire(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; anyhow::Result&lt;ConnectionPermit&gt; {
 <a href=#114 id=114 data-nosnippet>114</a>        <span class="comment">// Fast path: all required permits are already available
 <a href=#115 id=115 data-nosnippet>115</a>        </span><span class="kw">if let </span><span class="prelude-val">Ok</span>(permit) = <span class="self">self</span>.try_acquire_permits() {
-<a href=#116 id=116 data-nosnippet>116</a>            <span class="macro">spin_telemetry::monotonic_counter!</span>(
+<a href=#116 id=116 data-nosnippet>116</a>            <span class="macro">spin_telemetry::counter!</span>(
 <a href=#117 id=117 data-nosnippet>117</a>                outbound_connection_permits_acquired = <span class="number">1</span>,
 <a href=#118 id=118 data-nosnippet>118</a>                kind = <span class="self">self</span>.factor,
 <a href=#119 id=119 data-nosnippet>119</a>                waited = <span class="bool-val">false
@@ -182,12 +182,12 @@
 <a href=#182 id=182 data-nosnippet>182</a>
 <a href=#183 id=183 data-nosnippet>183</a>        <span class="kw">let </span>factor = <span class="self">self</span>.factor;
 <a href=#184 id=184 data-nosnippet>184</a>        <span class="kw">if </span>waited {
-<a href=#185 id=185 data-nosnippet>185</a>            <span class="macro">spin_telemetry::histogram!</span>(
+<a href=#185 id=185 data-nosnippet>185</a>            <span class="macro">spin_telemetry::histogram_f64!</span>(
 <a href=#186 id=186 data-nosnippet>186</a>                outbound_connection_permit_wait_duration_ms = start.elapsed().as_millis() <span class="kw">as </span>f64,
 <a href=#187 id=187 data-nosnippet>187</a>                kind = factor
 <a href=#188 id=188 data-nosnippet>188</a>            );
 <a href=#189 id=189 data-nosnippet>189</a>        }
-<a href=#190 id=190 data-nosnippet>190</a>        <span class="macro">spin_telemetry::monotonic_counter!</span>(
+<a href=#190 id=190 data-nosnippet>190</a>        <span class="macro">spin_telemetry::counter!</span>(
 <a href=#191 id=191 data-nosnippet>191</a>            outbound_connection_permits_acquired = <span class="number">1</span>,
 <a href=#192 id=192 data-nosnippet>192</a>            kind = factor,
 <a href=#193 id=193 data-nosnippet>193</a>            waited = waited
@@ -210,7 +210,7 @@
 <a href=#210 id=210 data-nosnippet>210</a>    </span><span class="kw">pub fn </span>try_acquire(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span>&lt;ConnectionPermit&gt; {
 <a href=#211 id=211 data-nosnippet>211</a>        <span class="kw">match </span><span class="self">self</span>.try_acquire_permits() {
 <a href=#212 id=212 data-nosnippet>212</a>            <span class="prelude-val">Ok</span>(permit) =&gt; {
-<a href=#213 id=213 data-nosnippet>213</a>                <span class="macro">spin_telemetry::monotonic_counter!</span>(
+<a href=#213 id=213 data-nosnippet>213</a>                <span class="macro">spin_telemetry::counter!</span>(
 <a href=#214 id=214 data-nosnippet>214</a>                    outbound_connection_permits_acquired = <span class="number">1</span>,
 <a href=#215 id=215 data-nosnippet>215</a>                    kind = <span class="self">self</span>.factor,
 <a href=#216 id=216 data-nosnippet>216</a>                    waited = <span class="bool-val">false
@@ -220,7 +220,7 @@
 <a href=#220 id=220 data-nosnippet>220</a>                <span class="prelude-val">Some</span>(permit)
 <a href=#221 id=221 data-nosnippet>221</a>            }
 <a href=#222 id=222 data-nosnippet>222</a>            <span class="prelude-val">Err</span>(limit) =&gt; {
-<a href=#223 id=223 data-nosnippet>223</a>                <span class="macro">spin_telemetry::monotonic_counter!</span>(
+<a href=#223 id=223 data-nosnippet>223</a>                <span class="macro">spin_telemetry::counter!</span>(
 <a href=#224 id=224 data-nosnippet>224</a>                    outbound_connection_permits_rejected = <span class="number">1</span>,
 <a href=#225 id=225 data-nosnippet>225</a>                    kind = <span class="self">self</span>.factor,
 <a href=#226 id=226 data-nosnippet>226</a>                    limit = limit
@@ -279,13 +279,13 @@
 <a href=#279 id=279 data-nosnippet>279</a>    /// reporting the same number.
 <a href=#280 id=280 data-nosnippet>280</a>    </span><span class="kw">fn </span>emit_utilization(<span class="kw-2">&amp;</span><span class="self">self</span>) {
 <a href=#281 id=281 data-nosnippet>281</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(util) = utilization(<span class="self">self</span>.factor_specific.as_ref()) {
-<a href=#282 id=282 data-nosnippet>282</a>            <span class="macro">spin_telemetry::histogram!</span>(
+<a href=#282 id=282 data-nosnippet>282</a>            <span class="macro">spin_telemetry::histogram_f64!</span>(
 <a href=#283 id=283 data-nosnippet>283</a>                outbound_connection_factor_utilization = util,
 <a href=#284 id=284 data-nosnippet>284</a>                kind = <span class="self">self</span>.factor
 <a href=#285 id=285 data-nosnippet>285</a>            );
 <a href=#286 id=286 data-nosnippet>286</a>        }
 <a href=#287 id=287 data-nosnippet>287</a>        <span class="kw">if let </span><span class="prelude-val">Some</span>(util) = utilization(<span class="self">self</span>.global.as_ref()) {
-<a href=#288 id=288 data-nosnippet>288</a>            <span class="macro">spin_telemetry::histogram!</span>(outbound_connection_global_utilization = util);
+<a href=#288 id=288 data-nosnippet>288</a>            <span class="macro">spin_telemetry::histogram_f64!</span>(outbound_connection_global_utilization = util);
 <a href=#289 id=289 data-nosnippet>289</a>        }
 <a href=#290 id=290 data-nosnippet>290</a>    }
 <a href=#291 id=291 data-nosnippet>291</a>}
@@ -297,7 +297,7 @@
 <a href=#297 id=297 data-nosnippet>297</a>/// topping out at 10000) would collapse every sample into the lowest bucket. These boundaries sit
 <a href=#298 id=298 data-nosnippet>298</a>/// near typical alerting cutoffs (75%, 90%, 95%, 99%). Pass the result to `spin_telemetry::init`.
 <a href=#299 id=299 data-nosnippet>299</a>///
-<a href=#300 id=300 data-nosnippet>300</a>/// The metric names here must match the identifiers used in the `histogram!` calls above.
+<a href=#300 id=300 data-nosnippet>300</a>/// The metric names here must match the identifiers used in the `histogram_f64!` calls above.
 <a href=#301 id=301 data-nosnippet>301</a></span><span class="kw">pub fn </span>metric_histogram_buckets() -&gt; Vec&lt;spin_telemetry::HistogramBuckets&gt; {
 <a href=#302 id=302 data-nosnippet>302</a>    <span class="kw">let </span>boundaries = <span class="macro">vec!</span>[<span class="number">0.25</span>, <span class="number">0.5</span>, <span class="number">0.75</span>, <span class="number">0.9</span>, <span class="number">0.95</span>, <span class="number">0.99</span>];
 <a href=#303 id=303 data-nosnippet>303</a>    [
@@ -534,194 +534,29 @@
 <a href=#534 id=534 data-nosnippet>534</a>        </span>);
 <a href=#535 id=535 data-nosnippet>535</a>    }
 <a href=#536 id=536 data-nosnippet>536</a>
-<a href=#537 id=537 data-nosnippet>537</a>    <span class="doccomment">/// Captures the f64 values logged for a given tracing field name, regardless of
-<a href=#538 id=538 data-nosnippet>538</a>    /// surrounding span context. Used to inspect the histogram samples that
-<a href=#539 id=539 data-nosnippet>539</a>    /// `spin_telemetry::histogram!` emits as `tracing::trace!` events.
-<a href=#540 id=540 data-nosnippet>540</a>    </span><span class="kw">mod </span>capture {
-<a href=#541 id=541 data-nosnippet>541</a>        <span class="kw">use </span>std::sync::{Arc, Mutex};
-<a href=#542 id=542 data-nosnippet>542</a>        <span class="kw">use </span>tracing::field::{Field, Visit};
-<a href=#543 id=543 data-nosnippet>543</a>        <span class="kw">use </span>tracing_subscriber::layer::{Context, Layer};
-<a href=#544 id=544 data-nosnippet>544</a>
-<a href=#545 id=545 data-nosnippet>545</a>        <span class="attr">#[derive(Clone, Default)]
-<a href=#546 id=546 data-nosnippet>546</a>        </span><span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>CapturedValues(<span class="kw">pub </span>Arc&lt;Mutex&lt;Vec&lt;f64&gt;&gt;&gt;);
-<a href=#547 id=547 data-nosnippet>547</a>
-<a href=#548 id=548 data-nosnippet>548</a>        <span class="kw">impl </span>CapturedValues {
-<a href=#549 id=549 data-nosnippet>549</a>            <span class="kw">pub fn </span>snapshot(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; Vec&lt;f64&gt; {
-<a href=#550 id=550 data-nosnippet>550</a>                <span class="self">self</span>.<span class="number">0</span>.lock().unwrap().clone()
-<a href=#551 id=551 data-nosnippet>551</a>            }
-<a href=#552 id=552 data-nosnippet>552</a>        }
-<a href=#553 id=553 data-nosnippet>553</a>
-<a href=#554 id=554 data-nosnippet>554</a>        <span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">struct </span>CaptureLayer {
-<a href=#555 id=555 data-nosnippet>555</a>            <span class="kw">pub </span>field_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
-<a href=#556 id=556 data-nosnippet>556</a>            <span class="kw">pub </span>sink: CapturedValues,
-<a href=#557 id=557 data-nosnippet>557</a>        }
-<a href=#558 id=558 data-nosnippet>558</a>
-<a href=#559 id=559 data-nosnippet>559</a>        <span class="kw">impl</span>&lt;S: tracing::Subscriber&gt; Layer&lt;S&gt; <span class="kw">for </span>CaptureLayer {
-<a href=#560 id=560 data-nosnippet>560</a>            <span class="kw">fn </span>on_event(<span class="kw-2">&amp;</span><span class="self">self</span>, event: <span class="kw-2">&amp;</span>tracing::Event&lt;<span class="lifetime">'_</span>&gt;, _ctx: Context&lt;<span class="lifetime">'_</span>, S&gt;) {
-<a href=#561 id=561 data-nosnippet>561</a>                <span class="kw">let </span><span class="kw-2">mut </span>v = FieldVisitor {
-<a href=#562 id=562 data-nosnippet>562</a>                    target: <span class="self">self</span>.field_name,
-<a href=#563 id=563 data-nosnippet>563</a>                    found: <span class="prelude-val">None</span>,
-<a href=#564 id=564 data-nosnippet>564</a>                };
-<a href=#565 id=565 data-nosnippet>565</a>                event.record(<span class="kw-2">&amp;mut </span>v);
-<a href=#566 id=566 data-nosnippet>566</a>                <span class="kw">if let </span><span class="prelude-val">Some</span>(val) = v.found {
-<a href=#567 id=567 data-nosnippet>567</a>                    <span class="self">self</span>.sink.<span class="number">0</span>.lock().unwrap().push(val);
-<a href=#568 id=568 data-nosnippet>568</a>                }
-<a href=#569 id=569 data-nosnippet>569</a>            }
-<a href=#570 id=570 data-nosnippet>570</a>        }
-<a href=#571 id=571 data-nosnippet>571</a>
-<a href=#572 id=572 data-nosnippet>572</a>        <span class="kw">struct </span>FieldVisitor {
-<a href=#573 id=573 data-nosnippet>573</a>            target: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str,
-<a href=#574 id=574 data-nosnippet>574</a>            found: <span class="prelude-ty">Option</span>&lt;f64&gt;,
-<a href=#575 id=575 data-nosnippet>575</a>        }
-<a href=#576 id=576 data-nosnippet>576</a>
-<a href=#577 id=577 data-nosnippet>577</a>        <span class="kw">impl </span>Visit <span class="kw">for </span>FieldVisitor {
-<a href=#578 id=578 data-nosnippet>578</a>            <span class="kw">fn </span>record_f64(<span class="kw-2">&amp;mut </span><span class="self">self</span>, field: <span class="kw-2">&amp;</span>Field, value: f64) {
-<a href=#579 id=579 data-nosnippet>579</a>                <span class="kw">if </span>field.name() == <span class="self">self</span>.target {
-<a href=#580 id=580 data-nosnippet>580</a>                    <span class="self">self</span>.found = <span class="prelude-val">Some</span>(value);
-<a href=#581 id=581 data-nosnippet>581</a>                }
-<a href=#582 id=582 data-nosnippet>582</a>            }
-<a href=#583 id=583 data-nosnippet>583</a>            <span class="kw">fn </span>record_i64(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Field, <span class="kw">_</span>: i64) {}
-<a href=#584 id=584 data-nosnippet>584</a>            <span class="kw">fn </span>record_u64(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Field, <span class="kw">_</span>: u64) {}
-<a href=#585 id=585 data-nosnippet>585</a>            <span class="kw">fn </span>record_bool(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Field, <span class="kw">_</span>: bool) {}
-<a href=#586 id=586 data-nosnippet>586</a>            <span class="kw">fn </span>record_str(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Field, <span class="kw">_</span>: <span class="kw-2">&amp;</span>str) {}
-<a href=#587 id=587 data-nosnippet>587</a>            <span class="kw">fn </span>record_debug(<span class="kw-2">&amp;mut </span><span class="self">self</span>, <span class="kw">_</span>: <span class="kw-2">&amp;</span>Field, <span class="kw">_</span>: <span class="kw-2">&amp;</span><span class="kw">dyn </span>std::fmt::Debug) {}
-<a href=#588 id=588 data-nosnippet>588</a>        }
-<a href=#589 id=589 data-nosnippet>589</a>    }
-<a href=#590 id=590 data-nosnippet>590</a>
-<a href=#591 id=591 data-nosnippet>591</a>    <span class="kw">fn </span>with_capture&lt;R&gt;(field_name: <span class="kw-2">&amp;</span><span class="lifetime">'static </span>str, f: <span class="kw">impl </span>FnOnce() -&gt; R) -&gt; (R, Vec&lt;f64&gt;) {
-<a href=#592 id=592 data-nosnippet>592</a>        <span class="kw">use </span>tracing_subscriber::layer::SubscriberExt;
-<a href=#593 id=593 data-nosnippet>593</a>        <span class="kw">let </span>sink = capture::CapturedValues::default();
-<a href=#594 id=594 data-nosnippet>594</a>        <span class="kw">let </span>layer = capture::CaptureLayer {
-<a href=#595 id=595 data-nosnippet>595</a>            field_name,
-<a href=#596 id=596 data-nosnippet>596</a>            sink: sink.clone(),
-<a href=#597 id=597 data-nosnippet>597</a>        };
-<a href=#598 id=598 data-nosnippet>598</a>        <span class="kw">let </span>subscriber = tracing_subscriber::registry().with(layer);
-<a href=#599 id=599 data-nosnippet>599</a>        <span class="kw">let </span>result = tracing::subscriber::with_default(subscriber, f);
-<a href=#600 id=600 data-nosnippet>600</a>        (result, sink.snapshot())
-<a href=#601 id=601 data-nosnippet>601</a>    }
-<a href=#602 id=602 data-nosnippet>602</a>
-<a href=#603 id=603 data-nosnippet>603</a>    <span class="kw">const </span>UTIL_FIELD: <span class="kw-2">&amp;</span>str = <span class="string">"histogram.outbound_connection_factor_utilization"</span>;
-<a href=#604 id=604 data-nosnippet>604</a>    <span class="kw">const </span>GLOBAL_UTIL_FIELD: <span class="kw-2">&amp;</span>str = <span class="string">"histogram.outbound_connection_global_utilization"</span>;
-<a href=#605 id=605 data-nosnippet>605</a>
-<a href=#606 id=606 data-nosnippet>606</a>    <span class="attr">#[test]
-<a href=#607 id=607 data-nosnippet>607</a>    </span><span class="kw">fn </span>utilization_emitted_on_acquire_and_drop_reflects_post_release_state() {
-<a href=#608 id=608 data-nosnippet>608</a>        <span class="kw">let </span>(<span class="kw">_</span>, samples) = with_capture(UTIL_FIELD, || {
-<a href=#609 id=609 data-nosnippet>609</a>            <span class="kw">let </span>sem = ConnectionSemaphore::new(
-<a href=#610 id=610 data-nosnippet>610</a>                <span class="prelude-val">None</span>,
-<a href=#611 id=611 data-nosnippet>611</a>                <span class="prelude-val">Some</span>(LimitedSemaphore::new(<span class="number">2</span>)),
-<a href=#612 id=612 data-nosnippet>612</a>                <span class="string">"test"</span>,
-<a href=#613 id=613 data-nosnippet>613</a>                Arc::from(<span class="string">"test-app"</span>),
-<a href=#614 id=614 data-nosnippet>614</a>                <span class="prelude-val">None</span>,
-<a href=#615 id=615 data-nosnippet>615</a>            );
-<a href=#616 id=616 data-nosnippet>616</a>            <span class="kw">let </span>p1 = sem.try_acquire().expect(<span class="string">"first acquire"</span>);
-<a href=#617 id=617 data-nosnippet>617</a>            <span class="comment">// After acquire: 1/2 in use
-<a href=#618 id=618 data-nosnippet>618</a>            </span><span class="kw">let </span>p2 = sem.try_acquire().expect(<span class="string">"second acquire"</span>);
-<a href=#619 id=619 data-nosnippet>619</a>            <span class="comment">// After acquire: 2/2 in use
-<a href=#620 id=620 data-nosnippet>620</a>            </span>drop(p1);
-<a href=#621 id=621 data-nosnippet>621</a>            <span class="comment">// After release: 1/2 in use
-<a href=#622 id=622 data-nosnippet>622</a>            </span>drop(p2);
-<a href=#623 id=623 data-nosnippet>623</a>            <span class="comment">// After release: 0/2 in use
-<a href=#624 id=624 data-nosnippet>624</a>        </span>});
-<a href=#625 id=625 data-nosnippet>625</a>        <span class="macro">assert_eq!</span>(
-<a href=#626 id=626 data-nosnippet>626</a>            samples,
-<a href=#627 id=627 data-nosnippet>627</a>            <span class="macro">vec!</span>[<span class="number">0.5</span>, <span class="number">1.0</span>, <span class="number">0.5</span>, <span class="number">0.0</span>],
-<a href=#628 id=628 data-nosnippet>628</a>            <span class="string">"expected acquire/drop transitions at 0.5, 1.0, 0.5, 0.0; got {samples:?}"
-<a href=#629 id=629 data-nosnippet>629</a>        </span>);
-<a href=#630 id=630 data-nosnippet>630</a>    }
-<a href=#631 id=631 data-nosnippet>631</a>
-<a href=#632 id=632 data-nosnippet>632</a>    <span class="attr">#[test]
-<a href=#633 id=633 data-nosnippet>633</a>    </span><span class="kw">fn </span>no_utilization_emitted_when_factor_limit_is_none() {
-<a href=#634 id=634 data-nosnippet>634</a>        <span class="kw">let </span>(<span class="kw">_</span>, samples) = with_capture(UTIL_FIELD, || {
-<a href=#635 id=635 data-nosnippet>635</a>            <span class="kw">let </span>sem = ConnectionSemaphore::new(<span class="prelude-val">None</span>, <span class="prelude-val">None</span>, <span class="string">"test"</span>, Arc::from(<span class="string">"test-app"</span>), <span class="prelude-val">None</span>);
-<a href=#636 id=636 data-nosnippet>636</a>            <span class="kw">let </span>p = sem.try_acquire().expect(<span class="string">"acquire"</span>);
-<a href=#637 id=637 data-nosnippet>637</a>            drop(p);
-<a href=#638 id=638 data-nosnippet>638</a>        });
-<a href=#639 id=639 data-nosnippet>639</a>        <span class="macro">assert!</span>(
-<a href=#640 id=640 data-nosnippet>640</a>            samples.is_empty(),
-<a href=#641 id=641 data-nosnippet>641</a>            <span class="string">"expected no utilization samples when factor limit unset; got {samples:?}"
-<a href=#642 id=642 data-nosnippet>642</a>        </span>);
-<a href=#643 id=643 data-nosnippet>643</a>    }
-<a href=#644 id=644 data-nosnippet>644</a>
-<a href=#645 id=645 data-nosnippet>645</a>    <span class="attr">#[test]
-<a href=#646 id=646 data-nosnippet>646</a>    </span><span class="kw">fn </span>global_utilization_emitted_on_acquire_and_drop_reflects_post_release_state() {
-<a href=#647 id=647 data-nosnippet>647</a>        <span class="kw">let </span>(<span class="kw">_</span>, samples) = with_capture(GLOBAL_UTIL_FIELD, || {
-<a href=#648 id=648 data-nosnippet>648</a>            <span class="kw">let </span>sem = ConnectionSemaphore::new(
-<a href=#649 id=649 data-nosnippet>649</a>                <span class="prelude-val">Some</span>(LimitedSemaphore::new(<span class="number">2</span>)),
-<a href=#650 id=650 data-nosnippet>650</a>                <span class="prelude-val">None</span>,
-<a href=#651 id=651 data-nosnippet>651</a>                <span class="string">"test"</span>,
-<a href=#652 id=652 data-nosnippet>652</a>                Arc::from(<span class="string">"test-app"</span>),
-<a href=#653 id=653 data-nosnippet>653</a>                <span class="prelude-val">None</span>,
-<a href=#654 id=654 data-nosnippet>654</a>            );
-<a href=#655 id=655 data-nosnippet>655</a>            <span class="kw">let </span>p1 = sem.try_acquire().expect(<span class="string">"first acquire"</span>);
-<a href=#656 id=656 data-nosnippet>656</a>            <span class="comment">// After acquire: 1/2 in use
-<a href=#657 id=657 data-nosnippet>657</a>            </span><span class="kw">let </span>p2 = sem.try_acquire().expect(<span class="string">"second acquire"</span>);
-<a href=#658 id=658 data-nosnippet>658</a>            <span class="comment">// After acquire: 2/2 in use
-<a href=#659 id=659 data-nosnippet>659</a>            </span>drop(p1);
-<a href=#660 id=660 data-nosnippet>660</a>            <span class="comment">// After release: 1/2 in use
-<a href=#661 id=661 data-nosnippet>661</a>            </span>drop(p2);
-<a href=#662 id=662 data-nosnippet>662</a>            <span class="comment">// After release: 0/2 in use
-<a href=#663 id=663 data-nosnippet>663</a>        </span>});
-<a href=#664 id=664 data-nosnippet>664</a>        <span class="macro">assert_eq!</span>(
-<a href=#665 id=665 data-nosnippet>665</a>            samples,
-<a href=#666 id=666 data-nosnippet>666</a>            <span class="macro">vec!</span>[<span class="number">0.5</span>, <span class="number">1.0</span>, <span class="number">0.5</span>, <span class="number">0.0</span>],
-<a href=#667 id=667 data-nosnippet>667</a>            <span class="string">"expected acquire/drop transitions at 0.5, 1.0, 0.5, 0.0; got {samples:?}"
-<a href=#668 id=668 data-nosnippet>668</a>        </span>);
-<a href=#669 id=669 data-nosnippet>669</a>    }
-<a href=#670 id=670 data-nosnippet>670</a>
-<a href=#671 id=671 data-nosnippet>671</a>    <span class="attr">#[test]
-<a href=#672 id=672 data-nosnippet>672</a>    </span><span class="kw">fn </span>no_global_utilization_emitted_when_global_limit_is_none() {
-<a href=#673 id=673 data-nosnippet>673</a>        <span class="kw">let </span>(<span class="kw">_</span>, samples) = with_capture(GLOBAL_UTIL_FIELD, || {
-<a href=#674 id=674 data-nosnippet>674</a>            <span class="kw">let </span>sem = ConnectionSemaphore::new(
-<a href=#675 id=675 data-nosnippet>675</a>                <span class="prelude-val">None</span>,
-<a href=#676 id=676 data-nosnippet>676</a>                <span class="prelude-val">Some</span>(LimitedSemaphore::new(<span class="number">2</span>)),
-<a href=#677 id=677 data-nosnippet>677</a>                <span class="string">"test"</span>,
-<a href=#678 id=678 data-nosnippet>678</a>                Arc::from(<span class="string">"test-app"</span>),
-<a href=#679 id=679 data-nosnippet>679</a>                <span class="prelude-val">None</span>,
-<a href=#680 id=680 data-nosnippet>680</a>            );
-<a href=#681 id=681 data-nosnippet>681</a>            <span class="kw">let </span>p = sem.try_acquire().expect(<span class="string">"acquire"</span>);
-<a href=#682 id=682 data-nosnippet>682</a>            drop(p);
-<a href=#683 id=683 data-nosnippet>683</a>        });
-<a href=#684 id=684 data-nosnippet>684</a>        <span class="macro">assert!</span>(
-<a href=#685 id=685 data-nosnippet>685</a>            samples.is_empty(),
-<a href=#686 id=686 data-nosnippet>686</a>            <span class="string">"expected no global utilization samples when global limit unset; got {samples:?}"
-<a href=#687 id=687 data-nosnippet>687</a>        </span>);
-<a href=#688 id=688 data-nosnippet>688</a>    }
-<a href=#689 id=689 data-nosnippet>689</a>
-<a href=#690 id=690 data-nosnippet>690</a>    <span class="attr">#[tokio::test]
-<a href=#691 id=691 data-nosnippet>691</a>    </span><span class="kw">async fn </span>utilization_emitted_on_slow_path_acquire() {
-<a href=#692 id=692 data-nosnippet>692</a>        <span class="kw">use </span>tracing_subscriber::layer::SubscriberExt;
-<a href=#693 id=693 data-nosnippet>693</a>        <span class="kw">let </span>sink = capture::CapturedValues::default();
-<a href=#694 id=694 data-nosnippet>694</a>        <span class="kw">let </span>layer = capture::CaptureLayer {
-<a href=#695 id=695 data-nosnippet>695</a>            field_name: UTIL_FIELD,
-<a href=#696 id=696 data-nosnippet>696</a>            sink: sink.clone(),
-<a href=#697 id=697 data-nosnippet>697</a>        };
-<a href=#698 id=698 data-nosnippet>698</a>        <span class="kw">let </span>subscriber = tracing_subscriber::registry().with(layer);
-<a href=#699 id=699 data-nosnippet>699</a>        <span class="kw">let </span>_guard = tracing::subscriber::set_default(subscriber);
-<a href=#700 id=700 data-nosnippet>700</a>
-<a href=#701 id=701 data-nosnippet>701</a>        <span class="kw">let </span>factor = LimitedSemaphore::new(<span class="number">1</span>);
-<a href=#702 id=702 data-nosnippet>702</a>        <span class="kw">let </span>factor_sem = factor.semaphore();
-<a href=#703 id=703 data-nosnippet>703</a>        <span class="kw">let </span>sem = ConnectionSemaphore::new(
-<a href=#704 id=704 data-nosnippet>704</a>            <span class="prelude-val">None</span>,
-<a href=#705 id=705 data-nosnippet>705</a>            <span class="prelude-val">Some</span>(factor),
-<a href=#706 id=706 data-nosnippet>706</a>            <span class="string">"test"</span>,
-<a href=#707 id=707 data-nosnippet>707</a>            Arc::from(<span class="string">"test-app"</span>),
-<a href=#708 id=708 data-nosnippet>708</a>            <span class="prelude-val">Some</span>(Duration::from_secs(<span class="number">1</span>)),
-<a href=#709 id=709 data-nosnippet>709</a>        );
-<a href=#710 id=710 data-nosnippet>710</a>        <span class="kw">let </span>blocker = factor_sem.acquire_owned().<span class="kw">await</span>.unwrap();
-<a href=#711 id=711 data-nosnippet>711</a>        <span class="kw">let </span>sem_clone = sem.clone();
-<a href=#712 id=712 data-nosnippet>712</a>        <span class="kw">let </span>handle = tokio::spawn(<span class="kw">async move </span>{ sem_clone.acquire().<span class="kw">await </span>});
-<a href=#713 id=713 data-nosnippet>713</a>        tokio::task::yield_now().<span class="kw">await</span>;
-<a href=#714 id=714 data-nosnippet>714</a>        drop(blocker);
-<a href=#715 id=715 data-nosnippet>715</a>        <span class="kw">let </span>permit = handle.<span class="kw">await</span>.expect(<span class="string">"task"</span>).expect(<span class="string">"acquire"</span>);
-<a href=#716 id=716 data-nosnippet>716</a>        drop(permit);
-<a href=#717 id=717 data-nosnippet>717</a>
-<a href=#718 id=718 data-nosnippet>718</a>        <span class="kw">let </span>samples = sink.snapshot();
-<a href=#719 id=719 data-nosnippet>719</a>        <span class="comment">// Slow-path acquire fills the only slot (1.0), then drop releases it (0.0).
-<a href=#720 id=720 data-nosnippet>720</a>        </span><span class="macro">assert_eq!</span>(
-<a href=#721 id=721 data-nosnippet>721</a>            samples,
-<a href=#722 id=722 data-nosnippet>722</a>            <span class="macro">vec!</span>[<span class="number">1.0</span>, <span class="number">0.0</span>],
-<a href=#723 id=723 data-nosnippet>723</a>            <span class="string">"expected slow-path acquire and drop samples; got {samples:?}"
-<a href=#724 id=724 data-nosnippet>724</a>        </span>);
-<a href=#725 id=725 data-nosnippet>725</a>    }
-<a href=#726 id=726 data-nosnippet>726</a>}
+<a href=#537 id=537 data-nosnippet>537</a>    <span class="attr">#[test]
+<a href=#538 id=538 data-nosnippet>538</a>    </span><span class="kw">fn </span>utilization_reflects_post_release_state() {
+<a href=#539 id=539 data-nosnippet>539</a>        <span class="kw">let </span>limited = LimitedSemaphore::new(<span class="number">2</span>);
+<a href=#540 id=540 data-nosnippet>540</a>        <span class="macro">assert_eq!</span>(utilization(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>limited)), <span class="prelude-val">Some</span>(<span class="number">0.0</span>));
+<a href=#541 id=541 data-nosnippet>541</a>        <span class="kw">let </span>p1 = limited
+<a href=#542 id=542 data-nosnippet>542</a>            .semaphore()
+<a href=#543 id=543 data-nosnippet>543</a>            .try_acquire_owned()
+<a href=#544 id=544 data-nosnippet>544</a>            .expect(<span class="string">"first acquire"</span>);
+<a href=#545 id=545 data-nosnippet>545</a>        <span class="macro">assert_eq!</span>(utilization(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>limited)), <span class="prelude-val">Some</span>(<span class="number">0.5</span>));
+<a href=#546 id=546 data-nosnippet>546</a>        <span class="kw">let </span>p2 = limited
+<a href=#547 id=547 data-nosnippet>547</a>            .semaphore()
+<a href=#548 id=548 data-nosnippet>548</a>            .try_acquire_owned()
+<a href=#549 id=549 data-nosnippet>549</a>            .expect(<span class="string">"second acquire"</span>);
+<a href=#550 id=550 data-nosnippet>550</a>        <span class="macro">assert_eq!</span>(utilization(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>limited)), <span class="prelude-val">Some</span>(<span class="number">1.0</span>));
+<a href=#551 id=551 data-nosnippet>551</a>        drop(p1);
+<a href=#552 id=552 data-nosnippet>552</a>        <span class="macro">assert_eq!</span>(utilization(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>limited)), <span class="prelude-val">Some</span>(<span class="number">0.5</span>));
+<a href=#553 id=553 data-nosnippet>553</a>        drop(p2);
+<a href=#554 id=554 data-nosnippet>554</a>        <span class="macro">assert_eq!</span>(utilization(<span class="prelude-val">Some</span>(<span class="kw-2">&amp;</span>limited)), <span class="prelude-val">Some</span>(<span class="number">0.0</span>));
+<a href=#555 id=555 data-nosnippet>555</a>    }
+<a href=#556 id=556 data-nosnippet>556</a>
+<a href=#557 id=557 data-nosnippet>557</a>    <span class="attr">#[test]
+<a href=#558 id=558 data-nosnippet>558</a>    </span><span class="kw">fn </span>no_utilization_when_limit_is_none() {
+<a href=#559 id=559 data-nosnippet>559</a>        <span class="macro">assert_eq!</span>(utilization(<span class="prelude-val">None</span>), <span class="prelude-val">None</span>);
+<a href=#560 id=560 data-nosnippet>560</a>    }
+<a href=#561 id=561 data-nosnippet>561</a>}
 </code></pre></div></section></main></body></html>
