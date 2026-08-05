@@ -7,13 +7,13 @@
     manager: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/sync/struct.Arc.html" title="struct alloc::sync::Arc">Arc</a>&lt;dyn <a class="trait" href="trait.StoreManager.html" title="trait spin_factor_key_value::StoreManager">StoreManager</a>&gt;,
     capacity: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,
     app_id: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/sync/struct.Arc.html" title="struct alloc::sync::Arc">Arc</a>&lt;<a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.str.html">str</a>&gt;,
-    otel: OtelFactorState,
+    otel: <a class="struct" href="../spin_factor_otel/struct.OtelFactorState.html" title="struct spin_factor_otel::OtelFactorState">OtelFactorState</a>,
 ) -&gt; Self</h4></section><section id="method.new_with_capacity_and_semaphore" class="method"><a class="src rightside" href="../src/spin_factor_key_value/host.rs.html#110-125">Source</a><h4 class="code-header">pub fn <a href="#method.new_with_capacity_and_semaphore" class="fn">new_with_capacity_and_semaphore</a>(
     allowed_stores: <a class="struct" href="https://doc.rust-lang.org/nightly/std/collections/hash/set/struct.HashSet.html" title="struct std::collections::hash::set::HashSet">HashSet</a>&lt;<a class="struct" href="https://doc.rust-lang.org/nightly/alloc/string/struct.String.html" title="struct alloc::string::String">String</a>&gt;,
     manager: <a class="struct" href="https://doc.rust-lang.org/nightly/alloc/sync/struct.Arc.html" title="struct alloc::sync::Arc">Arc</a>&lt;dyn <a class="trait" href="trait.StoreManager.html" title="trait spin_factor_key_value::StoreManager">StoreManager</a>&gt;,
     capacity: <a class="primitive" href="https://doc.rust-lang.org/nightly/std/primitive.u32.html">u32</a>,
     semaphore: ConnectionSemaphore,
-    otel: OtelFactorState,
+    otel: <a class="struct" href="../spin_factor_otel/struct.OtelFactorState.html" title="struct spin_factor_otel::OtelFactorState">OtelFactorState</a>,
 ) -&gt; Self</h4></section><section id="method.get_store" class="method"><a class="src rightside" href="../src/spin_factor_key_value/host.rs.html#143-149">Source</a><h4 class="code-header">pub fn <a href="#method.get_store" class="fn">get_store</a>&lt;T: 'static&gt;(
     &amp;self,
     store: <a class="struct" href="https://docs.rs/wasmtime/47.0.2/wasmtime/runtime/component/resources/host_static/struct.Resource.html" title="struct wasmtime::runtime::component::resources::host_static::Resource">Resource</a>&lt;T&gt;,
