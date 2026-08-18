@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["ErrorCode","HostFutureIncomingResponse"],"mod":["intercept","runtime_config","wasi_2023_10_18","wasi_2026_03_15"],"struct":["AppState","InstanceState","OutboundHttpFactor","OutgoingRequestConfig","SelfRequestOrigin"],"type":["HttpResult","HyperOutgoingBody","Request","Response"]};

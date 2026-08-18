@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["DependencyName"],"struct":["DependencyPackageName"]};

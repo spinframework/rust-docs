@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InheritConfiguration"],"fn":["apply_deny_adapter"]};

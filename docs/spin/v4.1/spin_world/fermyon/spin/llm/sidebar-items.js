@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error"],"fn":["add_to_linker","add_to_linker_instance"],"struct":["EmbeddingsResult","EmbeddingsUsage","InferencingParams","InferencingResult","InferencingUsage"],"trait":["Host","HostWithStore"],"type":["EmbeddingModel","InferencingModel"]};

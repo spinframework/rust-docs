@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"macro":[["counter",1],["gauge_f64",1],["gauge_i64",1],["gauge_u64",1],["histogram_f64",1],["histogram_u64",1],["up_and_down_counter",1]],"struct":["HistogramBuckets"]};
