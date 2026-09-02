@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["internal_server_error","method_not_allowed","not_found"]};
