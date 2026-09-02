@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["ip_name_lookup","types"]};

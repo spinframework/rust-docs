@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["manifest","rustlang","wasm"],"struct":["Checkup","DryRunNotSupported","PatientApp","PatientDiagnosis","StopDiagnosing"],"trait":["Diagnosis","Diagnostic","Treatment"]};

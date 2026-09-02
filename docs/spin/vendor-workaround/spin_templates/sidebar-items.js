@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["InstalledTemplateWarning","SkippedReason","TemplateSource","TemplateVariantInfo"],"struct":["InstallOptions","InstallationResults","ListResults","Run","RunOptions","Template","TemplateManager"],"trait":["ProgressReporter"]};

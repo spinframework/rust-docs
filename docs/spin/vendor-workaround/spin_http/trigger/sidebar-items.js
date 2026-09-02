@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["HandlerType"],"fn":["default_base"],"struct":["Metadata"]};

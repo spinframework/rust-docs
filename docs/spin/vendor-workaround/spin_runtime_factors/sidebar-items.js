@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["FactorsBuilder","TriggerAppArgs","TriggerFactors","TriggerFactorsAppState","TriggerFactorsInstanceBuilders","TriggerFactorsInstanceState","TriggerFactorsRuntimeConfig"]};

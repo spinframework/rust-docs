@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["InterceptOutcome"],"struct":["InterceptRequest"],"trait":["OutboundHttpInterceptor"],"type":["HyperBody"]};

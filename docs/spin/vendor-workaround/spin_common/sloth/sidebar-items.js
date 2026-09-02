@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["warn_if_slothful"],"struct":["SlothGuard"]};

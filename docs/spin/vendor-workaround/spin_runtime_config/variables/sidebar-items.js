@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["VariableProviderConfiguration"],"fn":["runtime_config_from_toml"]};

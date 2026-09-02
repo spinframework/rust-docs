@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Bucket","Error"],"fn":["add_to_linker"],"struct":["KeyResponse"],"trait":["Host","HostBucket","HostBucketWithStore","HostWithStore"]};

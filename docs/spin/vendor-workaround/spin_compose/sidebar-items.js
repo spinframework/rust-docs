@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ComposeError","InheritConfiguration"],"fn":["compose"],"struct":["ComponentSourceLoaderFs"],"trait":["ComponentLike","ComponentSourceLoader","DependencyLike"]};

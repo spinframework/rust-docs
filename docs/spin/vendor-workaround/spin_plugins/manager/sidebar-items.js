@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["InstallAction","ManifestLocation","PluginManagerUpdateGuard","PluginManagerUpdateLock"],"fn":["get_package"],"struct":["PluginManager"]};
