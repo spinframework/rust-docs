@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["componentize","componentize_command","componentize_if_necessary","componentize_new_bindgen","componentize_old_bindgen","componentize_old_module"],"mod":["bugs"]};

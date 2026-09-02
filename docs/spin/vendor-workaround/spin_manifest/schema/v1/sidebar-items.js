@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["ComponentSourceV1","WasiFilesMountV1"],"struct":["AppManifestV1","AppTriggerV1","ComponentBuildConfigV1","ComponentV1","VariableV1"]};

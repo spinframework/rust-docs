@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"fn":["parse_file_url","remove_credentials"]};

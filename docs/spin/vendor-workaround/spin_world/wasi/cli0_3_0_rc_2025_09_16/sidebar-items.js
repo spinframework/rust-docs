@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["environment","exit","stderr","stdin","stdout","terminal_input","terminal_output","terminal_stderr","terminal_stdin","terminal_stdout","types"]};

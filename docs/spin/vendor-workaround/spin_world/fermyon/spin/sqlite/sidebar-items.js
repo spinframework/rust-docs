@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Error","Value"],"fn":["add_to_linker"],"struct":["QueryResult","RowResult"],"trait":["Host","HostWithStore"],"type":["Connection"]};

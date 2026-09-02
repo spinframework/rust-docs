@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["test"],"struct":["BlockedNetworks"],"trait":["IpAddrLike"]};

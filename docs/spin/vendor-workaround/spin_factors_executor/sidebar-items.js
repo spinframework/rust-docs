@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"struct":["FactorsExecutor","FactorsExecutorApp","FactorsInstanceBuilder","InstanceState"],"trait":["ComponentLoader","ExecutorHooks"]};

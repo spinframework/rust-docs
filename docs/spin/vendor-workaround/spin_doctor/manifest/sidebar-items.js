@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["trigger","upgrade","version"],"trait":["ManifestTreatment"]};

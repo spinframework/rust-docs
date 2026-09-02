@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["allowed_hosts","blocked_networks"]};

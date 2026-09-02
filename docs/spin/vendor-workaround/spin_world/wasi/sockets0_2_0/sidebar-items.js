@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"mod":["instance_network","ip_name_lookup","network","tcp","tcp_create_socket","udp","udp_create_socket"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"constant":["SERVER_SOFTWARE_VERSION","WAGI_VERSION"],"fn":["build_headers","compose_response"]};

@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["Error","RedisParameter","RedisResult"],"struct":["Connection"],"type":["Payload"]};

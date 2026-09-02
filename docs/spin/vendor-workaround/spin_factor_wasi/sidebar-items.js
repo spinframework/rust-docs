@@ -1,1 +1,0 @@
-window.SIDEBAR_ITEMS = {"enum":["SocketAddrUse"],"mod":["spin"],"struct":["DummyFilesMounter","InstanceBuilder","InstanceState","MountFilesContext","WasiFactor"],"trait":["FilesMounter"]};
