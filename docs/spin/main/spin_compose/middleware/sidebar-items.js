@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["MIDDLEWARE_HANDLER_INTERFACE"],"fn":["compose_middleware_pipeline"],"struct":["Middleware"]};
