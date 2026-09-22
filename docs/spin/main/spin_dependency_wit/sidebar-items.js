@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"fn":["extract_wits","extract_wits_into"]};
+window.SIDEBAR_ITEMS = {"fn":["extract_wits","extract_wits_into"],"struct":["ComponentInterfaces"]};
