@@ -1,5 +1,5 @@
 (function() {
-    const implementors = Object.fromEntries([["spin_factor_wasi",[["impl&lt;T: 'static&gt; <a class=\"trait\" href=\"https://docs.rs/wasmtime-wasi/49.0.0/wasmtime_wasi/p3/bindings/generated/wasi/sockets/types/trait.HostUdpSocketWithStore.html\" title=\"trait wasmtime_wasi::p3::bindings::generated::wasi::sockets::types::HostUdpSocketWithStore\">HostUdpSocketWithStore</a>&lt;T&gt; for <a class=\"struct\" href=\"spin_factor_wasi/sockets/struct.SpinSockets.html\" title=\"struct spin_factor_wasi::sockets::SpinSockets\">SpinSockets</a>&lt;T&gt;",0]]]]);
+    const implementors = Object.fromEntries([["spin_factor_wasi",[["impl&lt;T: 'static&gt; <a class=\"trait\" href=\"https://docs.rs/wasmtime-wasi/49.0.1/wasmtime_wasi/p3/bindings/generated/wasi/sockets/types/trait.HostUdpSocketWithStore.html\" title=\"trait wasmtime_wasi::p3::bindings::generated::wasi::sockets::types::HostUdpSocketWithStore\">HostUdpSocketWithStore</a>&lt;T&gt; for <a class=\"struct\" href=\"spin_factor_wasi/sockets/struct.SpinSockets.html\" title=\"struct spin_factor_wasi::sockets::SpinSockets\">SpinSockets</a>&lt;T&gt;",0]]]]);
     if (window.register_implementors) {
         window.register_implementors(implementors);
     } else {
