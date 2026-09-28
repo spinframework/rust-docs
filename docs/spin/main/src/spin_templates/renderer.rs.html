@@ -89,68 +89,60 @@
 <a href=#89 id=89 data-nosnippet>89</a>        raw: Vec&lt;u8&gt;,
 <a href=#90 id=90 data-nosnippet>90</a>        parser: <span class="kw-2">&amp;</span>liquid::Parser,
 <a href=#91 id=91 data-nosnippet>91</a>    ) -&gt; anyhow::Result&lt;TemplateContent&gt; {
-<a href=#92 id=92 data-nosnippet>92</a>        <span class="kw">match </span>string_from_bytes(<span class="kw-2">&amp;</span>raw) {
-<a href=#93 id=93 data-nosnippet>93</a>            <span class="prelude-val">None </span>=&gt; <span class="prelude-val">Ok</span>(TemplateContent::Binary(raw)),
-<a href=#94 id=94 data-nosnippet>94</a>            <span class="prelude-val">Some</span>(s) =&gt; {
-<a href=#95 id=95 data-nosnippet>95</a>                <span class="kw">match </span>parser.parse(<span class="kw-2">&amp;</span>s) {
-<a href=#96 id=96 data-nosnippet>96</a>                    <span class="prelude-val">Ok</span>(t) =&gt; <span class="prelude-val">Ok</span>(TemplateContent::Template(t)),
-<a href=#97 id=97 data-nosnippet>97</a>                    <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">match </span>understand_liquid_error(e) {
-<a href=#98 id=98 data-nosnippet>98</a>                        TemplateParseFailure::Other(_e) =&gt; {
-<a href=#99 id=99 data-nosnippet>99</a>                            <span class="comment">// TODO: emit a warning?
-<a href=#100 id=100 data-nosnippet>100</a>                            </span><span class="prelude-val">Ok</span>(TemplateContent::Binary(raw))
-<a href=#101 id=101 data-nosnippet>101</a>                        }
-<a href=#102 id=102 data-nosnippet>102</a>                        TemplateParseFailure::UnknownFilter(id) =&gt; {
-<a href=#103 id=103 data-nosnippet>103</a>                            <span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(<span class="string">"internal error in template: unknown filter '{id}'"</span>))
-<a href=#104 id=104 data-nosnippet>104</a>                        }
-<a href=#105 id=105 data-nosnippet>105</a>                    },
-<a href=#106 id=106 data-nosnippet>106</a>                }
-<a href=#107 id=107 data-nosnippet>107</a>            }
-<a href=#108 id=108 data-nosnippet>108</a>        }
-<a href=#109 id=109 data-nosnippet>109</a>    }
-<a href=#110 id=110 data-nosnippet>110</a>
-<a href=#111 id=111 data-nosnippet>111</a>    <span class="kw">fn </span>render(<span class="self">self</span>, globals: <span class="kw-2">&amp;</span>liquid::Object) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
-<a href=#112 id=112 data-nosnippet>112</a>        <span class="kw">match </span><span class="self">self </span>{
-<a href=#113 id=113 data-nosnippet>113</a>            <span class="self">Self</span>::Template(t) =&gt; {
-<a href=#114 id=114 data-nosnippet>114</a>                <span class="kw">let </span>text = t.render(globals)<span class="question-mark">?</span>;
-<a href=#115 id=115 data-nosnippet>115</a>                <span class="prelude-val">Ok</span>(text.bytes().collect())
-<a href=#116 id=116 data-nosnippet>116</a>            }
-<a href=#117 id=117 data-nosnippet>117</a>            <span class="self">Self</span>::Binary(v) =&gt; <span class="prelude-val">Ok</span>(v),
-<a href=#118 id=118 data-nosnippet>118</a>        }
-<a href=#119 id=119 data-nosnippet>119</a>    }
-<a href=#120 id=120 data-nosnippet>120</a>}
-<a href=#121 id=121 data-nosnippet>121</a>
-<a href=#122 id=122 data-nosnippet>122</a><span class="comment">// TODO: this doesn't truly belong in a module that claims to be about
-<a href=#123 id=123 data-nosnippet>123</a>// rendering but the only thing that uses it is the TemplateContent ctor
-<a href=#124 id=124 data-nosnippet>124</a></span><span class="kw">fn </span>string_from_bytes(bytes: <span class="kw-2">&amp;</span>[u8]) -&gt; <span class="prelude-ty">Option</span>&lt;String&gt; {
-<a href=#125 id=125 data-nosnippet>125</a>    <span class="kw">match </span>std::str::from_utf8(bytes) {
-<a href=#126 id=126 data-nosnippet>126</a>        <span class="prelude-val">Ok</span>(s) =&gt; <span class="prelude-val">Some</span>(s.to_owned()),
-<a href=#127 id=127 data-nosnippet>127</a>        <span class="prelude-val">Err</span>(<span class="kw">_</span>) =&gt; <span class="prelude-val">None</span>, <span class="comment">// TODO: try other encodings!
-<a href=#128 id=128 data-nosnippet>128</a>    </span>}
-<a href=#129 id=129 data-nosnippet>129</a>}
-<a href=#130 id=130 data-nosnippet>130</a>
-<a href=#131 id=131 data-nosnippet>131</a><span class="kw">enum </span>TemplateParseFailure {
-<a href=#132 id=132 data-nosnippet>132</a>    UnknownFilter(String),
-<a href=#133 id=133 data-nosnippet>133</a>    Other(liquid::Error),
-<a href=#134 id=134 data-nosnippet>134</a>}
-<a href=#135 id=135 data-nosnippet>135</a>
-<a href=#136 id=136 data-nosnippet>136</a><span class="kw">static </span>UNKNOWN_FILTER: LazyLock&lt;regex::Regex&gt; = LazyLock::new(|| {
-<a href=#137 id=137 data-nosnippet>137</a>    regex::Regex::new(<span class="string">"requested filter=(\\S+)"</span>).expect(<span class="string">"Invalid unknown filter regex"</span>)
-<a href=#138 id=138 data-nosnippet>138</a>});
-<a href=#139 id=139 data-nosnippet>139</a>
-<a href=#140 id=140 data-nosnippet>140</a><span class="kw">fn </span>understand_liquid_error(e: liquid::Error) -&gt; TemplateParseFailure {
-<a href=#141 id=141 data-nosnippet>141</a>    <span class="kw">let </span>err_str = e.to_string();
-<a href=#142 id=142 data-nosnippet>142</a>
-<a href=#143 id=143 data-nosnippet>143</a>    <span class="comment">// They should use typed errors like we, er, don't
-<a href=#144 id=144 data-nosnippet>144</a>    </span><span class="kw">match </span>err_str.lines().next() {
-<a href=#145 id=145 data-nosnippet>145</a>        <span class="prelude-val">None </span>=&gt; TemplateParseFailure::Other(e),
-<a href=#146 id=146 data-nosnippet>146</a>        <span class="prelude-val">Some</span>(<span class="string">"liquid: Unknown filter"</span>) =&gt; <span class="kw">match </span>UNKNOWN_FILTER.captures(<span class="kw-2">&amp;</span>err_str) {
-<a href=#147 id=147 data-nosnippet>147</a>            <span class="prelude-val">None </span>=&gt; TemplateParseFailure::Other(e),
-<a href=#148 id=148 data-nosnippet>148</a>            <span class="prelude-val">Some</span>(captures) =&gt; <span class="kw">match </span>captures.get(<span class="number">1</span>) {
-<a href=#149 id=149 data-nosnippet>149</a>                <span class="prelude-val">None </span>=&gt; TemplateParseFailure::Other(e),
-<a href=#150 id=150 data-nosnippet>150</a>                <span class="prelude-val">Some</span>(id) =&gt; TemplateParseFailure::UnknownFilter(id.as_str().to_owned()),
-<a href=#151 id=151 data-nosnippet>151</a>            },
-<a href=#152 id=152 data-nosnippet>152</a>        },
-<a href=#153 id=153 data-nosnippet>153</a>        <span class="kw">_ </span>=&gt; TemplateParseFailure::Other(e),
-<a href=#154 id=154 data-nosnippet>154</a>    }
-<a href=#155 id=155 data-nosnippet>155</a>}
+<a href=#92 id=92 data-nosnippet>92</a>        <span class="kw">match </span>String::from_utf8(raw) {
+<a href=#93 id=93 data-nosnippet>93</a>            <span class="comment">// `into_bytes` hands back the original bytes that failed UTF-8 validation
+<a href=#94 id=94 data-nosnippet>94</a>            </span><span class="prelude-val">Err</span>(e) =&gt; <span class="prelude-val">Ok</span>(TemplateContent::Binary(e.into_bytes())), <span class="comment">// TODO: try other encodings!
+<a href=#95 id=95 data-nosnippet>95</a>            </span><span class="prelude-val">Ok</span>(s) =&gt; {
+<a href=#96 id=96 data-nosnippet>96</a>                <span class="kw">match </span>parser.parse(<span class="kw-2">&amp;</span>s) {
+<a href=#97 id=97 data-nosnippet>97</a>                    <span class="prelude-val">Ok</span>(t) =&gt; <span class="prelude-val">Ok</span>(TemplateContent::Template(t)),
+<a href=#98 id=98 data-nosnippet>98</a>                    <span class="prelude-val">Err</span>(e) =&gt; <span class="kw">match </span>understand_liquid_error(e) {
+<a href=#99 id=99 data-nosnippet>99</a>                        TemplateParseFailure::Other(_e) =&gt; {
+<a href=#100 id=100 data-nosnippet>100</a>                            <span class="comment">// TODO: emit a warning?
+<a href=#101 id=101 data-nosnippet>101</a>                            </span><span class="prelude-val">Ok</span>(TemplateContent::Binary(s.into_bytes()))
+<a href=#102 id=102 data-nosnippet>102</a>                        }
+<a href=#103 id=103 data-nosnippet>103</a>                        TemplateParseFailure::UnknownFilter(id) =&gt; {
+<a href=#104 id=104 data-nosnippet>104</a>                            <span class="prelude-val">Err</span>(<span class="macro">anyhow!</span>(<span class="string">"internal error in template: unknown filter '{id}'"</span>))
+<a href=#105 id=105 data-nosnippet>105</a>                        }
+<a href=#106 id=106 data-nosnippet>106</a>                    },
+<a href=#107 id=107 data-nosnippet>107</a>                }
+<a href=#108 id=108 data-nosnippet>108</a>            }
+<a href=#109 id=109 data-nosnippet>109</a>        }
+<a href=#110 id=110 data-nosnippet>110</a>    }
+<a href=#111 id=111 data-nosnippet>111</a>
+<a href=#112 id=112 data-nosnippet>112</a>    <span class="kw">fn </span>render(<span class="self">self</span>, globals: <span class="kw-2">&amp;</span>liquid::Object) -&gt; anyhow::Result&lt;Vec&lt;u8&gt;&gt; {
+<a href=#113 id=113 data-nosnippet>113</a>        <span class="kw">match </span><span class="self">self </span>{
+<a href=#114 id=114 data-nosnippet>114</a>            <span class="self">Self</span>::Template(t) =&gt; {
+<a href=#115 id=115 data-nosnippet>115</a>                <span class="kw">let </span>text = t.render(globals)<span class="question-mark">?</span>;
+<a href=#116 id=116 data-nosnippet>116</a>                <span class="prelude-val">Ok</span>(text.into_bytes())
+<a href=#117 id=117 data-nosnippet>117</a>            }
+<a href=#118 id=118 data-nosnippet>118</a>            <span class="self">Self</span>::Binary(v) =&gt; <span class="prelude-val">Ok</span>(v),
+<a href=#119 id=119 data-nosnippet>119</a>        }
+<a href=#120 id=120 data-nosnippet>120</a>    }
+<a href=#121 id=121 data-nosnippet>121</a>}
+<a href=#122 id=122 data-nosnippet>122</a>
+<a href=#123 id=123 data-nosnippet>123</a><span class="kw">enum </span>TemplateParseFailure {
+<a href=#124 id=124 data-nosnippet>124</a>    UnknownFilter(String),
+<a href=#125 id=125 data-nosnippet>125</a>    Other(liquid::Error),
+<a href=#126 id=126 data-nosnippet>126</a>}
+<a href=#127 id=127 data-nosnippet>127</a>
+<a href=#128 id=128 data-nosnippet>128</a><span class="kw">static </span>UNKNOWN_FILTER: LazyLock&lt;regex::Regex&gt; = LazyLock::new(|| {
+<a href=#129 id=129 data-nosnippet>129</a>    regex::Regex::new(<span class="string">"requested filter=(\\S+)"</span>).expect(<span class="string">"Invalid unknown filter regex"</span>)
+<a href=#130 id=130 data-nosnippet>130</a>});
+<a href=#131 id=131 data-nosnippet>131</a>
+<a href=#132 id=132 data-nosnippet>132</a><span class="kw">fn </span>understand_liquid_error(e: liquid::Error) -&gt; TemplateParseFailure {
+<a href=#133 id=133 data-nosnippet>133</a>    <span class="kw">let </span>err_str = e.to_string();
+<a href=#134 id=134 data-nosnippet>134</a>
+<a href=#135 id=135 data-nosnippet>135</a>    <span class="comment">// They should use typed errors like we, er, don't
+<a href=#136 id=136 data-nosnippet>136</a>    </span><span class="kw">match </span>err_str.lines().next() {
+<a href=#137 id=137 data-nosnippet>137</a>        <span class="prelude-val">None </span>=&gt; TemplateParseFailure::Other(e),
+<a href=#138 id=138 data-nosnippet>138</a>        <span class="prelude-val">Some</span>(<span class="string">"liquid: Unknown filter"</span>) =&gt; <span class="kw">match </span>UNKNOWN_FILTER.captures(<span class="kw-2">&amp;</span>err_str) {
+<a href=#139 id=139 data-nosnippet>139</a>            <span class="prelude-val">None </span>=&gt; TemplateParseFailure::Other(e),
+<a href=#140 id=140 data-nosnippet>140</a>            <span class="prelude-val">Some</span>(captures) =&gt; <span class="kw">match </span>captures.get(<span class="number">1</span>) {
+<a href=#141 id=141 data-nosnippet>141</a>                <span class="prelude-val">None </span>=&gt; TemplateParseFailure::Other(e),
+<a href=#142 id=142 data-nosnippet>142</a>                <span class="prelude-val">Some</span>(id) =&gt; TemplateParseFailure::UnknownFilter(id.as_str().to_owned()),
+<a href=#143 id=143 data-nosnippet>143</a>            },
+<a href=#144 id=144 data-nosnippet>144</a>        },
+<a href=#145 id=145 data-nosnippet>145</a>        <span class="kw">_ </span>=&gt; TemplateParseFailure::Other(e),
+<a href=#146 id=146 data-nosnippet>146</a>    }
+<a href=#147 id=147 data-nosnippet>147</a>}
 </code></pre></div></section></main></body></html>
