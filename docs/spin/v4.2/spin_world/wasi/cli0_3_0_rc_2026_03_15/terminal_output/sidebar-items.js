@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["TerminalOutput"],"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostTerminalOutput","HostTerminalOutputWithStore","HostWithStore"]};
