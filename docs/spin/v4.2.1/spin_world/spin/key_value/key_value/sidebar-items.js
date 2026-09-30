@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["Error","Store"],"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostStore","HostStoreWithStore","HostWithStore"]};

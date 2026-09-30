@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["add_to_linker","add_to_linker_instance"],"trait":["Host","HostWithStore"],"type":["Error","Payload","RedisParameter","RedisResult"]};
