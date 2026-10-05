@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["InstallAction","ManifestLocation","PluginManagerUpdateGuard","PluginManagerUpdateLock"],"struct":["PluginManager"]};
