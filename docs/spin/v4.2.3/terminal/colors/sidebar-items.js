@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["bold_cyan","bold_green","bold_red","bold_yellow"]};
