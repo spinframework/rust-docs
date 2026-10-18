@@ -233,7 +233,7 @@
 <a href=#233 id=233 data-nosnippet>233</a>            })<span class="question-mark">?
 <a href=#234 id=234 data-nosnippet>234</a>            </span>.clone();
 <a href=#235 id=235 data-nosnippet>235</a>
-<a href=#236 id=236 data-nosnippet>236</a>        <span class="kw">let </span>bytes = wit_component::encode(decoded.resolve(), package_id)<span class="question-mark">?</span>;
+<a href=#236 id=236 data-nosnippet>236</a>        <span class="kw">let </span>bytes = wit_component::encode(decoded.resolve(), package_id, <span class="bool-val">false</span>)<span class="question-mark">?</span>;
 <a href=#237 id=237 data-nosnippet>237</a>
 <a href=#238 id=238 data-nosnippet>238</a>        <span class="prelude-val">Ok</span>(<span class="self">Self </span>{
 <a href=#239 id=239 data-nosnippet>239</a>            world: world.to_owned(),
@@ -261,7 +261,7 @@
 <a href=#261 id=261 data-nosnippet>261</a>            .push_dir(wit_path)
 <a href=#262 id=262 data-nosnippet>262</a>            .expect(<span class="string">"should have pushed WIT dir"</span>);
 <a href=#263 id=263 data-nosnippet>263</a>        <span class="kw">let </span>package_bytes =
-<a href=#264 id=264 data-nosnippet>264</a>            wit_component::encode(<span class="kw-2">&amp;</span>resolve, id).expect(<span class="string">"should have encoded world package"</span>);
+<a href=#264 id=264 data-nosnippet>264</a>            wit_component::encode(<span class="kw-2">&amp;</span>resolve, id, <span class="bool-val">false</span>).expect(<span class="string">"should have encoded world package"</span>);
 <a href=#265 id=265 data-nosnippet>265</a>
 <a href=#266 id=266 data-nosnippet>266</a>        <span class="kw">let </span>world_name = WorldName::try_from(world.to_owned()).unwrap();
 <a href=#267 id=267 data-nosnippet>267</a>        <span class="kw">let </span>simple_world = CandidateWorld::from_package_bytes(<span class="kw-2">&amp;</span>world_name, package_bytes)
@@ -881,15 +881,16 @@
 <a href=#881 id=881 data-nosnippet>881</a>            <span class="kw-2">&amp;</span>resolve,
 <a href=#882 id=882 data-nosnippet>882</a>            world_id,
 <a href=#883 id=883 data-nosnippet>883</a>            wit_component::StringEncoding::UTF8,
-<a href=#884 id=884 data-nosnippet>884</a>        )
-<a href=#885 id=885 data-nosnippet>885</a>        .expect(<span class="string">"should embed component metadata"</span>);
-<a href=#886 id=886 data-nosnippet>886</a>
-<a href=#887 id=887 data-nosnippet>887</a>        wit_component::ComponentEncoder::default()
-<a href=#888 id=888 data-nosnippet>888</a>            .validate(<span class="bool-val">true</span>)
-<a href=#889 id=889 data-nosnippet>889</a>            .module(<span class="kw-2">&amp;</span>wasm)
-<a href=#890 id=890 data-nosnippet>890</a>            .expect(<span class="string">"should set module"</span>)
-<a href=#891 id=891 data-nosnippet>891</a>            .encode()
-<a href=#892 id=892 data-nosnippet>892</a>            .expect(<span class="string">"should encode component"</span>)
-<a href=#893 id=893 data-nosnippet>893</a>    }
-<a href=#894 id=894 data-nosnippet>894</a>}
+<a href=#884 id=884 data-nosnippet>884</a>            <span class="bool-val">false</span>,
+<a href=#885 id=885 data-nosnippet>885</a>        )
+<a href=#886 id=886 data-nosnippet>886</a>        .expect(<span class="string">"should embed component metadata"</span>);
+<a href=#887 id=887 data-nosnippet>887</a>
+<a href=#888 id=888 data-nosnippet>888</a>        wit_component::ComponentEncoder::default()
+<a href=#889 id=889 data-nosnippet>889</a>            .validate(<span class="bool-val">true</span>)
+<a href=#890 id=890 data-nosnippet>890</a>            .module(<span class="kw-2">&amp;</span>wasm)
+<a href=#891 id=891 data-nosnippet>891</a>            .expect(<span class="string">"should set module"</span>)
+<a href=#892 id=892 data-nosnippet>892</a>            .encode()
+<a href=#893 id=893 data-nosnippet>893</a>            .expect(<span class="string">"should encode component"</span>)
+<a href=#894 id=894 data-nosnippet>894</a>    }
+<a href=#895 id=895 data-nosnippet>895</a>}
 </code></pre></div></section></main></body></html>
