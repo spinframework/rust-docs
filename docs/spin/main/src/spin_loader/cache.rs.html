@@ -1,4 +1,4 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/loader/src/cache.rs`."><title>cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-203241e4.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_loader" data-themes="" data-resource-suffix="" data-rustdoc-version="1.101.0-nightly (822182db4 2026-10-13)" data-channel="nightly" data-search-js="search-b167f383.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-170eb4bf.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-1814ead3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-9f56287d.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_loader/</div>cache.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Cache for OCI registry entities.
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `crates/loader/src/cache.rs`."><title>cache.rs - source</title><script>if(window.location.protocol!=="file:")document.head.insertAdjacentHTML("beforeend","SourceSerif4-Regular-6b053e98.ttf.woff2,FiraSans-Italic-81dc35de.woff2,FiraSans-Regular-0fe48ade.woff2,FiraSans-MediumItalic-ccf7e434.woff2,FiraSans-Medium-e1aa3f0a.woff2,SourceCodePro-Regular-8badfe75.ttf.woff2,SourceCodePro-Semibold-aa29a496.ttf.woff2".split(",").map(f=>`<link rel="preload" as="font" type="font/woff2"href="../../static.files/${f}">`).join(""))</script><link rel="stylesheet" href="../../static.files/normalize-9960930a.css"><link rel="stylesheet" href="../../static.files/rustdoc-009149e2.css"><meta name="rustdoc-vars" data-root-path="../../" data-static-root-path="../../static.files/" data-current-crate="spin_loader" data-themes="" data-resource-suffix="" data-rustdoc-version="1.101.0-nightly (8006091eb 2026-10-17)" data-channel="nightly" data-search-js="search-b167f383.js" data-stringdex-js="stringdex-b5109af9.js" data-settings-js="settings-9b351432.js" ><script src="../../static.files/storage-41dd4d93.js"></script><script defer src="../../static.files/src-script-813739b1.js"></script><script defer src="../../src-files.js"></script><script defer src="../../static.files/main-1814ead3.js"></script><noscript><link rel="stylesheet" href="../../static.files/noscript-9f56287d.css"></noscript><link rel="alternate icon" type="image/png" href="../../static.files/favicon-32x32-eab170b8.png"><link rel="icon" type="image/svg+xml" href="../../static.files/favicon-044be391.svg"></head><body class="rustdoc src"><a class="skip-main-content" href="#main-content">Skip to main content</a><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="src-sidebar-title"><h2>Files</h2></div></nav><div class="sidebar-resizer" title="Drag to resize sidebar"></div><main><section id="main-content" class="content" tabindex="-1"><div class="main-heading"><h1><div class="sub-heading">spin_loader/</div>cache.rs</h1><rustdoc-toolbar></rustdoc-toolbar></div><div class="example-wrap digits-3"><pre class="rust"><code><a href=#1 id=1 data-nosnippet>1</a><span class="doccomment">//! Cache for OCI registry entities.
 <a href=#2 id=2 data-nosnippet>2</a>
 <a href=#3 id=3 data-nosnippet>3</a></span><span class="kw">use </span>anyhow::{Context, <span class="prelude-ty">Result</span>, ensure};
 <a href=#4 id=4 data-nosnippet>4</a>
@@ -7,7 +7,7 @@
 <a href=#7 id=7 data-nosnippet>7</a>    sync::atomic::{AtomicBool, Ordering},
 <a href=#8 id=8 data-nosnippet>8</a>};
 <a href=#9 id=9 data-nosnippet>9</a>
-<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span><span class="kw">crate</span>::fs::{create_dir_all, write_file};
+<a href=#10 id=10 data-nosnippet>10</a><span class="kw">use </span><span class="kw">crate</span>::fs::{create_dir_all, write_file_atomically};
 <a href=#11 id=11 data-nosnippet>11</a>
 <a href=#12 id=12 data-nosnippet>12</a><span class="kw">const </span>CONFIG_DIR: <span class="kw-2">&amp;</span>str = <span class="string">"spin"</span>;
 <a href=#13 id=13 data-nosnippet>13</a><span class="kw">const </span>REGISTRY_CACHE_DIR: <span class="kw-2">&amp;</span>str = <span class="string">"registry"</span>;
@@ -89,14 +89,14 @@
 <a href=#89 id=89 data-nosnippet>89</a>    <span class="doccomment">/// Write the contents in the cache's wasm directory.
 <a href=#90 id=90 data-nosnippet>90</a>    </span><span class="kw">pub async fn </span>write_wasm(<span class="kw-2">&amp;</span><span class="self">self</span>, bytes: <span class="kw">impl </span>AsRef&lt;[u8]&gt;, digest: <span class="kw">impl </span>AsRef&lt;str&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
 <a href=#91 id=91 data-nosnippet>91</a>        <span class="self">self</span>.ensure_dirs().<span class="kw">await</span><span class="question-mark">?</span>;
-<a href=#92 id=92 data-nosnippet>92</a>        write_file(<span class="kw-2">&amp;</span><span class="self">self</span>.wasm_path(digest), bytes.as_ref()).<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#92 id=92 data-nosnippet>92</a>        write_file_atomically(<span class="kw-2">&amp;</span><span class="self">self</span>.wasm_path(digest), bytes.as_ref()).<span class="kw">await</span><span class="question-mark">?</span>;
 <a href=#93 id=93 data-nosnippet>93</a>        <span class="prelude-val">Ok</span>(())
 <a href=#94 id=94 data-nosnippet>94</a>    }
 <a href=#95 id=95 data-nosnippet>95</a>
 <a href=#96 id=96 data-nosnippet>96</a>    <span class="doccomment">/// Write the contents in the cache's data directory.
 <a href=#97 id=97 data-nosnippet>97</a>    </span><span class="kw">pub async fn </span>write_data(<span class="kw-2">&amp;</span><span class="self">self</span>, bytes: <span class="kw">impl </span>AsRef&lt;[u8]&gt;, digest: <span class="kw">impl </span>AsRef&lt;str&gt;) -&gt; <span class="prelude-ty">Result</span>&lt;()&gt; {
 <a href=#98 id=98 data-nosnippet>98</a>        <span class="self">self</span>.ensure_dirs().<span class="kw">await</span><span class="question-mark">?</span>;
-<a href=#99 id=99 data-nosnippet>99</a>        write_file(<span class="kw-2">&amp;</span><span class="self">self</span>.data_path(digest), bytes.as_ref()).<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#99 id=99 data-nosnippet>99</a>        write_file_atomically(<span class="kw-2">&amp;</span><span class="self">self</span>.data_path(digest), bytes.as_ref()).<span class="kw">await</span><span class="question-mark">?</span>;
 <a href=#100 id=100 data-nosnippet>100</a>        <span class="prelude-val">Ok</span>(())
 <a href=#101 id=101 data-nosnippet>101</a>    }
 <a href=#102 id=102 data-nosnippet>102</a>
@@ -190,5 +190,34 @@
 <a href=#190 id=190 data-nosnippet>190</a>
 <a href=#191 id=191 data-nosnippet>191</a>        <span class="prelude-val">Ok</span>(())
 <a href=#192 id=192 data-nosnippet>192</a>    }
-<a href=#193 id=193 data-nosnippet>193</a>}
+<a href=#193 id=193 data-nosnippet>193</a>
+<a href=#194 id=194 data-nosnippet>194</a>    <span class="attr">#[tokio::test]
+<a href=#195 id=195 data-nosnippet>195</a>    </span><span class="kw">async fn </span>writes_leave_no_temporary_files() -&gt; anyhow::Result&lt;()&gt; {
+<a href=#196 id=196 data-nosnippet>196</a>        <span class="kw">let </span>temp_dir = tempfile::tempdir()<span class="question-mark">?</span>;
+<a href=#197 id=197 data-nosnippet>197</a>        <span class="kw">let </span>cache = Cache::new(<span class="prelude-val">Some</span>(temp_dir.path().to_owned())).<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#198 id=198 data-nosnippet>198</a>
+<a href=#199 id=199 data-nosnippet>199</a>        <span class="kw">let </span>wasm = <span class="string">"Wasm"</span>.as_bytes();
+<a href=#200 id=200 data-nosnippet>200</a>        <span class="kw">let </span>digest = <span class="macro">format!</span>(<span class="string">"sha256:{}"</span>, hex_digest_from_bytes(wasm));
+<a href=#201 id=201 data-nosnippet>201</a>        <span class="comment">// Writing the same content again replaces it in place.
+<a href=#202 id=202 data-nosnippet>202</a>        </span>cache.write_wasm(wasm, <span class="kw-2">&amp;</span>digest).<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#203 id=203 data-nosnippet>203</a>        cache.write_wasm(wasm, <span class="kw-2">&amp;</span>digest).<span class="kw">await</span><span class="question-mark">?</span>;
+<a href=#204 id=204 data-nosnippet>204</a>        <span class="macro">assert_eq!</span>(wasm, std::fs::read(cache.wasm_file(<span class="kw-2">&amp;</span>digest)<span class="question-mark">?</span>)<span class="question-mark">?</span>);
+<a href=#205 id=205 data-nosnippet>205</a>        <span class="macro">assert_eq!</span>(std::fs::read_dir(cache.wasm_dir())<span class="question-mark">?</span>.count(), <span class="number">1</span>);
+<a href=#206 id=206 data-nosnippet>206</a>
+<a href=#207 id=207 data-nosnippet>207</a>        <span class="comment">// The file gets the mode `std::fs::write` would give it, not 0600.
+<a href=#208 id=208 data-nosnippet>208</a>        </span><span class="attr">#[cfg(unix)]
+<a href=#209 id=209 data-nosnippet>209</a>        </span>{
+<a href=#210 id=210 data-nosnippet>210</a>            <span class="kw">use </span>std::os::unix::fs::PermissionsExt;
+<a href=#211 id=211 data-nosnippet>211</a>            <span class="kw">let </span>reference = temp_dir.path().join(<span class="string">"reference"</span>);
+<a href=#212 id=212 data-nosnippet>212</a>            std::fs::write(<span class="kw-2">&amp;</span>reference, <span class="string">b""</span>)<span class="question-mark">?</span>;
+<a href=#213 id=213 data-nosnippet>213</a>            <span class="kw">let </span>expected = std::fs::metadata(<span class="kw-2">&amp;</span>reference)<span class="question-mark">?</span>.permissions().mode();
+<a href=#214 id=214 data-nosnippet>214</a>            <span class="kw">let </span>actual = std::fs::metadata(cache.wasm_path(<span class="kw-2">&amp;</span>digest))<span class="question-mark">?
+<a href=#215 id=215 data-nosnippet>215</a>                </span>.permissions()
+<a href=#216 id=216 data-nosnippet>216</a>                .mode();
+<a href=#217 id=217 data-nosnippet>217</a>            <span class="macro">assert_eq!</span>(actual, expected);
+<a href=#218 id=218 data-nosnippet>218</a>        }
+<a href=#219 id=219 data-nosnippet>219</a>
+<a href=#220 id=220 data-nosnippet>220</a>        <span class="prelude-val">Ok</span>(())
+<a href=#221 id=221 data-nosnippet>221</a>    }
+<a href=#222 id=222 data-nosnippet>222</a>}
 </code></pre></div></section></main></body></html>
