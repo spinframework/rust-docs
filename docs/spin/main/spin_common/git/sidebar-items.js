@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["GitError"],"fn":["init_git_repo","is_in_git_repo"],"struct":["GitSource"],"trait":["UnderstandGitResult"]};
