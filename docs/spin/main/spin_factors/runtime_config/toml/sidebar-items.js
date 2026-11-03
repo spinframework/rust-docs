@@ -1,1 +1,1 @@
-window.SIDEBAR_ITEMS = {"struct":["TomlKeyTracker"],"trait":["GetTomlValue"]};
+window.SIDEBAR_ITEMS = {"fn":["default_true"],"struct":["TomlKeyTracker"],"trait":["GetTomlValue"]};
