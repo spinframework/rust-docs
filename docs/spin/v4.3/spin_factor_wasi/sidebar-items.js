@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["SocketAddrUse"],"fn":["convert_result","reborrow"],"macro":[["convert",1]],"mod":["sockets","spin"],"struct":["DummyFilesMounter","InstanceBuilder","InstanceState","MountFilesContext","WasiFactor"],"trait":["FilesMounter","FutureReaderExt","StreamReaderExt"]};

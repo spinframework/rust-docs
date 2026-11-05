@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["FilesMountStrategy"],"fn":["from_file","from_wasm_file","requires_service_chaining"],"mod":["cache"],"struct":["WasmLoader"]};

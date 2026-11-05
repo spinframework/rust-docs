@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"enum":["BadgerChecker","BadgerUI"],"struct":["AvailableUpgrades","BadgerEvaluator","PluginVersion"]};

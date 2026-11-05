@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["warn_unsupported_version"],"struct":["PluginManifest","PluginPackage"]};

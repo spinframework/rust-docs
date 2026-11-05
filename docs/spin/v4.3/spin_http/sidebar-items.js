@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"constant":["WELL_KNOWN_PREFIX"],"mod":["app_info","body","config","trigger","wagi"],"type":["Body"]};
