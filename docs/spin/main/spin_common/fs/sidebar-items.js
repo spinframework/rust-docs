@@ -1,0 +1,1 @@
+window.SIDEBAR_ITEMS = {"fn":["temp_file_beside","write_file_atomically_stream"]};
