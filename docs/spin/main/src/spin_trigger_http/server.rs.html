@@ -715,7 +715,7 @@
 <a href=#715 id=715 data-nosnippet>715</a>    };
 <a href=#716 id=716 data-nosnippet>716</a>    parts.scheme = <span class="prelude-val">Some</span>(scheme);
 <a href=#717 id=717 data-nosnippet>717</a>    parts.authority = <span class="prelude-val">Some</span>(authority);
-<a href=#718 id=718 data-nosnippet>718</a>    <span class="kw-2">*</span>req.uri_mut() = Uri::from_parts(parts).unwrap();
+<a href=#718 id=718 data-nosnippet>718</a>    <span class="kw-2">*</span>req.uri_mut() = Uri::from_parts(parts)<span class="question-mark">?</span>;
 <a href=#719 id=719 data-nosnippet>719</a>    <span class="prelude-val">Ok</span>(())
 <a href=#720 id=720 data-nosnippet>720</a>}
 <a href=#721 id=721 data-nosnippet>721</a>
